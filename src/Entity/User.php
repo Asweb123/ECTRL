@@ -11,9 +11,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @var \Ramsey\Uuid\UuidInterface
+     *
+     * @ORM\Id
+     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     private $id;
 
@@ -54,11 +57,6 @@ class User implements UserInterface
     private $phoneSsid;
 
     /**
-     * @ORM\Column(type="guid")
-     */
-    private $userUuid;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $userEnable;
@@ -66,7 +64,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="boolean")
      */
-    private $user_aware;
+    private $userAware;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="companyUsers")
@@ -80,6 +78,12 @@ class User implements UserInterface
      */
     private $userRole;
 
+
+    public function __construct()
+    {
+        $this->userEnable = false;
+        $this->userAware = false;
+    }
 
     public function getId(): ?int
     {
@@ -207,18 +211,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getUserUuid(): ?string
-    {
-        return $this->userUuid;
-    }
-
-    public function setUserUuid(string $userUuid): self
-    {
-        $this->userUuid = $userUuid;
-
-        return $this;
-    }
-
     public function getUserEnable(): ?bool
     {
         return $this->userEnable;
@@ -233,12 +225,12 @@ class User implements UserInterface
 
     public function getUserAware(): ?bool
     {
-        return $this->user_aware;
+        return $this->userAware;
     }
 
-    public function setUserAware(bool $user_aware): self
+    public function setUserAware(bool $userAware): self
     {
-        $this->user_aware = $user_aware;
+        $this->user_aware = $userAware;
 
         return $this;
     }

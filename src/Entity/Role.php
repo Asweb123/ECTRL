@@ -12,9 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
 class Role
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @var \Ramsey\Uuid\UuidInterface
+     *
+     * @ORM\Id
+     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     private $id;
 
@@ -27,11 +30,6 @@ class Role
      * @ORM\Column(type="string", length=255)
      */
     private $roleDescription;
-
-    /**
-     * @ORM\Column(type="guid")
-     */
-    private $roleUuid;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="userRole", orphanRemoval=true)
@@ -74,18 +72,6 @@ class Role
     public function setRoleDescription(string $roleDescription): self
     {
         $this->roleDescription = $roleDescription;
-
-        return $this;
-    }
-
-    public function getRoleUuid(): ?string
-    {
-        return $this->roleUuid;
-    }
-
-    public function setRoleUuid(string $roleUuid): self
-    {
-        $this->roleUuid = $roleUuid;
 
         return $this;
     }

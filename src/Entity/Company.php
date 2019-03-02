@@ -6,15 +6,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CompanyRepository")
  */
 class Company
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @var \Ramsey\Uuid\UuidInterface
+     *
+     * @ORM\Id
+     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     private $id;
 
@@ -27,11 +31,6 @@ class Company
      * @ORM\Column(type="string", length=255)
      */
     private $companyPlan;
-
-    /**
-     * @ORM\Column(type="guid")
-     */
-    private $companyUuid;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="userCompany", orphanRemoval=true)
@@ -74,18 +73,6 @@ class Company
     public function setCompanyPlan(string $companyPlan): self
     {
         $this->companyPlan = $companyPlan;
-
-        return $this;
-    }
-
-    public function getCompanyUuid(): ?string
-    {
-        return $this->companyUuid;
-    }
-
-    public function setCompanyUuid(string $companyUuid): self
-    {
-        $this->companyUuid = $companyUuid;
 
         return $this;
     }

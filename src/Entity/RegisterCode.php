@@ -10,9 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
 class RegisterCode
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @var \Ramsey\Uuid\UuidInterface
+     *
+     * @ORM\Id
+     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     private $id;
 
@@ -20,11 +23,6 @@ class RegisterCode
      * @ORM\Column(type="string", length=255)
      */
     private $codeContent;
-
-    /**
-     * @ORM\Column(type="guid")
-     */
-    private $codeUuid;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="companyRegisterCodes")
@@ -51,18 +49,6 @@ class RegisterCode
     public function setCodeContent(string $codeContent): self
     {
         $this->codeContent = $codeContent;
-
-        return $this;
-    }
-
-    public function getCodeUuid(): ?string
-    {
-        return $this->codeUuid;
-    }
-
-    public function setCodeUuid(string $codeUuid): self
-    {
-        $this->codeUuid = $codeUuid;
 
         return $this;
     }
