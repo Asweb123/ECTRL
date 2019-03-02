@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="CompaniesRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CompanyRepository")
  */
-class Companies
+class Company
 {
     /**
      * @ORM\Id()
@@ -39,14 +39,14 @@ class Companies
     private $companyUsers;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RegisterCodes", mappedBy="RegisterCodeCompany", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\RegisterCode", mappedBy="RegisterCodeCompany", orphanRemoval=true)
      */
-    private $companieRegisterCodes;
+    private $companyRegisterCodes;
 
     public function __construct()
     {
         $this->companyUsers = new ArrayCollection();
-        $this->companieRegisterCodes = new ArrayCollection();
+        $this->companyRegisterCodes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -122,34 +122,33 @@ class Companies
     }
 
     /**
-     * @return Collection|RegisterCodes[]
+     * @return Collection|RegisterCode[]
      */
-    public function getCompanieRegisterCodes(): Collection
+    public function getCompanyRegisterCodes(): Collection
     {
-        return $this->companieRegisterCodes;
+        return $this->companyRegisterCodes;
     }
 
-    public function addCompanieRegisterCode(RegisterCodes $companieRegisterCode): self
+    public function addCompanyRegisterCode(RegisterCode $companyRegisterCode): self
     {
-        if (!$this->companieRegisterCodes->contains($companieRegisterCode)) {
-            $this->companieRegisterCodes[] = $companieRegisterCode;
-            $companieRegisterCode->setRegisterCodeCompany($this);
+        if (!$this->companyRegisterCodes->contains($companyRegisterCode)) {
+            $this->companyRegisterCodes[] = $companyRegisterCode;
+            $companyRegisterCode->setRegisterCodeCompany($this);
         }
 
         return $this;
     }
 
-    public function removeCompanieRegisterCode(RegisterCodes $companieRegisterCode): self
+    public function removeCompanyRegisterCode(RegisterCode $companyRegisterCode): self
     {
-        if ($this->companieRegisterCodes->contains($companieRegisterCode)) {
-            $this->companieRegisterCodes->removeElement($companieRegisterCode);
+        if ($this->companyRegisterCodes->contains($companyRegisterCode)) {
+            $this->companyRegisterCodes->removeElement($companyRegisterCode);
             // set the owning side to null (unless already changed)
-            if ($companieRegisterCode->getRegisterCodeCompany() === $this) {
-                $companieRegisterCode->setRegisterCodeCompany(null);
+            if ($companyRegisterCode->getRegisterCodeCompany() === $this) {
+                $companyRegisterCode->setRegisterCodeCompany(null);
             }
         }
 
         return $this;
     }
-
 }

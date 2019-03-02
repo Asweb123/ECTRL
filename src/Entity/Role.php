@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\RolesRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\RoleRepository")
  */
-class Roles
+class Role
 {
     /**
      * @ORM\Id()
@@ -39,14 +39,14 @@ class Roles
     private $roleUsers;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RegisterCodes", mappedBy="RegisterCodeRole", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\RegisterCode", mappedBy="RegisterCodeRole", orphanRemoval=true)
      */
-    private $RoleRegisterCode;
+    private $roleRegisterCodes;
 
     public function __construct()
     {
         $this->roleUsers = new ArrayCollection();
-        $this->RoleRegisterCode = new ArrayCollection();
+        $this->roleRegisterCodes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -122,27 +122,27 @@ class Roles
     }
 
     /**
-     * @return Collection|RegisterCodes[]
+     * @return Collection|RegisterCode[]
      */
-    public function getRoleRegisterCode(): Collection
+    public function getRoleRegisterCodes(): Collection
     {
-        return $this->RoleRegisterCode;
+        return $this->roleRegisterCodes;
     }
 
-    public function addRoleRegisterCode(RegisterCodes $roleRegisterCode): self
+    public function addRoleRegisterCode(RegisterCode $roleRegisterCode): self
     {
-        if (!$this->RoleRegisterCode->contains($roleRegisterCode)) {
-            $this->RoleRegisterCode[] = $roleRegisterCode;
+        if (!$this->roleRegisterCodes->contains($roleRegisterCode)) {
+            $this->roleRegisterCodes[] = $roleRegisterCode;
             $roleRegisterCode->setRegisterCodeRole($this);
         }
 
         return $this;
     }
 
-    public function removeRoleRegisterCode(RegisterCodes $roleRegisterCode): self
+    public function removeRoleRegisterCode(RegisterCode $roleRegisterCode): self
     {
-        if ($this->RoleRegisterCode->contains($roleRegisterCode)) {
-            $this->RoleRegisterCode->removeElement($roleRegisterCode);
+        if ($this->roleRegisterCodes->contains($roleRegisterCode)) {
+            $this->roleRegisterCodes->removeElement($roleRegisterCode);
             // set the owning side to null (unless already changed)
             if ($roleRegisterCode->getRegisterCodeRole() === $this) {
                 $roleRegisterCode->setRegisterCodeRole(null);

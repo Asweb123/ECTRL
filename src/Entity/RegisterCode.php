@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\RegisterCodesRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\RegisterCodeRepository")
  */
-class RegisterCodes
+class RegisterCode
 {
     /**
      * @ORM\Id()
@@ -27,13 +27,13 @@ class RegisterCodes
     private $codeUuid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Companies", inversedBy="companieRegisterCodes")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="companyRegisterCodes")
      * @ORM\JoinColumn(nullable=false)
      */
     private $RegisterCodeCompany;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Roles", inversedBy="RoleRegisterCode")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Role", inversedBy="roleRegisterCodes")
      * @ORM\JoinColumn(nullable=false)
      */
     private $RegisterCodeRole;
@@ -67,24 +67,24 @@ class RegisterCodes
         return $this;
     }
 
-    public function getRegisterCodeCompany(): ?Companies
+    public function getRegisterCodeCompany(): ?Company
     {
         return $this->RegisterCodeCompany;
     }
 
-    public function setRegisterCodeCompany(?Companies $RegisterCodeCompany): self
+    public function setRegisterCodeCompany(?Company $RegisterCodeCompany): self
     {
         $this->RegisterCodeCompany = $RegisterCodeCompany;
 
         return $this;
     }
 
-    public function getRegisterCodeRole(): ?Roles
+    public function getRegisterCodeRole(): ?Role
     {
         return $this->RegisterCodeRole;
     }
 
-    public function setRegisterCodeRole(?Roles $RegisterCodeRole): self
+    public function setRegisterCodeRole(?Role $RegisterCodeRole): self
     {
         $this->RegisterCodeRole = $RegisterCodeRole;
 

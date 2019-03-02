@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\RegisterCodes;
+use App\Entity\Role;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method RegisterCodes|null find($id, $lockMode = null, $lockVersion = null)
- * @method RegisterCodes|null findOneBy(array $criteria, array $orderBy = null)
- * @method RegisterCodes[]    findAll()
- * @method RegisterCodes[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Role|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Role|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Role[]    findAll()
+ * @method Role[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class RegisterCodesRepository extends ServiceEntityRepository
+class RoleRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, RegisterCodes::class);
+        parent::__construct($registry, Role::class);
     }
 
     // /**
-    //  * @return RegisterCodes[] Returns an array of RegisterCodes objects
+    //  * @return Role[] Returns an array of Role objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class RegisterCodesRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?RegisterCodes
+    public function findOneBySomeField($value): ?Role
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.exampleField = :val')

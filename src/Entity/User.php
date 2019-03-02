@@ -59,18 +59,6 @@ class User implements UserInterface
     private $userUuid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Companies", inversedBy="companyUsers")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $userCompany;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Roles", inversedBy="roleUsers")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $userRole;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $userEnable;
@@ -79,6 +67,18 @@ class User implements UserInterface
      * @ORM\Column(type="boolean")
      */
     private $user_aware;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="companyUsers")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $userCompany;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Role", inversedBy="roleUsers")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $userRole;
 
 
     public function getId(): ?int
@@ -219,30 +219,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getUserCompany(): ?Companies
-    {
-        return $this->userCompany;
-    }
-
-    public function setUserCompany(?Companies $userCompany): self
-    {
-        $this->userCompany = $userCompany;
-
-        return $this;
-    }
-
-    public function getUserRole(): ?Roles
-    {
-        return $this->userRole;
-    }
-
-    public function setUserRole(?Roles $userRole): self
-    {
-        $this->userRole = $userRole;
-
-        return $this;
-    }
-
     public function getUserEnable(): ?bool
     {
         return $this->userEnable;
@@ -263,6 +239,30 @@ class User implements UserInterface
     public function setUserAware(bool $user_aware): self
     {
         $this->user_aware = $user_aware;
+
+        return $this;
+    }
+
+    public function getUserCompany(): ?Company
+    {
+        return $this->userCompany;
+    }
+
+    public function setUserCompany(?Company $userCompany): self
+    {
+        $this->userCompany = $userCompany;
+
+        return $this;
+    }
+
+    public function getUserRole(): ?Role
+    {
+        return $this->userRole;
+    }
+
+    public function setUserRole(?Role $userRole): self
+    {
+        $this->userRole = $userRole;
 
         return $this;
     }
