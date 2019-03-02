@@ -14,7 +14,7 @@ class RegisterCodes
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $registerId;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -26,9 +26,21 @@ class RegisterCodes
      */
     private $codeUuid;
 
-    public function getRegisterId(): ?int
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Companies", inversedBy="companieRegisterCodes")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $RegisterCodeCompany;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Roles", inversedBy="RoleRegisterCode")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $RegisterCodeRole;
+
+    public function getId(): ?int
     {
-        return $this->registerId;
+        return $this->id;
     }
 
     public function getCodeContent(): ?string
@@ -51,6 +63,30 @@ class RegisterCodes
     public function setCodeUuid(string $codeUuid): self
     {
         $this->codeUuid = $codeUuid;
+
+        return $this;
+    }
+
+    public function getRegisterCodeCompany(): ?Companies
+    {
+        return $this->RegisterCodeCompany;
+    }
+
+    public function setRegisterCodeCompany(?Companies $RegisterCodeCompany): self
+    {
+        $this->RegisterCodeCompany = $RegisterCodeCompany;
+
+        return $this;
+    }
+
+    public function getRegisterCodeRole(): ?Roles
+    {
+        return $this->RegisterCodeRole;
+    }
+
+    public function setRegisterCodeRole(?Roles $RegisterCodeRole): self
+    {
+        $this->RegisterCodeRole = $RegisterCodeRole;
 
         return $this;
     }

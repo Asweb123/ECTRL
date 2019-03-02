@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,7 +16,7 @@ class Roles
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $roleId;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -31,9 +33,25 @@ class Roles
      */
     private $roleUuid;
 
-    public function getRoleId(): ?int
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="userRole", orphanRemoval=true)
+     */
+    private $roleUsers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RegisterCodes", mappedBy="RegisterCodeRole", orphanRemoval=true)
+     */
+    private $RoleRegisterCode;
+
+    public function __construct()
     {
-        return $this->roleId;
+        $this->roleUsers = new ArrayCollection();
+        $this->RoleRegisterCode = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getRoleTitle(): ?string
@@ -68,6 +86,68 @@ class Roles
     public function setRoleUuid(string $roleUuid): self
     {
         $this->roleUuid = $roleUuid;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getRoleUsers(): Collection
+    {
+        return $this->roleUsers;
+    }
+
+    public function addRoleUser(User $roleUser): self
+    {
+        if (!$this->roleUsers->contains($roleUser)) {
+            $this->roleUsers[] = $roleUser;
+            $roleUser->setUserRole($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRoleUser(User $roleUser): self
+    {
+        if ($this->roleUsers->contains($roleUser)) {
+            $this->roleUsers->removeElement($roleUser);
+            // set the owning side to null (unless already changed)
+            if ($roleUser->getUserRole() === $this) {
+                $roleUser->setUserRole(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RegisterCodes[]
+     */
+    public function getRoleRegisterCode(): Collection
+    {
+        return $this->RoleRegisterCode;
+    }
+
+    public function addRoleRegisterCode(RegisterCodes $roleRegisterCode): self
+    {
+        if (!$this->RoleRegisterCode->contains($roleRegisterCode)) {
+            $this->RoleRegisterCode[] = $roleRegisterCode;
+            $roleRegisterCode->setRegisterCodeRole($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRoleRegisterCode(RegisterCodes $roleRegisterCode): self
+    {
+        if ($this->RoleRegisterCode->contains($roleRegisterCode)) {
+            $this->RoleRegisterCode->removeElement($roleRegisterCode);
+            // set the owning side to null (unless already changed)
+            if ($roleRegisterCode->getRegisterCodeRole() === $this) {
+                $roleRegisterCode->setRegisterCodeRole(null);
+            }
+        }
 
         return $this;
     }

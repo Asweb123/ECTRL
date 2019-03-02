@@ -15,7 +15,7 @@ class User implements UserInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $userId;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -58,10 +58,32 @@ class User implements UserInterface
      */
     private $userUuid;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Companies", inversedBy="companyUsers")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $userCompany;
 
-    public function getUserId(): ?int
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Roles", inversedBy="roleUsers")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $userRole;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $userEnable;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $user_aware;
+
+
+    public function getId(): ?int
     {
-        return $this->userId;
+        return $this->id;
     }
 
     public function getUserEmail(): ?string
@@ -193,6 +215,54 @@ class User implements UserInterface
     public function setUserUuid(string $userUuid): self
     {
         $this->userUuid = $userUuid;
+
+        return $this;
+    }
+
+    public function getUserCompany(): ?Companies
+    {
+        return $this->userCompany;
+    }
+
+    public function setUserCompany(?Companies $userCompany): self
+    {
+        $this->userCompany = $userCompany;
+
+        return $this;
+    }
+
+    public function getUserRole(): ?Roles
+    {
+        return $this->userRole;
+    }
+
+    public function setUserRole(?Roles $userRole): self
+    {
+        $this->userRole = $userRole;
+
+        return $this;
+    }
+
+    public function getUserEnable(): ?bool
+    {
+        return $this->userEnable;
+    }
+
+    public function setUserEnable(bool $userEnable): self
+    {
+        $this->userEnable = $userEnable;
+
+        return $this;
+    }
+
+    public function getUserAware(): ?bool
+    {
+        return $this->user_aware;
+    }
+
+    public function setUserAware(bool $user_aware): self
+    {
+        $this->user_aware = $user_aware;
 
         return $this;
     }
