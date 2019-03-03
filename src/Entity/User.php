@@ -23,7 +23,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $userEmail;
+    private $email;
 
     /**
      * @ORM\Column(type="json")
@@ -91,14 +91,14 @@ class User implements UserInterface
         return $this->id;
     }
 
-    public function getUserEmail(): ?string
+    public function getEmail(): ?string
     {
-        return $this->userEmail;
+        return $this->email;
     }
 
-    public function setUserEmail(string $userEmail): self
+    public function setEmail(string $email): self
     {
-        $this->email = $userEmail;
+        $this->email = $email;
 
         return $this;
     }
@@ -110,7 +110,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->userEmail;
+        return (string) $this->email;
     }
 
     /**
