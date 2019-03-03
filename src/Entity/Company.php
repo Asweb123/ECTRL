@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Certification\Certification;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,11 +29,6 @@ class Company
     private $companyName;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $companyPlan;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="userCompany", orphanRemoval=true)
      */
     private $companyUsers;
@@ -42,13 +38,25 @@ class Company
      */
     private $companyRegisterCodes;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $creationDate;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Certification\Certification", mappedBy="certifications")
+     */
+    private $certifications;
+
     public function __construct()
     {
+        $this->creationDate = new \DateTime("now");
         $this->companyUsers = new ArrayCollection();
         $this->companyRegisterCodes = new ArrayCollection();
+        $this->certifications = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
@@ -61,18 +69,6 @@ class Company
     public function setCompanyName(string $companyName): self
     {
         $this->companyName = $companyName;
-
-        return $this;
-    }
-
-    public function getCompanyPlan(): ?string
-    {
-        return $this->companyPlan;
-    }
-
-    public function setCompanyPlan(string $companyPlan): self
-    {
-        $this->companyPlan = $companyPlan;
 
         return $this;
     }
@@ -134,6 +130,46 @@ class Company
             if ($companyRegisterCode->getRegisterCodeCompany() === $this) {
                 $companyRegisterCode->setRegisterCodeCompany(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->creationDate;
+    }
+
+    public function setCreationDate(\DateTimeInterface $creationDate): self
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Certification[]
+     */
+    public function getCertifications(): Collection
+    {
+        return $this->certifications;
+    }
+
+    public function addCertification(Certification $certification): self
+    {
+        if (!$this->certifications->contains($certification)) {
+            $this->certifications[] = $certification;
+            $certification->addCertification($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCertification(Certification $certification): self
+    {
+        if ($this->certifications->contains($certification)) {
+            $this->certifications->removeElement($certification);
+            $certification->removeCertification($this);
         }
 
         return $this;

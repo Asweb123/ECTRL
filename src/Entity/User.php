@@ -81,11 +81,12 @@ class User implements UserInterface
 
     public function __construct()
     {
+        $this->creationDate = new \DateTime("now");
         $this->userEnable = false;
         $this->userAware = false;
     }
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }

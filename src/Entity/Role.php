@@ -41,13 +41,19 @@ class Role
      */
     private $roleRegisterCodes;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $creationDate;
+
     public function __construct()
     {
+        $this->creationDate = new \DateTime("now");
         $this->roleUsers = new ArrayCollection();
         $this->roleRegisterCodes = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
@@ -134,6 +140,18 @@ class Role
                 $roleRegisterCode->setRegisterCodeRole(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->creationDate;
+    }
+
+    public function setCreationDate(\DateTimeInterface $creationDate): self
+    {
+        $this->creationDate = $creationDate;
 
         return $this;
     }

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: SIMON
- * Date: 02/03/2019
- * Time: 20:55
- */
 
 namespace App\Controller\API\Authentication;
 

@@ -36,7 +36,17 @@ class RegisterCode
      */
     private $RegisterCodeRole;
 
-    public function getId(): ?int
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $creationDate;
+
+    public function __construct()
+    {
+        $this->creationDate = new \DateTime("now");
+    }
+
+    public function getId()
     {
         return $this->id;
     }
@@ -73,6 +83,18 @@ class RegisterCode
     public function setRegisterCodeRole(?Role $RegisterCodeRole): self
     {
         $this->RegisterCodeRole = $RegisterCodeRole;
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->creationDate;
+    }
+
+    public function setCreationDate(\DateTimeInterface $creationDate): self
+    {
+        $this->creationDate = $creationDate;
 
         return $this;
     }
