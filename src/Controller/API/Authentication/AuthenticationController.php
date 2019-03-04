@@ -16,13 +16,18 @@ class AuthenticationController extends AbstractController
      */
     public function register(Request $request)
     {
-        $data = json_decode($request->getContent(), true);
+        $data = $request->getContent();
 
         dump($data);
 
         return new JsonResponse(
             [
-                'status' => 'ok',
+                "code" => "200",
+                "details" => "Register done",
+                "result" => [
+                    "firstName" => $data,
+                    "lastName" => "bla"
+                ]
             ],
             JsonResponse::HTTP_OK
         );
