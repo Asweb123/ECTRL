@@ -22,50 +22,30 @@ class AuthenticationController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-     //   $data = $request->getContent();
-
-
-        $data = $data[0];
-
-
-        $receivedCode = $data["code"];
         $repository = $this->getDoctrine()->getrepository(RegisterCode::class);
-        $registerCode = $repository->findOneBy(['codeContent' => $receivedCode]);
-
-        if ($registerCode === null) {
-            return new JsonResponse(
-                [
-                    "code"=> 403,
-                    "details" => "Wrong registerCode",
-                    "result" => []
-                ],
-                JsonResponse::HTTP_FORBIDDEN
-            );
-        }
-
+        $registerCode = $repository->findOneBy(['codeContent' => $data["code"]]);
 
         $formUser = $this->createForm(UserRegisterType::class, new User());
         $formUser->submit($data);
 
-        if ($formUser->isValid() === false) {
+        if (($registerCode === null) || ($formUser->isValid() === false)) {
             return new JsonResponse(
                 [
                     "code"=> 403,
-                    "details" => "Wrong register user values",
+                    "details" => "Wrong register values",
                     "result" => []
                 ],
                 JsonResponse::HTTP_FORBIDDEN
             );
         }
-
 
         $user = new User();
         $user->setEmail($data['email']);
         $user->setFirstName($data['firstName']);
         $user->setLastName($data["lastName"]);
         $user->setPassword($data["password"]);
-        $user->setUserCompany($registerCode->getRegisterCodeCompany());
-        $user->setUserRole($registerCode->getRegisterCodeRole());
+        $user->setCompany($registerCode->getCompany());
+        $user->setRole($registerCode->getRole());
 
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($user);
@@ -81,8 +61,8 @@ class AuthenticationController extends AbstractController
                     "email" => $user->getEmail(),
                     "uuidUser" => $user->getId(),
                     "userSociety" => [
-                        "uuidSociety" => $user->getUserCompany()->getId(),
-                        "societyName" => $user->getUserCompany()->getCompanyName()
+                        "uuidSociety" => $user->getCompany()->getId(),
+                        "societyName" => $user->getCompany()->getName()
                     ]
                 ]
             ],

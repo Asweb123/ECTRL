@@ -12,45 +12,42 @@ use Doctrine\ORM\Mapping as ORM;
 class Role
 {
     /**
-     * @var \Ramsey\Uuid\UuidInterface
-     *
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     * @ORM\Id()
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(name="id", type="guid")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $roleTitle;
+    private $title;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
-    private $roleDescription;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="userRole", orphanRemoval=true)
-     */
-    private $roleUsers;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RegisterCode", mappedBy="RegisterCodeRole", orphanRemoval=true)
-     */
-    private $roleRegisterCodes;
+    private $description;
 
     /**
      * @ORM\Column(type="datetime")
      */
     private $creationDate;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="role")
+     */
+    private $users;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RegisterCode", mappedBy="role", orphanRemoval=true)
+     */
+    private $registerCodes;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
-        $this->roleUsers = new ArrayCollection();
-        $this->roleRegisterCodes = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->registerCodes = new ArrayCollection();
     }
 
     public function getId()
@@ -58,88 +55,26 @@ class Role
         return $this->id;
     }
 
-    public function getRoleTitle(): ?string
+    public function getTitle(): ?string
     {
-        return $this->roleTitle;
+        return $this->title;
     }
 
-    public function setRoleTitle(string $roleTitle): self
+    public function setTitle(string $title): self
     {
-        $this->roleTitle = $roleTitle;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getRoleDescription(): ?string
+    public function getDescription(): ?string
     {
-        return $this->roleDescription;
+        return $this->description;
     }
 
-    public function setRoleDescription(string $roleDescription): self
+    public function setDescription(string $description): self
     {
-        $this->roleDescription = $roleDescription;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|User[]
-     */
-    public function getRoleUsers(): Collection
-    {
-        return $this->roleUsers;
-    }
-
-    public function addRoleUser(User $roleUser): self
-    {
-        if (!$this->roleUsers->contains($roleUser)) {
-            $this->roleUsers[] = $roleUser;
-            $roleUser->setUserRole($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRoleUser(User $roleUser): self
-    {
-        if ($this->roleUsers->contains($roleUser)) {
-            $this->roleUsers->removeElement($roleUser);
-            // set the owning side to null (unless already changed)
-            if ($roleUser->getUserRole() === $this) {
-                $roleUser->setUserRole(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|RegisterCode[]
-     */
-    public function getRoleRegisterCodes(): Collection
-    {
-        return $this->roleRegisterCodes;
-    }
-
-    public function addRoleRegisterCode(RegisterCode $roleRegisterCode): self
-    {
-        if (!$this->roleRegisterCodes->contains($roleRegisterCode)) {
-            $this->roleRegisterCodes[] = $roleRegisterCode;
-            $roleRegisterCode->setRegisterCodeRole($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRoleRegisterCode(RegisterCode $roleRegisterCode): self
-    {
-        if ($this->roleRegisterCodes->contains($roleRegisterCode)) {
-            $this->roleRegisterCodes->removeElement($roleRegisterCode);
-            // set the owning side to null (unless already changed)
-            if ($roleRegisterCode->getRegisterCodeRole() === $this) {
-                $roleRegisterCode->setRegisterCodeRole(null);
-            }
-        }
+        $this->description = $description;
 
         return $this;
     }
@@ -152,6 +87,68 @@ class Role
     public function setCreationDate(\DateTimeInterface $creationDate): self
     {
         $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setRole($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getRole() === $this) {
+                $user->setRole(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RegisterCode[]
+     */
+    public function getRegisterCodes(): Collection
+    {
+        return $this->registerCodes;
+    }
+
+    public function addRegisterCode(RegisterCode $registerCode): self
+    {
+        if (!$this->registerCodes->contains($registerCode)) {
+            $this->registerCodes[] = $registerCode;
+            $registerCode->setRole($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRegisterCode(RegisterCode $registerCode): self
+    {
+        if ($this->registerCodes->contains($registerCode)) {
+            $this->registerCodes->removeElement($registerCode);
+            // set the owning side to null (unless already changed)
+            if ($registerCode->getRole() === $this) {
+                $registerCode->setRole(null);
+            }
+        }
 
         return $this;
     }

@@ -7,36 +7,22 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CompanyRepository")
  */
 class Company
 {
     /**
-     * @var \Ramsey\Uuid\UuidInterface
-     *
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     * @ORM\Id()
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(name="id", type="guid")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $companyName;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="userCompany", orphanRemoval=true)
-     */
-    private $companyUsers;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RegisterCode", mappedBy="RegisterCodeCompany", orphanRemoval=true)
-     */
-    private $companyRegisterCodes;
+    private $name;
 
     /**
      * @ORM\Column(type="datetime")
@@ -44,16 +30,26 @@ class Company
     private $creationDate;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Certification\Certification", mappedBy="certifications")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Certification\Certification", mappedBy="companies")
      */
     private $certifications;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="company", orphanRemoval=true)
+     */
+    private $users;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RegisterCode", mappedBy="company", orphanRemoval=true)
+     */
+    private $registerCodes;
 
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
-        $this->companyUsers = new ArrayCollection();
-        $this->companyRegisterCodes = new ArrayCollection();
         $this->certifications = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->registerCodes = new ArrayCollection();
     }
 
     public function getId()
@@ -61,76 +57,14 @@ class Company
         return $this->id;
     }
 
-    public function getCompanyName(): ?string
+    public function getName(): ?string
     {
-        return $this->companyName;
+        return $this->name;
     }
 
-    public function setCompanyName(string $companyName): self
+    public function setName(string $name): self
     {
-        $this->companyName = $companyName;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|User[]
-     */
-    public function getCompanyUsers(): Collection
-    {
-        return $this->companyUsers;
-    }
-
-    public function addCompanyUser(User $companyUser): self
-    {
-        if (!$this->companyUsers->contains($companyUser)) {
-            $this->companyUsers[] = $companyUser;
-            $companyUser->setUserCompany($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCompanyUser(User $companyUser): self
-    {
-        if ($this->companyUsers->contains($companyUser)) {
-            $this->companyUsers->removeElement($companyUser);
-            // set the owning side to null (unless already changed)
-            if ($companyUser->getUserCompany() === $this) {
-                $companyUser->setUserCompany(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|RegisterCode[]
-     */
-    public function getCompanyRegisterCodes(): Collection
-    {
-        return $this->companyRegisterCodes;
-    }
-
-    public function addCompanyRegisterCode(RegisterCode $companyRegisterCode): self
-    {
-        if (!$this->companyRegisterCodes->contains($companyRegisterCode)) {
-            $this->companyRegisterCodes[] = $companyRegisterCode;
-            $companyRegisterCode->setRegisterCodeCompany($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCompanyRegisterCode(RegisterCode $companyRegisterCode): self
-    {
-        if ($this->companyRegisterCodes->contains($companyRegisterCode)) {
-            $this->companyRegisterCodes->removeElement($companyRegisterCode);
-            // set the owning side to null (unless already changed)
-            if ($companyRegisterCode->getRegisterCodeCompany() === $this) {
-                $companyRegisterCode->setRegisterCodeCompany(null);
-            }
-        }
+        $this->name = $name;
 
         return $this;
     }
@@ -159,7 +93,7 @@ class Company
     {
         if (!$this->certifications->contains($certification)) {
             $this->certifications[] = $certification;
-            $certification->addCertification($this);
+            $certification->addCompany($this);
         }
 
         return $this;
@@ -169,7 +103,69 @@ class Company
     {
         if ($this->certifications->contains($certification)) {
             $this->certifications->removeElement($certification);
-            $certification->removeCertification($this);
+            $certification->removeCompany($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getCompany() === $this) {
+                $user->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RegisterCode[]
+     */
+    public function getRegisterCodes(): Collection
+    {
+        return $this->registerCodes;
+    }
+
+    public function addRegisterCode(RegisterCode $registerCode): self
+    {
+        if (!$this->registerCodes->contains($registerCode)) {
+            $this->registerCodes[] = $registerCode;
+            $registerCode->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRegisterCode(RegisterCode $registerCode): self
+    {
+        if ($this->registerCodes->contains($registerCode)) {
+            $this->registerCodes->removeElement($registerCode);
+            // set the owning side to null (unless already changed)
+            if ($registerCode->getCompany() === $this) {
+                $registerCode->setCompany(null);
+            }
         }
 
         return $this;

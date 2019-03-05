@@ -13,24 +13,21 @@ use Doctrine\ORM\Mapping as ORM;
 class Certification
 {
     /**
-     * @var \Ramsey\Uuid\UuidInterface
-     *
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     * @ORM\Id()
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(name="id", type="guid")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $certifTitle;
+    private $title;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $certifDescription;
+    private $description;
 
     /**
      * @ORM\Column(type="datetime")
@@ -40,12 +37,12 @@ class Certification
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Company", inversedBy="certifications")
      */
-    private $certifications;
+    private $companies;
 
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
-        $this->certifications = new ArrayCollection();
+        $this->companies = new ArrayCollection();
     }
 
     public function getId()
@@ -53,26 +50,26 @@ class Certification
         return $this->id;
     }
 
-    public function getCertifTitle(): ?string
+    public function getTitle(): ?string
     {
-        return $this->certifTitle;
+        return $this->title;
     }
 
-    public function setCertifTitle(string $certifTitle): self
+    public function setTitle(string $title): self
     {
-        $this->certifTitle = $certifTitle;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getCertifDescription(): ?string
+    public function getDescription(): ?string
     {
-        return $this->certifDescription;
+        return $this->description;
     }
 
-    public function setCertifDescription(string $certifDescription): self
+    public function setDescription(string $description): self
     {
-        $this->certifDescription = $certifDescription;
+        $this->description = $description;
 
         return $this;
     }
@@ -92,24 +89,24 @@ class Certification
     /**
      * @return Collection|Company[]
      */
-    public function getCertifications(): Collection
+    public function getCompanies(): Collection
     {
-        return $this->certifications;
+        return $this->companies;
     }
 
-    public function addCertification(Company $certification): self
+    public function addCompany(Company $company): self
     {
-        if (!$this->certifications->contains($certification)) {
-            $this->certifications[] = $certification;
+        if (!$this->companies->contains($company)) {
+            $this->companies[] = $company;
         }
 
         return $this;
     }
 
-    public function removeCertification(Company $certification): self
+    public function removeCompany(Company $company): self
     {
-        if ($this->certifications->contains($certification)) {
-            $this->certifications->removeElement($certification);
+        if ($this->companies->contains($company)) {
+            $this->companies->removeElement($company);
         }
 
         return $this;

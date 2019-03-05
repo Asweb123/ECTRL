@@ -5,19 +5,18 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity("email")
  */
 class User implements UserInterface
 {
     /**
-     * @var \Ramsey\Uuid\UuidInterface
-     *
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     * @ORM\Id()
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(name="id", type="guid")
      */
     private $id;
 
@@ -33,6 +32,7 @@ class User implements UserInterface
     private $roles = [];
 
     /**
+     * @var string The hashed password
      * @ORM\Column(type="string")
      */
     private $password;
@@ -45,8 +45,6 @@ class User implements UserInterface
      * @Assert\Length(
      *      min = 2,
      *      max = 50,
-     *      minMessage = "The first name must be at least {{ limit }} characters long",
-     *      maxMessage = "The first name cannot be longer than {{ limit }} characters"
      * )
      */
     private $firstName;
@@ -59,8 +57,6 @@ class User implements UserInterface
      * @Assert\Length(
      *      min = 2,
      *      max = 50,
-     *      minMessage = "The first name must be at least {{ limit }} characters long",
-     *      maxMessage = "The first name cannot be longer than {{ limit }} characters"
      * )
      */
     private $lastName;
@@ -69,11 +65,6 @@ class User implements UserInterface
      * @ORM\Column(type="datetime")
      */
     private $creationDate;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $phoneSsid;
 
     /**
      * @ORM\Column(type="boolean")
@@ -86,17 +77,16 @@ class User implements UserInterface
     private $userAware;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="companyUsers")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $userCompany;
+    private $company;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Role", inversedBy="roleUsers")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Role", inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $userRole;
-
+    private $role;
 
     public function __construct()
     {
@@ -219,18 +209,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPhoneSsid(): ?string
-    {
-        return $this->phoneSsid;
-    }
-
-    public function setPhoneSsid(string $phoneSsid): self
-    {
-        $this->phoneSsid = $phoneSsid;
-
-        return $this;
-    }
-
     public function getUserEnable(): ?bool
     {
         return $this->userEnable;
@@ -250,33 +228,32 @@ class User implements UserInterface
 
     public function setUserAware(bool $userAware): self
     {
-        $this->user_aware = $userAware;
+        $this->userAware = $userAware;
 
         return $this;
     }
 
-    public function getUserCompany(): ?Company
+    public function getCompany(): ?Company
     {
-        return $this->userCompany;
+        return $this->company;
     }
 
-    public function setUserCompany(?Company $userCompany): self
+    public function setCompany(?Company $company): self
     {
-        $this->userCompany = $userCompany;
+        $this->company = $company;
 
         return $this;
     }
 
-    public function getUserRole(): ?Role
+    public function getRole(): ?Role
     {
-        return $this->userRole;
+        return $this->role;
     }
 
-    public function setUserRole(?Role $userRole): self
+    public function setRole(?Role $role): self
     {
-        $this->userRole = $userRole;
+        $this->role = $role;
 
         return $this;
     }
-
 }

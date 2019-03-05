@@ -14,12 +14,12 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $company = new Company();
-        $company->setCompanyName("Fleury Michon");
+        $company->setName("Fleury Michon");
 
 
         $certificationIFS = new Certification();
-        $certificationIFS->setCertifTitle("IFS");
-        $certificationIFS->setCertifDescription("Norme Internationale pour la sécurité des Aliments");
+        $certificationIFS->setTitle("IFS");
+        $certificationIFS->setDescription("Norme Internationale pour la sécurité des Aliments");
 
 
         $registerCodeD = new RegisterCode();
@@ -36,33 +36,33 @@ class AppFixtures extends Fixture
 
 
         $roleD = new Role();
-        $roleD->setRoleTitle("Directeur");
-        $roleD->setRoleDescription("Suivi des résultats et validation des grilles vérifiées par le responsable qualité");
+        $roleD->setTitle("Directeur");
+        $roleD->setDescription("Suivi des résultats et validation des grilles vérifiées par le responsable qualité");
 
         $roleR = new Role();
-        $roleR->setRoleTitle("Responsable qualité");
-        $roleR->setRoleDescription("Création, complétion et validation des grilles");
+        $roleR->setTitle("Responsable qualité");
+        $roleR->setDescription("Création, complétion et validation des grilles");
 
         $roleA = new Role();
-        $roleA->setRoleTitle("Assistant qualité");
-        $roleA->setRoleDescription("Création et complétion des grilles");
+        $roleA->setTitle("Assistant qualité");
+        $roleA->setDescription("Création et complétion des grilles");
 
         $roleC = new Role();
-        $roleC->setRoleTitle("Client Distributeur");
-        $roleC->setRoleDescription("Consultation des résultats émis par le directeur de l’entreprise");
+        $roleC->setTitle("Client Distributeur");
+        $roleC->setDescription("Consultation des résultats émis par le directeur de l’entreprise");
 
 
         $company->addCertification($certificationIFS);
 
-        $company->addCompanyRegisterCode($registerCodeD);
-        $company->addCompanyRegisterCode($registerCodeR);
-        $company->addCompanyRegisterCode($registerCodeA);
-        $company->addCompanyRegisterCode($registerCodeC);
+        $company->addRegisterCode($registerCodeD);
+        $company->addRegisterCode($registerCodeR);
+        $company->addRegisterCode($registerCodeA);
+        $company->addRegisterCode($registerCodeC);
 
-        $registerCodeD->setRegisterCodeRole($roleD);
-        $registerCodeR->setRegisterCodeRole($roleR);
-        $registerCodeA->setRegisterCodeRole($roleA);
-        $registerCodeC->setRegisterCodeRole($roleC);
+        $registerCodeD->setRole($roleD);
+        $registerCodeR->setRole($roleR);
+        $registerCodeA->setRole($roleA);
+        $registerCodeC->setRole($roleC);
 
 
         $manager->persist($company);
