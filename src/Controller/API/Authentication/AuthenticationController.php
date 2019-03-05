@@ -47,9 +47,9 @@ class AuthenticationController extends AbstractController
         $user->setCompany($registerCode->getCompany());
         $user->setRole($registerCode->getRole());
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($user);
-        $entityManager->flush();
+    //    $entityManager = $this->getDoctrine()->getManager();
+    //    $entityManager->persist($user);
+    //    $entityManager->flush();
 
         return new JsonResponse(
             [
@@ -69,4 +69,52 @@ class AuthenticationController extends AbstractController
             JsonResponse::HTTP_OK
         );
     }
+
+
+    /**
+     * @Route("/api/login", name="login", methods={"POST"})
+     */
+    public function login(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+       
+        $repository = $this->getDoctrine()->getrepository(User::class);
+        $user = $repository->findOneBy(['email' => $data["email"]]);
+
+
+        if (($user === null) || ($user->getPassword() !== $data["password"])) {
+            return new JsonResponse(
+                [
+                    "code"=> 403,
+                    "details" => "Wrong login values",
+                    "result" => []
+                ],
+                JsonResponse::HTTP_FORBIDDEN
+            );
+        }
+
+
+        return new JsonResponse(
+            [
+                "code" => "200",
+                "details" => "The user can access to your super app dude!",
+                "result" => [
+                    "firstName" => $user->getFirstName(),
+                    "lastName" => $user->getLastName(),
+                    "email" => $user->getEmail(),
+                    "uuidUser" => $user->getId(),
+                    "userRole" => [
+                        "uuidRole" => $user->getRole()->getId(),
+                        "roleName" => $user->getRole()->getTitle()
+                    ],
+                    "userSociety" => [
+                        "uuidSociety" => $user->getCompany()->getId(),
+                        "societyName" => $user->getCompany()->getName()
+                    ]
+                ]
+            ],
+            JsonResponse::HTTP_OK
+        );
+    }
+
 }
