@@ -1,0 +1,7 @@
+<p>Bonjour {{ firstName }} {{ lastName }},</p>
+
+<p>Afin de finaliser votre inscription à l'application eCtrl de EKALIT, veuillez cliquer sur le lien ci-dessous:</p>
+
+<p>
+    <a href="{{ url('registerConfirmation', {'userId': userId})  }}">Cliquez sur ce lien pour activer votre compte.</a>
+</p>
