@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,9 +40,20 @@ class RegisterCode
      */
     private $role;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $maxNbOfUsers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="registerCode")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
+        $this->users = new ArrayCollection();
     }
 
     public function getId()
@@ -92,6 +105,49 @@ class RegisterCode
     public function setRole(?Role $role): self
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    public function getMaxNbOfUsers(): ?int
+    {
+        return $this->maxNbOfUsers;
+    }
+
+    public function setMaxNbOfUsers(int $maxNbOfUsers): self
+    {
+        $this->maxNbOfUsers = $maxNbOfUsers;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setRegisterCode($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getRegisterCode() === $this) {
+                $user->setRegisterCode(null);
+            }
+        }
 
         return $this;
     }

@@ -88,6 +88,12 @@ class User implements UserInterface
      */
     private $role;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\RegisterCode", inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $registerCode;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
@@ -253,6 +259,18 @@ class User implements UserInterface
     public function setRole(?Role $role): self
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    public function getRegisterCode(): ?RegisterCode
+    {
+        return $this->registerCode;
+    }
+
+    public function setRegisterCode(?RegisterCode $registerCode): self
+    {
+        $this->registerCode = $registerCode;
 
         return $this;
     }

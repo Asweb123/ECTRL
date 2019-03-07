@@ -24,15 +24,19 @@ class AppFixtures extends Fixture
 
         $registerCodeD = new RegisterCode();
         $registerCodeD->setCodeContent("X29JTZ22");
+        $registerCodeD->setMaxNbOfUsers(3);
 
         $registerCodeR = new RegisterCode();
         $registerCodeR->setCodeContent("UT28SK78");
+        $registerCodeR->setMaxNbOfUsers(3);
 
         $registerCodeA = new RegisterCode();
         $registerCodeA->setCodeContent("AS59ET47");
+        $registerCodeA->setMaxNbOfUsers(3);
 
         $registerCodeC = new RegisterCode();
         $registerCodeC->setCodeContent("VG87SY45");
+        $registerCodeC->setMaxNbOfUsers(3);
 
 
         $roleD = new Role();
