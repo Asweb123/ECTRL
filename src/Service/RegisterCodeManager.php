@@ -10,10 +10,10 @@ class RegisterCodeManager
     private $em;
 
     public function __construct(EntityManagerInterface $em){
-        $this->em =$em;
+        $this->em = $em;
     }
 
-    public function NbOfUsersChecker($registerCode)
+    public function nbOfUsersChecker($registerCode)
     {
         if (($registerCode === null) || (count($registerCode->getUsers()) >= $registerCode->getMaxNbOfUsers())) {
             return false;
@@ -22,7 +22,7 @@ class RegisterCodeManager
         }
     }
 
-    public function NbOfUsersUpdater($registerCode, $user)
+    public function nbOfUsersUpdater($registerCode, $user)
     {
         $registerCode->addUser($user);
         $this->em->persist($registerCode);

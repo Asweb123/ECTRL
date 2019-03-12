@@ -9,7 +9,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @UniqueEntity("email")
+ * @UniqueEntity("email", message="L'adresse email renseignée est déjà utilisée.")
  */
 class User implements UserInterface
 {
@@ -22,7 +22,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\Email()
+     * @Assert\Email(message="L'adresse email renseignée n'est pas une adresse valide.")
      */
     private $email;
 
@@ -43,8 +43,15 @@ class User implements UserInterface
      * @Assert\NotNull()
      * @Assert\NotBlank()
      * @Assert\Length(
-     *      min = 2,
-     *      max = 50,
+     *     min = 2,
+     *     max = 50,
+     *     minMessage="Votre prénom doit contenir au moins {{ limit }} caractères.",
+     *     maxMessage="Votre prénom doit contenir au maximum {{ limit }} caractères."
+     * )
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="Votre prénom ne peut pas contenir de chiffres."
      * )
      */
     private $firstName;
@@ -55,8 +62,15 @@ class User implements UserInterface
      * @Assert\NotNull()
      * @Assert\NotBlank()
      * @Assert\Length(
-     *      min = 2,
-     *      max = 50,
+     *     min = 2,
+     *     max = 50,
+     *     minMessage="Votre nom doit contenir au moins {{ limit }} caractères.",
+     *     maxMessage="Votre nom doit contenir au maximum {{ limit }} caractères."
+     * )
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="Votre nom ne peut pas contenir de chiffres."
      * )
      */
     private $lastName;
@@ -70,11 +84,6 @@ class User implements UserInterface
      * @ORM\Column(type="boolean")
      */
     private $userEnable;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $userAware;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="users")
@@ -98,7 +107,6 @@ class User implements UserInterface
     {
         $this->creationDate = new \DateTime("now");
         $this->userEnable = false;
-        $this->userAware = false;
     }
 
     public function getId()

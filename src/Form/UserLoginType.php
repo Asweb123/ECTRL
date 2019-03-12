@@ -2,24 +2,32 @@
 
 namespace App\Form;
 
-use App\Entity\User;
-use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Regex;
 
-class UserRegisterType extends AbstractType
+class UserLoginType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstName')
-            ->add('lastName')
-            ->add('email')
-            ->add('password',
-                  null,
+            ->add('email',
+                null,
                     [
+                       'constraints' => [
+                           new Email(
+                               [
+                                   'message' => "L'adresse email renseignée n'est pas une adresse email valide."
+                               ]
+                           )
+                       ]
+                    ]
+                )
+            ->add('password',
+                 null,
+                     [
                         'constraints' => [
                             new Regex(
                                 [
@@ -28,7 +36,7 @@ class UserRegisterType extends AbstractType
                                 ]
                             )
                         ]
-                    ]
+                     ]
                 )
         ;
     }
@@ -36,9 +44,7 @@ class UserRegisterType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
             'csrf_protection' => false,
-            'allow_extra_fields' => true,
         ]);
     }
 }

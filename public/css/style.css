@@ -1,0 +1,27 @@
+.bg {
+    background-color: #58c0c1;
+    height: 100vh;
+    font-family: "Roboto", "sans-serif";
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info-wrap {
+    padding: 1rem;
+}
+
+.info-title {
+    text-align: center;
+    font-size: 2.5rem;
+}
+
+.img-hand {
+
+}
+
+.info {
+    text-align: center;
+    font-weight: 300;
+}
