@@ -6,6 +6,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 
 .info-wrap {
@@ -23,5 +24,26 @@
 
 .info {
     text-align: center;
-    font-weight: 300;
+}
+
+.form {
+    max-width: 17rem;
+    margin: auto;
+    text-align: center;
+}
+
+#reset_pass_password_first_help {
+    color: white!important;
+}
+
+.form-error-icon {
+    display: none;
+}
+
+.save {
+    margin-top: 1rem;
+    background-color: #b8dee3;
+    color: black;
+    border-color: #b8dee3;
+    font-weight: 400;
 }

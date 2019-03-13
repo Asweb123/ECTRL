@@ -4,15 +4,13 @@ namespace App\Controller\Authentication;
 
 
 use App\Form\ForgotPassType;
+use App\Form\ResetPassType;
 use App\Form\UserLoginType;
 use App\Repository\RegisterCodeRepository;
 use App\Repository\UserRepository;
 use App\Service\ResponseManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -158,7 +156,7 @@ class LoginController extends AbstractController
                 );
             }
 
-            $message = (new \Swift_Message('Réinitialisez votre mot de passe - eCtrl'))
+            $message = (new \Swift_Message('Mot de passe oublié - eCtrl'))
                 ->setFrom('ectrl.service@gmail.com')
                 ->setTo($user->getEmail())
                 ->setBody(
@@ -190,28 +188,20 @@ class LoginController extends AbstractController
     }
 
     /**
-     * @Route("/resetPassword/{userId}", name="resetPassword", methods={"GET"})
+     * @Route("/resetPassword/{userId}", name="resetPassword")
      */
     public function resetPassword(Request $request, $userId)
     {
         $user = $this->userRepository->find($userId);
 
-        $form = $this->createFormBuilder()
-            ->add('password', PasswordType::class)
-            ->add('repeatPassword', RepeatedType::class)
-            ->add('save', SubmitType::class, ['label' => 'Enregistrer le mot de passe'])
-            ->getForm();
-
+        $form = $this->createForm(ResetPassType::class);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $form->getData();
-dump($password);
-            $user->setPassword($this->userPasswordEncoder->encodePassword($password));
+            $data = $form->getData('password');
+            $user->setPassword($this->userPasswordEncoder->encodePassword($user, $data['password']));
 
-            // $entityManager = $this->getDoctrine()->getManager();
-            // $entityManager->persist($task);
-            // $entityManager->flush();
+            $this->em->persist($user);
+            $this->em->flush();
 
             return $this->render('authentication/modifiedPassword.html.twig');
         }
