@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -103,10 +105,16 @@ class User implements UserInterface
      */
     private $registerCode;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Audit", mappedBy="user")
+     */
+    private $audits;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
         $this->userEnable = false;
+        $this->audits = new ArrayCollection();
     }
 
     public function getId()
@@ -279,6 +287,37 @@ class User implements UserInterface
     public function setRegisterCode(?RegisterCode $registerCode): self
     {
         $this->registerCode = $registerCode;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Audit[]
+     */
+    public function getAudits(): Collection
+    {
+        return $this->audits;
+    }
+
+    public function addAudit(Audit $audit): self
+    {
+        if (!$this->audits->contains($audit)) {
+            $this->audits[] = $audit;
+            $audit->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAudit(Audit $audit): self
+    {
+        if ($this->audits->contains($audit)) {
+            $this->audits->removeElement($audit);
+            // set the owning side to null (unless already changed)
+            if ($audit->getUser() === $this) {
+                $audit->setUser(null);
+            }
+        }
 
         return $this;
     }

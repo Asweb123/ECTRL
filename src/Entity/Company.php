@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Certification\Certification;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,7 +29,7 @@ class Company
     private $creationDate;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Certification\Certification", mappedBy="companies")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Certification", mappedBy="companies")
      */
     private $certifications;
 

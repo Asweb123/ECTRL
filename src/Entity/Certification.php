@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Entity\Certification;
+namespace App\Entity;
 
-use App\Entity\Company;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\Certification\CertificationRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CertificationRepository")
  */
 class Certification
 {
@@ -39,10 +38,16 @@ class Certification
      */
     private $companies;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Audit", mappedBy="certification", orphanRemoval=true)
+     */
+    private $audits;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
         $this->companies = new ArrayCollection();
+        $this->audits = new ArrayCollection();
     }
 
     public function getId()
@@ -107,6 +112,37 @@ class Certification
     {
         if ($this->companies->contains($company)) {
             $this->companies->removeElement($company);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Audit[]
+     */
+    public function getAudits(): Collection
+    {
+        return $this->audits;
+    }
+
+    public function addAudit(Audit $audit): self
+    {
+        if (!$this->audits->contains($audit)) {
+            $this->audits[] = $audit;
+            $audit->setCertification($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAudit(Audit $audit): self
+    {
+        if ($this->audits->contains($audit)) {
+            $this->audits->removeElement($audit);
+            // set the owning side to null (unless already changed)
+            if ($audit->getCertification() === $this) {
+                $audit->setCertification(null);
+            }
         }
 
         return $this;

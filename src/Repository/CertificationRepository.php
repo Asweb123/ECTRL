@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository\Certification;
+namespace App\Repository;
 
-use App\Entity\Certification\Certification;
+use App\Entity\Certification;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

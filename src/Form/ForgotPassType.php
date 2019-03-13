@@ -7,9 +7,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Type;
 
-class UserLoginType extends AbstractType
+class ForgotPassType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -31,24 +31,24 @@ class UserLoginType extends AbstractType
                        ]
                     ]
                 )
-            ->add('password',
-                 null,
-                     [
-                        'constraints' => [
-                            new Regex(
-                                [
-                                    'pattern' => '/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/',
-                                    'message' => "Votre mot de passe doit contenir au moins huit caractères dont une majuscule, une minuscule et un chiffre."
-                                ]
-                            ),
-                            new NotBlank(
-                                [
-                                    'message' => "Veuillez renseigner votre mot de passe."
-                                ]
-                            )
-                        ]
-                     ]
-                )
+            ->add('codeContent',
+                null,
+                [
+                    'constraints' => [
+                        new Type(
+                            [
+                                'type' => 'string',
+                                'message' => "Le code d'enregistrement renseigné n'est pas valide."
+                            ]
+                        ),
+                        new NotBlank(
+                            [
+                                'message' => "Veuillez renseigner votre code d'enregistrement."
+                            ]
+                        )
+                    ]
+                ]
+            )
         ;
     }
 

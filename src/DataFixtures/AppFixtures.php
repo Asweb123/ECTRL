@@ -2,7 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Certification\Certification;
+use App\Entity\Certification;
 use App\Entity\Company;
 use App\Entity\RegisterCode;
 use App\Entity\Role;

@@ -3,6 +3,7 @@
 namespace App\Controller\Authentication;
 
 use App\Entity\User;
+use App\Form\RegisterCodeType;
 use App\Form\UserRegisterType;
 use App\Service\RegisterCodeManager;
 use App\Repository\RegisterCodeRepository;
@@ -45,6 +46,16 @@ class RegisterController extends AbstractController
     {
         try {
             $data = json_decode($request->getContent(), true);
+
+            $formCode = $this->createForm(RegisterCodeType::class);
+            $formCode->submit($data);
+            if($formCode->isValid() === false) {
+                return $this->responseManager->response403(
+                    468,
+                    "Wrong register code value",
+                    $formCode->getErrors(true)->getChildren()->getMessage()
+                );
+            }
 
             $registerCode = $this->registerCodeRepository->findOneBy(['codeContent' => $data["code"]]);
 

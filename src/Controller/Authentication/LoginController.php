@@ -3,15 +3,16 @@
 namespace App\Controller\Authentication;
 
 
-use App\Entity\User;
+use App\Form\ForgotPassType;
 use App\Form\UserLoginType;
-use App\Form\UserRegisterType;
 use App\Repository\RegisterCodeRepository;
 use App\Repository\UserRepository;
-use App\Service\RegisterCodeManager;
 use App\Service\ResponseManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -87,7 +88,17 @@ class LoginController extends AbstractController
                 ];
             }
 
-
+            $audits = [];
+            foreach ($user->getAudits() as $audit){
+                $audits[] = [
+                    "uuidAudit" => $certification->getId(),
+                    "certificationTitle" => $audit->getCertification()->getTitle(),
+                    "isFinished" => $audit->getIsFinished(),
+                    "lastModification" => $audit->getCreationDate(),
+                    "score" => $audit->getScore(),
+                    "progression" => $audit->getProgression(),
+                ];
+            }
 
             return $this->responseManager->response200(
                200,
@@ -104,7 +115,8 @@ class LoginController extends AbstractController
                         "societyName" => $user->getCompany()->getName()
                     ],
                     "userEnable" => $user->getUserEnable(),
-                    "certifications" => $certifications
+                    "certifications" => $certifications,
+                    "audits" => $audits
                 ]
             );
 
@@ -117,59 +129,102 @@ class LoginController extends AbstractController
     }
 
 
-
-
-
     /**
      * @Route("/forgotPassword", name="forgotPassword", methods={"POST"})
      */
-    public function forgotPasswordRequest(Request $request)
+    public function forgotPassword(Request $request, \Swift_Mailer $mailer)
     {
         try {
             $data = json_decode($request->getContent(), true);
+
+            $form = $this->createForm(ForgotPassType::class);
+            $form->submit($data);
+            if($form->isValid() === false) {
+                return $this->responseManager->response403(
+                    460,
+                    "Wrong format values.",
+                    $form->getErrors(true)->getChildren()->getMessage()
+                );
+            }
 
             $user = $this->userRepository->findOneBy(['email' => $data["email"]]);
             $registerCode = $this->registerCodeRepository->findOneBy(['codeContent' => $data["codeContent"]]);
 
             if ($user === null || $user->getRegisterCode() !== $registerCode) {
-                return new JsonResponse(
-                    [
-                        "code"=> 403,
-                        "details" => "wrong values",
-                        "result" => []
-                    ],
-                    JsonResponse::HTTP_FORBIDDEN
+                return $this->responseManager->response403(
+                    403,
+                    "Wrong crédentials.",
+                    "Identifiants invalides."
                 );
             }
 
-            return new JsonResponse(
-                [
-                    "code" => 200,
-                    "details" => "The user exist for this email and register code",
-                    "result" => [
-                        "uuidUser" => $user->getId(),
-                    ]
-                ],
-                JsonResponse::HTTP_OK
+            $message = (new \Swift_Message('Réinitialisez votre mot de passe - eCtrl'))
+                ->setFrom('ectrl.service@gmail.com')
+                ->setTo($user->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        'emails/resetPassword.html.twig',
+                        [
+                            'userId' => $user->getId(),
+                            'firstName' => $user->getFirstName(),
+                            'lastName' => $user->getlastName()
+                        ]
+                    ),
+                    'text/html'
+                )
+            ;
+            $mailer->send($message);
+
+            return $this->responseManager->response200(
+                200,
+                "Right credentials for the reset password process",
+                "Veuillez consulter le mail envoyé à l’adresse renseignée pour créer votre compte.",
+                ["uuidUser" => $user->getId()]
             );
         }
 
         catch(\Exception $ex){
-            return new JsonResponse(
-                [
-                    "code" => 500,
-                    "details" => "server error",
-                    "results" => []
-                ]
-            );
+            dump($ex);
+            return $this->responseManager->response500();
         }
     }
 
+    /**
+     * @Route("/resetPassword/{userId}", name="resetPassword", methods={"GET"})
+     */
+    public function resetPassword(Request $request, $userId)
+    {
+        $user = $this->userRepository->find($userId);
+
+        $form = $this->createFormBuilder()
+            ->add('password', PasswordType::class)
+            ->add('repeatPassword', RepeatedType::class)
+            ->add('save', SubmitType::class, ['label' => 'Enregistrer le mot de passe'])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $password = $form->getData();
+dump($password);
+            $user->setPassword($this->userPasswordEncoder->encodePassword($password));
+
+            // $entityManager = $this->getDoctrine()->getManager();
+            // $entityManager->persist($task);
+            // $entityManager->flush();
+
+            return $this->render('authentication/modifiedPassword.html.twig');
+        }
+
+        return $this->render('authentication/modifyPassword.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
     /**
-     * @Route("/changePassword", name="changePassword", methods={"POST"})
+     * @Route("/modifyPassword/{uuidUser}", name="modifyPassword", methods={"GET"})
      */
-    public function changePasswordRequest(Request $request)
+    public function modifyPasswordRequest(Request $request, $uuidUser)
     {
         try {
             $data = json_decode($request->getContent(), true);
