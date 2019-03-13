@@ -11,7 +11,6 @@ use App\Repository\UserRepository;
 use App\Service\ResponseManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -192,6 +191,7 @@ class LoginController extends AbstractController
      */
     public function resetPassword(Request $request, $userId)
     {
+
         $user = $this->userRepository->find($userId);
 
         $form = $this->createForm(ResetPassType::class);
@@ -209,66 +209,6 @@ class LoginController extends AbstractController
         return $this->render('authentication/modifyPassword.html.twig', [
             'form' => $form->createView(),
         ]);
-    }
-
-    /**
-     * @Route("/modifyPassword/{uuidUser}", name="modifyPassword", methods={"GET"})
-     */
-    public function modifyPasswordRequest(Request $request, $uuidUser)
-    {
-        try {
-            $data = json_decode($request->getContent(), true);
-
-            $user = $this->userRepository->find([$data["uuid"]]);
-
-            if ($user === null || $data === null) {
-                return new JsonResponse(
-                    [
-                        "code"=> 403,
-                        "details" => "wrong values",
-                        "result" => []
-                    ],
-                    JsonResponse::HTTP_FORBIDDEN
-                );
-            }
-
-            $password = $this->userPasswordEncoder->encodePassword($user, $data['password']);
-            $user->setPassword($password);
-
-            return new JsonResponse(
-                [
-                    "code" => 200,
-                    "details" => "user password change success",
-                    "result" => [
-                        "firstName" => $user->getFirstName(),
-                        "lastName" => $user->getLastName(),
-                        "email" => $user->getEmail(),
-                        "uuidUser" => $user->getId(),
-                        "userRole" => [
-                            "uuidRole" => $user->getRole()->getId(),
-                            "roleName" => $user->getRole()->getTitle()
-                        ],
-                        "userSociety" => [
-                            "uuidSociety" => $user->getCompany()->getId(),
-                            "societyName" => $user->getCompany()->getName()
-                        ],
-                        "userEnable" => $user->getUserEnable(),
-                        "userAware" => $user->getUserAware()
-                    ]
-                ],
-                JsonResponse::HTTP_OK
-            );
-        }
-
-        catch(\Exception $ex){
-            return new JsonResponse(
-                [
-                    "code" => 500,
-                    "details" => "server error",
-                    "results" => []
-                ]
-            );
-        }
     }
 
 }

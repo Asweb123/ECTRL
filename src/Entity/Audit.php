@@ -53,6 +53,12 @@ class Audit
      */
     private $lastModification;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="audits")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $company;
+
     public function __construct(){
         $this->isFinished = false;
         $this->creationDate = new \Datetime('now');
@@ -146,6 +152,18 @@ class Audit
     public function setLastModification(\DateTimeInterface $lastModification): self
     {
         $this->lastModification = $lastModification;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): self
+    {
+        $this->company = $company;
 
         return $this;
     }
