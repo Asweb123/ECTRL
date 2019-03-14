@@ -62,11 +62,16 @@ class Audit
      */
     private $responses;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isFinished;
+
     public function __construct(){
         $this->isFinished = false;
         $this->creationDate = new \Datetime('now');
         $this->lastModification = new \Datetime('now');
-        $this->score = 0;
+        $this->isFinished = false;
         $this->progression = 0;
         $this->responses = new ArrayCollection();
     }
@@ -187,6 +192,18 @@ class Audit
                 $response->setAudit(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsFinished(): ?bool
+    {
+        return $this->isFinished;
+    }
+
+    public function setIsFinished(bool $isFinished): self
+    {
+        $this->isFinished = $isFinished;
 
         return $this;
     }

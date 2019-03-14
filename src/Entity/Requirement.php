@@ -13,8 +13,8 @@ class Requirement
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(name="id", type="guid")
      */
     private $id;
 
@@ -57,6 +57,7 @@ class Requirement
 
     public function __construct()
     {
+        $this->creationDate = new \DateTime("now");
         $this->responses = new ArrayCollection();
     }
 

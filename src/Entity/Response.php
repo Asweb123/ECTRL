@@ -11,8 +11,8 @@ class Response
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(name="id", type="guid")
      */
     private $id;
 
@@ -37,6 +37,11 @@ class Response
      * @ORM\JoinColumn(nullable=false)
      */
     private $requirement;
+
+    public function __construct()
+    {
+        $this->creationDate = new \DateTime("now");
+    }
 
     public function getId(): ?int
     {

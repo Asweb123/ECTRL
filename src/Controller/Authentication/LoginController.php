@@ -90,7 +90,6 @@ class LoginController extends AbstractController
                 $audits[] = [
                     "uuidAudit" => $certification->getId(),
                     "certificationTitle" => $audit->getCertification()->getTitle(),
-                    "isFinished" => $audit->getIsFinished(),
                     "lastModification" => $audit->getCreationDate(),
                     "score" => $audit->getScore(),
                     "progression" => $audit->getProgression(),

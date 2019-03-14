@@ -13,8 +13,8 @@ class Theme
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(name="id", type="guid")
      */
     private $id;
 
@@ -36,7 +36,7 @@ class Theme
     /**
      * @ORM\Column(type="integer")
      */
-    private $rankAudit;
+    private $rankCertification;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Certification", inversedBy="themes")
@@ -51,6 +51,7 @@ class Theme
 
     public function __construct()
     {
+        $this->creationDate = new \DateTime("now");
         $this->requirements = new ArrayCollection();
     }
 
@@ -95,14 +96,14 @@ class Theme
         return $this;
     }
 
-    public function getRankAudit(): ?int
+    public function getRankCertification(): ?int
     {
-        return $this->rankAudit;
+        return $this->rankCertification;
     }
 
-    public function setRankAudit(int $rankAudit): self
+    public function setRankCertification(int $rankCertification): self
     {
-        $this->rankAudit = $rankAudit;
+        $this->rankCertification = $rankCertification;
 
         return $this;
     }
