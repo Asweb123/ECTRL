@@ -43,11 +43,23 @@ class Certification
      */
     private $audits;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Theme", mappedBy="certification", orphanRemoval=true)
+     */
+    private $themes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Requirement", mappedBy="certification", orphanRemoval=true)
+     */
+    private $requirements;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
         $this->companies = new ArrayCollection();
         $this->audits = new ArrayCollection();
+        $this->themes = new ArrayCollection();
+        $this->requirements = new ArrayCollection();
     }
 
     public function getId()
@@ -142,6 +154,68 @@ class Certification
             // set the owning side to null (unless already changed)
             if ($audit->getCertification() === $this) {
                 $audit->setCertification(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Theme[]
+     */
+    public function getThemes(): Collection
+    {
+        return $this->themes;
+    }
+
+    public function addTheme(Theme $theme): self
+    {
+        if (!$this->themes->contains($theme)) {
+            $this->themes[] = $theme;
+            $theme->setCertification($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTheme(Theme $theme): self
+    {
+        if ($this->themes->contains($theme)) {
+            $this->themes->removeElement($theme);
+            // set the owning side to null (unless already changed)
+            if ($theme->getCertification() === $this) {
+                $theme->setCertification(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Requirement[]
+     */
+    public function getRequirements(): Collection
+    {
+        return $this->requirements;
+    }
+
+    public function addRequirement(Requirement $requirement): self
+    {
+        if (!$this->requirements->contains($requirement)) {
+            $this->requirements[] = $requirement;
+            $requirement->setCertification($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRequirement(Requirement $requirement): self
+    {
+        if ($this->requirements->contains($requirement)) {
+            $this->requirements->removeElement($requirement);
+            // set the owning side to null (unless already changed)
+            if ($requirement->getCertification() === $this) {
+                $requirement->setCertification(null);
             }
         }
 

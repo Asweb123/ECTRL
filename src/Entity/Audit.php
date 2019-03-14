@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,19 +19,10 @@ class Audit
     private $id;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isFinished;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $creationDate;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $score;
 
     /**
      * @ORM\Column(type="integer")
@@ -59,29 +52,28 @@ class Audit
      */
     private $company;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $score;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Response", mappedBy="audit", orphanRemoval=true)
+     */
+    private $responses;
+
     public function __construct(){
         $this->isFinished = false;
         $this->creationDate = new \Datetime('now');
         $this->lastModification = new \Datetime('now');
         $this->score = 0;
         $this->progression = 0;
+        $this->responses = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIsFinished(): ?bool
-    {
-        return $this->isFinished;
-    }
-
-    public function setIsFinished(bool $isFinished): self
-    {
-        $this->isFinished = $isFinished;
-
-        return $this;
     }
 
     public function getCreationDate(): ?\DateTimeInterface
@@ -92,18 +84,6 @@ class Audit
     public function setCreationDate(\DateTimeInterface $creationDate): self
     {
         $this->creationDate = $creationDate;
-
-        return $this;
-    }
-
-    public function getScore(): ?int
-    {
-        return $this->score;
-    }
-
-    public function setScore(?int $score): self
-    {
-        $this->score = $score;
 
         return $this;
     }
@@ -164,6 +144,49 @@ class Audit
     public function setCompany(?Company $company): self
     {
         $this->company = $company;
+
+        return $this;
+    }
+
+    public function getScore(): ?int
+    {
+        return $this->score;
+    }
+
+    public function setScore(?int $score): self
+    {
+        $this->score = $score;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Response[]
+     */
+    public function getResponses(): Collection
+    {
+        return $this->responses;
+    }
+
+    public function addResponse(Response $response): self
+    {
+        if (!$this->responses->contains($response)) {
+            $this->responses[] = $response;
+            $response->setAudit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResponse(Response $response): self
+    {
+        if ($this->responses->contains($response)) {
+            $this->responses->removeElement($response);
+            // set the owning side to null (unless already changed)
+            if ($response->getAudit() === $this) {
+                $response->setAudit(null);
+            }
+        }
 
         return $this;
     }
