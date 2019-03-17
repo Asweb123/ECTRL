@@ -110,11 +110,17 @@ class User implements UserInterface
      */
     private $audits;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ExpoPushToken", mappedBy="user", orphanRemoval=true)
+     */
+    private $expoPushTokens;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
         $this->userEnable = false;
         $this->audits = new ArrayCollection();
+        $this->expoPushTokens = new ArrayCollection();
     }
 
     public function getId()
@@ -316,6 +322,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($audit->getUser() === $this) {
                 $audit->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ExpoPushToken[]
+     */
+    public function getExpoPushTokens(): Collection
+    {
+        return $this->expoPushTokens;
+    }
+
+    public function addExpoPushToken(ExpoPushToken $expoPushToken): self
+    {
+        if (!$this->expoPushTokens->contains($expoPushToken)) {
+            $this->expoPushTokens[] = $expoPushToken;
+            $expoPushToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExpoPushToken(ExpoPushToken $expoPushToken): self
+    {
+        if ($this->expoPushTokens->contains($expoPushToken)) {
+            $this->expoPushTokens->removeElement($expoPushToken);
+            // set the owning side to null (unless already changed)
+            if ($expoPushToken->getUser() === $this) {
+                $expoPushToken->setUser(null);
             }
         }
 

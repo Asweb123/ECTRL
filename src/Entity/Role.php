@@ -43,6 +43,11 @@ class Role
      */
     private $registerCodes;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $rank;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
@@ -149,6 +154,18 @@ class Role
                 $registerCode->setRole(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRank(): ?int
+    {
+        return $this->rank;
+    }
+
+    public function setRank(int $rank): self
+    {
+        $this->rank = $rank;
 
         return $this;
     }

@@ -51,17 +51,17 @@ class Requirement
     private $theme;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Response", mappedBy="requirement", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Result", mappedBy="requirement", orphanRemoval=true)
      */
-    private $responses;
+    private $results;
 
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
-        $this->responses = new ArrayCollection();
+        $this->results = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
@@ -139,30 +139,30 @@ class Requirement
     }
 
     /**
-     * @return Collection|Response[]
+     * @return Collection|Result[]
      */
     public function getResponses(): Collection
     {
-        return $this->responses;
+        return $this->results;
     }
 
-    public function addResponse(Response $response): self
+    public function addResult(Result $result): self
     {
-        if (!$this->responses->contains($response)) {
-            $this->responses[] = $response;
-            $response->setRequirement($this);
+        if (!$this->results->contains($result)) {
+            $this->results[] = $result;
+            $result->setRequirement($this);
         }
 
         return $this;
     }
 
-    public function removeResponse(Response $response): self
+    public function removeResponse(Result $result): self
     {
-        if ($this->responses->contains($response)) {
-            $this->responses->removeElement($response);
+        if ($this->results->contains($result)) {
+            $this->responses->removeElement($result);
             // set the owning side to null (unless already changed)
-            if ($response->getRequirement() === $this) {
-                $response->setRequirement(null);
+            if ($result->getRequirement() === $this) {
+                $result->setRequirement(null);
             }
         }
 

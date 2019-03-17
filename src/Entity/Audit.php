@@ -44,7 +44,7 @@ class Audit
     /**
      * @ORM\Column(type="datetime")
      */
-    private $lastModification;
+    private $lastModificationDate;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="audits")
@@ -58,25 +58,20 @@ class Audit
     private $score;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Response", mappedBy="audit", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Result", mappedBy="audit", orphanRemoval=true)
      */
-    private $responses;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isFinished;
+    private $results;
 
     public function __construct(){
         $this->isFinished = false;
         $this->creationDate = new \Datetime('now');
-        $this->lastModification = new \Datetime('now');
+        $this->lastModificationDate = new \Datetime('now');
         $this->isFinished = false;
         $this->progression = 0;
-        $this->responses = new ArrayCollection();
+        $this->results = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
@@ -129,14 +124,14 @@ class Audit
         return $this;
     }
 
-    public function getLastModification(): ?\DateTimeInterface
+    public function getLastModificationDate(): ?\DateTimeInterface
     {
-        return $this->lastModification;
+        return $this->lastModificationDate;
     }
 
-    public function setLastModification(\DateTimeInterface $lastModification): self
+    public function setLastModificationDate(\DateTimeInterface $lastModificationDate): self
     {
-        $this->lastModification = $lastModification;
+        $this->lastModificationDate = $lastModificationDate;
 
         return $this;
     }
@@ -166,45 +161,34 @@ class Audit
     }
 
     /**
-     * @return Collection|Response[]
+     * @return Collection|Result[]
      */
-    public function getResponses(): Collection
+    public function getResults(): Collection
     {
-        return $this->responses;
+        return $this->results;
     }
 
-    public function addResponse(Response $response): self
+    public function addResutl(Result $result): self
     {
-        if (!$this->responses->contains($response)) {
-            $this->responses[] = $response;
-            $response->setAudit($this);
+        if (!$this->results->contains($result)) {
+            $this->results[] = $result;
+            $result->setAudit($this);
         }
 
         return $this;
     }
 
-    public function removeResponse(Response $response): self
+    public function removeResponse(Result $result): self
     {
-        if ($this->responses->contains($response)) {
-            $this->responses->removeElement($response);
+        if ($this->results->contains($result)) {
+            $this->results->removeElement($result);
             // set the owning side to null (unless already changed)
-            if ($response->getAudit() === $this) {
-                $response->setAudit(null);
+            if ($result->getAudit() === $this) {
+                $result->setAudit(null);
             }
         }
 
         return $this;
     }
 
-    public function getIsFinished(): ?bool
-    {
-        return $this->isFinished;
-    }
-
-    public function setIsFinished(bool $isFinished): self
-    {
-        $this->isFinished = $isFinished;
-
-        return $this;
-    }
 }

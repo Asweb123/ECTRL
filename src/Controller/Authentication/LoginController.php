@@ -6,6 +6,7 @@ namespace App\Controller\Authentication;
 use App\Form\ForgotPassType;
 use App\Form\ResetPassType;
 use App\Form\UserLoginType;
+use App\Repository\AuditRepository;
 use App\Repository\RegisterCodeRepository;
 use App\Repository\UserRepository;
 use App\Service\ResponseManager;
@@ -43,7 +44,7 @@ class LoginController extends AbstractController
     /**
      * @Route("/login", name="login", methods={"POST"})
      */
-    public function login(Request $request)
+    public function login(Request $request, AuditRepository $auditRepository)
     {
         try {
             $data = json_decode($request->getContent(), true);
@@ -76,7 +77,6 @@ class LoginController extends AbstractController
                 );
             }
 
-            $certifications = [];
             foreach ($user->getCompany()->getCertifications() as $certification){
                 $certifications[] = [
                     "uuidCertification" => $certification->getId(),
@@ -85,16 +85,19 @@ class LoginController extends AbstractController
                 ];
             }
 
-            $audits = [];
-            foreach ($user->getAudits() as $audit){
+            $audits = $auditRepository->findBy(['user' => $user], ['lastModificationDate' => 'DESC']);
+
+            foreach ($audits as $audit){
                 $audits[] = [
                     "uuidAudit" => $certification->getId(),
                     "certificationTitle" => $audit->getCertification()->getTitle(),
-                    "lastModification" => $audit->getCreationDate(),
+                    "lastModification" => $audit->getLastModificationDate(),
                     "score" => $audit->getScore(),
                     "progression" => $audit->getProgression(),
                 ];
             }
+
+
 
             return $this->responseManager->response200(
                200,
@@ -180,7 +183,6 @@ class LoginController extends AbstractController
         }
 
         catch(\Exception $ex){
-            dump($ex);
             return $this->responseManager->response500();
         }
     }
@@ -196,7 +198,7 @@ class LoginController extends AbstractController
         $form = $this->createForm(ResetPassType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData('password');
+            $data = $form->getData();
             $user->setPassword($this->userPasswordEncoder->encodePassword($user, $data['password']));
 
             $this->em->persist($user);

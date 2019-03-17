@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ResponseRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ResultRepository")
  */
-class Response
+class Result
 {
     /**
      * @ORM\Id()
@@ -24,16 +24,16 @@ class Response
     /**
      * @ORM\Column(type="datetime")
      */
-    private $CreationDate;
+    private $creationDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Audit", inversedBy="responses")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Audit", inversedBy="results")
      * @ORM\JoinColumn(nullable=false)
      */
     private $audit;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Requirement", inversedBy="responses")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Requirement", inversedBy="resutls")
      * @ORM\JoinColumn(nullable=false)
      */
     private $requirement;
@@ -41,9 +41,10 @@ class Response
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
+        $this->state = 0;
     }
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
@@ -62,12 +63,12 @@ class Response
 
     public function getCreationDate(): ?\DateTimeInterface
     {
-        return $this->CreationDate;
+        return $this->creationDate;
     }
 
-    public function setCreationDate(\DateTimeInterface $CreationDate): self
+    public function setCreationDate(\DateTimeInterface $creationDate): self
     {
-        $this->CreationDate = $CreationDate;
+        $this->creationDate = $creationDate;
 
         return $this;
     }

@@ -208,47 +208,45 @@ class AppFixtures extends Fixture
         $requirement21T6->setRankCertification(21);
         $requirement21T6->setRankTheme(1);
         $requirement21T6->setCertification($certificationIFS);
-        $requirement21T6->setTheme($theme5);
+        $requirement21T6->setTheme($theme6);
 
         $requirement22T6 = new Requirement();
         $requirement22T6->setDescription("Des enregistrements ou des inspections sur site sont-elles réalisés à une fréquence définie (à minima annuellement?");
         $requirement22T6->setRankCertification(22);
         $requirement22T6->setRankTheme(2);
         $requirement22T6->setCertification($certificationIFS);
-        $requirement22T6->setTheme($theme5);
+        $requirement22T6->setTheme($theme6);
 
         $requirement23T6 = new Requirement();
         $requirement23T6->setDescription("Le personnel est-il formé à la Food Defense?");
         $requirement23T6->setRankCertification(23);
         $requirement23T6->setRankTheme(3);
         $requirement23T6->setCertification($certificationIFS);
-        $requirement23T6->setTheme($theme5);
+        $requirement23T6->setTheme($theme6);
 
         $requirement24T6 = new Requirement();
         $requirement24T6->setDescription("Les visiteurs et prestataires sont-ils identifiés et informés de la politique du site et de la vérification des accès?");
         $requirement24T6->setRankCertification(24);
         $requirement24T6->setRankTheme(4);
         $requirement24T6->setCertification($certificationIFS);
-        $requirement24T6->setTheme($theme5);
+        $requirement24T6->setTheme($theme6);
 
 
-        // Roles (for V2)
+        // Roles
         $roleD = new Role();
         $roleD->setTitle("Directeur");
         $roleD->setDescription("Suivi des résultats et validation des grilles vérifiées par le responsable qualité");
+        $roleD->setRank(1);
 
         $roleR = new Role();
         $roleR->setTitle("Responsable qualité");
         $roleR->setDescription("Création, complétion et validation des grilles");
+        $roleR->setRank(2);
 
         $roleA = new Role();
         $roleA->setTitle("Assistant qualité");
         $roleA->setDescription("Création et complétion des grilles");
-
-        $roleC = new Role();
-        $roleC->setTitle("Client Distributeur");
-        $roleC->setDescription("Consultation des résultats émis par le directeur de l’entreprise");
-
+        $roleA->setRank(3);
 
         // Code for a company
         $company = new Company();
@@ -257,19 +255,15 @@ class AppFixtures extends Fixture
 
         $registerCodeD = new RegisterCode();
         $registerCodeD->setCodeContent("X29JTZ22");
-        $registerCodeD->setMaxNbOfUsers(3);
+        $registerCodeD->setMaxNbOfUsers(2);
 
         $registerCodeR = new RegisterCode();
         $registerCodeR->setCodeContent("UT28SK78");
-        $registerCodeR->setMaxNbOfUsers(3);
+        $registerCodeR->setMaxNbOfUsers(4);
 
         $registerCodeA = new RegisterCode();
         $registerCodeA->setCodeContent("AS59ET47");
-        $registerCodeA->setMaxNbOfUsers(3);
-
-        $registerCodeC = new RegisterCode();
-        $registerCodeC->setCodeContent("VG87SY45");
-        $registerCodeC->setMaxNbOfUsers(3);
+        $registerCodeA->setMaxNbOfUsers(10);
 
 
         //Code for EKALIT
@@ -288,10 +282,6 @@ class AppFixtures extends Fixture
         $registerCodeAE->setCodeContent("ES59ET47");
         $registerCodeAE->setMaxNbOfUsers(3);
 
-        $registerCodeCE = new RegisterCode();
-        $registerCodeCE->setCodeContent("EG87SY45");
-        $registerCodeCE->setMaxNbOfUsers(10);
-
 
 
         $company->addCertification($certificationIFS);
@@ -301,33 +291,27 @@ class AppFixtures extends Fixture
         $registerCodeD->setRole($roleD);
         $registerCodeR->setRole($roleR);
         $registerCodeA->setRole($roleA);
-        $registerCodeC->setRole($roleC);
 
         $registerCodeDE->setRole($roleD);
         $registerCodeRE->setRole($roleR);
         $registerCodeAE->setRole($roleA);
-        $registerCodeCE->setRole($roleC);
 
         $registerCodeD->setCompany($company);
         $registerCodeR->setCompany($company);
         $registerCodeA->setCompany($company);
-        $registerCodeC->setCompany($company);
 
         $registerCodeDE->setCompany($companyE);
         $registerCodeRE->setCompany($companyE);
         $registerCodeAE->setCompany($companyE);
-        $registerCodeCE->setCompany($companyE);
 
 
         $company->addRegisterCode($registerCodeD);
         $company->addRegisterCode($registerCodeR);
         $company->addRegisterCode($registerCodeA);
-        $company->addRegisterCode($registerCodeC);
 
-        $companyE->addRegisterCode($registerCodeD);
-        $companyE->addRegisterCode($registerCodeR);
-        $companyE->addRegisterCode($registerCodeA);
-        $companyE->addRegisterCode($registerCodeC);
+        $companyE->addRegisterCode($registerCodeDE);
+        $companyE->addRegisterCode($registerCodeRE);
+        $companyE->addRegisterCode($registerCodeAE);
 
 
         $manager->persist($certificationIFS);
@@ -371,16 +355,13 @@ class AppFixtures extends Fixture
         $manager->persist($roleD);
         $manager->persist($roleR);
         $manager->persist($roleA);
-        $manager->persist($roleC);
 
         $manager->persist($registerCodeD);
         $manager->persist($registerCodeR);
         $manager->persist($registerCodeA);
-        $manager->persist($registerCodeC);
         $manager->persist($registerCodeDE);
         $manager->persist($registerCodeRE);
         $manager->persist($registerCodeAE);
-        $manager->persist($registerCodeCE);
 
 
         $manager->flush();

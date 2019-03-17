@@ -38,6 +38,19 @@ class ResponseManager
         );
     }
 
+    public function response404($code, $details, $message)
+    {
+        return new JsonResponse(
+            [
+                "code"=> $code,
+                "details" => $details,
+                "message" => $message,
+                "result" => json_encode([], JSON_FORCE_OBJECT)
+            ],
+            JsonResponse::HTTP_NOT_FOUND
+        );
+    }
+
     public function response500()
     {
         return new JsonResponse(
