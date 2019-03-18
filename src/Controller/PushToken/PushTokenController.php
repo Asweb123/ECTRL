@@ -33,7 +33,7 @@ class PushTokenController extends AbstractController
             $form->submit($data);
             if($form->isValid() === false) {
                 return $responseManager->response403(
-                    460,
+                    403,
                     "wrong format values",
                     $form->getErrors(true)->getChildren()->getMessage()
                 );

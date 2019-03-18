@@ -69,7 +69,7 @@ class AuditController extends AbstractController
             $form->submit($data);
             if($form->isValid() === false) {
                 return $this->responseManager->response403(
-                    460,
+                    403,
                     "wrong format values",
                     $form->getErrors(true)->getChildren()->getMessage()
                 );
@@ -80,7 +80,7 @@ class AuditController extends AbstractController
 
             if(($user === null) || ($user->getCompany()->getCertifications()->contains($certification) === false)){
                 return $this->responseManager->response403(
-                    461,
+                    403,
                     "Wrong user or certification relation",
                     "L’utilisateur n’existe pas ou son entreprise n’a pas les droits pour réaliser un audit sur cette certification."
                 );
@@ -157,7 +157,7 @@ class AuditController extends AbstractController
             $form->submit($data);
             if($form->isValid() === false) {
                 return $this->responseManager->response403(
-                    460,
+                    403,
                     "wrong format values",
                     $form->getErrors(true)->getChildren()->getMessage()
                 );
@@ -208,7 +208,7 @@ class AuditController extends AbstractController
             $form->submit($data);
             if($form->isValid() === false) {
                 return $this->responseManager->response403(
-                    460,
+                    403,
                     "wrong format values",
                     $form->getErrors(true)->getChildren()->getMessage()
                 );
@@ -216,7 +216,7 @@ class AuditController extends AbstractController
 
             if(((int)$data['state'] < 1) || ((int)$data['state'] > 3)){
                 return $this->responseManager->response403(
-                    461,
+                    403,
                     "wrong format values",
                     "Format de réponse invalide."
                 );
@@ -225,7 +225,7 @@ class AuditController extends AbstractController
             $currentResult = $resultRepository->find($data['uuidResult']);
             if($currentResult === null){
                 return $this->responseManager->response403(
-                    462,
+                    403,
                     "Wrong id for this result",
                     "L'identifiant pour cette réponse n'est pas correct."
                 );

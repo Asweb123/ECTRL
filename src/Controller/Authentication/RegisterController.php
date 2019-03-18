@@ -51,7 +51,7 @@ class RegisterController extends AbstractController
             $formCode->submit($data);
             if($formCode->isValid() === false) {
                 return $this->responseManager->response403(
-                    468,
+                    403,
                     "Wrong register code value",
                     $formCode->getErrors(true)->getChildren()->getMessage()
                 );
@@ -61,7 +61,7 @@ class RegisterController extends AbstractController
 
             if ($registerCode === null) {
                 return $this->responseManager->response403(
-                    460,
+                    403,
                     "Wrong register code value",
                     "Le code d'enregistrement renseigné n'est pas valide."
                 );
@@ -69,7 +69,7 @@ class RegisterController extends AbstractController
 
             if ($this->registerCodeManager->NbOfUsersChecker($registerCode) === false) {
                 return $this->responseManager->response403(
-                    461,
+                    403,
                     "Max number of accounts for this register code is reached.",
                     "Le nombre maximum d'utilisateurs pour ce code d'enregistrement est déjà atteint."
                 );
@@ -79,7 +79,7 @@ class RegisterController extends AbstractController
             $formUser->submit($data);
             if ($formUser->isValid() === false) {
                 return $this->responseManager->response403(
-                    462,
+                    403,
                     "wrong users values",
                     $formUser->getErrors(true)->getChildren()->getMessage()
                 );

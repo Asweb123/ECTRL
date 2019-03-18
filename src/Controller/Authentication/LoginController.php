@@ -53,7 +53,7 @@ class LoginController extends AbstractController
             $form->submit($data);
             if($form->isValid() === false) {
                 return $this->responseManager->response403(
-                    460,
+                    403,
                     "wrong format values",
                     $form->getErrors(true)->getChildren()->getMessage()
                 );
@@ -71,7 +71,7 @@ class LoginController extends AbstractController
 
             if ($user->getUserEnable() === false) {
                 return $this->responseManager->response403(
-                    461,
+                    403,
                     "Register user without account activation by mail",
                     "Vous devez activer votre compte avant de pouvoir vous connecter à l'application."
                 );
@@ -140,7 +140,7 @@ class LoginController extends AbstractController
             $form->submit($data);
             if($form->isValid() === false) {
                 return $this->responseManager->response403(
-                    460,
+                    403,
                     "Wrong format values.",
                     $form->getErrors(true)->getChildren()->getMessage()
                 );

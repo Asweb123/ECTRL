@@ -54,7 +54,7 @@ class ProfilController extends AbstractController
            $form->submit($data);
            if($form->isValid() === false) {
                return $this->responseManager->response403(
-                   463,
+                   403,
                    "Wrong password format",
                     $form->getErrors(true)->getChildren()->getMessage()
                );
@@ -63,7 +63,7 @@ class ProfilController extends AbstractController
            $user = $this->userRepository->find($data["uuidUser"]);
            if ($user === null || $this->userPasswordEncoder->isPasswordValid($user, $data["oldPassword"]) === false) {
                return $this->responseManager->response403(
-                   464,
+                   403,
                    "Wrong credentials",
                    "Ancien mot de passe incorrect"
                );
@@ -100,7 +100,7 @@ class ProfilController extends AbstractController
             $form->submit($data);
             if($form->isValid() === false) {
                 return $this->responseManager->response403(
-                    463,
+                    403,
                     "Wrong password format",
                     $form->getErrors(true)->getChildren()->getMessage()
                 );
@@ -110,7 +110,7 @@ class ProfilController extends AbstractController
             $user = $this->userRepository->find($data["uuidUser"]);
             if ($user === null || $this->userPasswordEncoder->isPasswordValid($user, $data["password"]) === false) {
                 return $this->responseManager->response403(
-                    464,
+                    403,
                     "Wrong credentials",
                     "Mot de passe incorrect"
                 );
