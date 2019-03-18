@@ -1,0 +1,20 @@
+easy_admin:
+    site_name: 'ECTRL administration'
+    entities:
+        Company:
+            class: App\Entity\Company
+            label: Sociétés
+            list:
+                fields: ['name', 'creationDate', 'certifications', 'registerCodes']
+            form:
+                fields: ['name', 'certifications', 'registerCodes']
+
+        RegisterCode:
+            class: App\Entity\RegisterCode
+            label: Codes d'enregistrement
+            list:
+                fields: ['codeContent', 'company.name', 'role.title', 'maxNbOfUsers', 'users']
+            form:
+                fields: ['codeContent', 'company.name', 'role.title', 'maxNbOfUsers']
+
+

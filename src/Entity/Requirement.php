@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RequirementRepository")
@@ -20,6 +21,15 @@ class Requirement
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Type("string")
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Length(
+     *     min = 1,
+     *     max = 500,
+     *     minMessage="Le titre de la certification doit contenir au moins {{ limit }} caractère.",
+     *     maxMessage="Le titre de la certification doit contenir au maximum {{ limit }} caractères."
+     * )
      */
     private $description;
 
@@ -30,11 +40,21 @@ class Requirement
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Type(
+     *     type="integer",
+     *     message="La valeur renseignée n'est pas un nombre entier."
+     * )
+     * @Assert\GreaterThan(0)
      */
     private $rankTheme;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Type(
+     *     type="integer",
+     *     message="La valeur renseignée n'est pas un nombre entier."
+     * )
+     * @Assert\GreaterThan(0)
      */
     private $rankCertification;
 

@@ -5,9 +5,12 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RegisterCodeRepository")
+ * @UniqueEntity("codeContent", message="Ce code d'enregistrement est déjà utilisé.")
  */
 class RegisterCode
 {
@@ -20,6 +23,14 @@ class RegisterCode
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Type("string")
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Length(
+     *     min = 8,
+     *     max = 8,
+     *     exactMessage="Le code d'enregistrement doit contenir exactement {{ limit }} caractères."
+     * )
      */
     private $codeContent;
 
@@ -42,6 +53,11 @@ class RegisterCode
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Type(
+     *     type="integer",
+     *     message="La valeur renseignée n'est pas un nombre entier."
+     * )
+     * @Assert\GreaterThan(0)
      */
     private $maxNbOfUsers;
 

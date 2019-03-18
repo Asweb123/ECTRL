@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ResultRepository")
@@ -18,6 +19,13 @@ class Result
 
     /**
      * @ORM\Column(type="smallint")
+     * @Assert\Type("integer")
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Range(
+     *      min = 0,
+     *      max = 3
+     * )
      */
     private $state;
 
@@ -33,7 +41,7 @@ class Result
     private $audit;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Requirement", inversedBy="resutls")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Requirement", inversedBy="results")
      * @ORM\JoinColumn(nullable=false)
      */
     private $requirement;

@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RoleRepository")
@@ -20,6 +21,14 @@ class Role
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Length(
+     *     min = 1,
+     *     max = 255,
+     *     minMessage="Le titre de la certification doit contenir au moins {{ limit }} caractère.",
+     *     maxMessage="Le titre de la certification doit contenir au maximum {{ limit }} caractères."
+     * )
      */
     private $title;
 
@@ -45,6 +54,12 @@ class Role
 
     /**
      * @ORM\Column(type="smallint")
+     * @Assert\Range(
+     *      min = 1,
+     *      max = 3,
+     *      minMessage = "Le niveau hiérarchique de ce rôle ne peut pas être plus petit que {{ limit }}.",
+     *      maxMessage = "Le niveau hiérarchique de ce rôle ne peut pas être plus grand que {{ limit }}."
+     * )
      */
     private $rank;
 

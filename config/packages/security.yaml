@@ -3,26 +3,33 @@ security:
         App\Entity\User:
             algorithm: argon2i
             cost: 12
+        Symfony\Component\Security\Core\User\User: 'bcrypt'
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         # used to reload user from session & other features (e.g. switch_user)
-        app_user_provider:
-            entity:
-                class: App\Entity\User
-                property: email
+        #app_user_provider:
+        #    entity:
+        #        class: App\Entity\User
+        #        property: email
         # used to reload user from session & other features (e.g. switch_user)
+        backend_users:
+            memory:
+                users:
+                    ekadmin1: { password: '$argon2i$v=19$m=1024,t=2,p=2$NDlabU5vNllpWnRzRVlXMQ$8c1tgwlBIKce2sEpKndDrqpFvv4m0BvJrEwIquKqiKk', roles: ['ROLE_ADMIN'] }
+                    ekadmin2: { password: '$argon2i$v=19$m=1024,t=2,p=2$ODE0NzY5eDJwYXlwSzRycA$z1eKY7NAw/N7dHOWN3AC/0yKfknceLUSmUhrX7L+fJQ', roles: ['ROLE_ADMIN'] }
         # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+            http_basic: true
         main:
             anonymous: ~
 
             # activate different ways to authenticate
 
-            # http_basic: true
+            http_basic: true
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
 
             # form_login: true
@@ -31,5 +38,5 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+         - { path: ^/ectadminrl, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
