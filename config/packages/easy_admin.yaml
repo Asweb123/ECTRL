@@ -1,20 +1,64 @@
 easy_admin:
-    site_name: 'ECTRL administration'
+    site_name: ECTRL administration
+    formats:
+            date:     'd/m/Y'
+            time:     'H:i'
+            datetime: 'd/m/Y'
     entities:
         Company:
             class: App\Entity\Company
             label: Sociétés
             list:
-                fields: ['name', 'creationDate', 'certifications', 'registerCodes']
+                title: Sociétés
+                fields:
+                    - { property: name, label: Nom }
+                    - { property: certifications, label: Certifications }
+                    - { property: registerCodes, label: Code d'enregistrement}
+                    - { property: users, label: Utilisateurs }
+                    - { property: creationDate, label: Date de création}
             form:
-                fields: ['name', 'certifications', 'registerCodes']
+                title: Modifier la société
+                fields:
+                    - { property: name, label: Nom }
+                    - { property: certifications, label: Certifications }
+                    - { property: registerCodes, label: Code d'enregistrement}
+                    - { property: users, label: Utilisateurs }
 
         RegisterCode:
             class: App\Entity\RegisterCode
             label: Codes d'enregistrement
             list:
-                fields: ['codeContent', 'company.name', 'role.title', 'maxNbOfUsers', 'users']
+                title: Codes d'enregistrement
+                fields:
+                    - { property: codeContent, label: Code d'enregistrement }
+                    - { property: company, label: Société }
+                    - { property: role, label: Role }
+                    - { property: maxNbOfUsers, label: Nb max d'utilisateur }
+                    - { property: creationDate, label: Date de création }
             form:
-                fields: ['codeContent', 'company.name', 'role.title', 'maxNbOfUsers']
+                title: Modifier le code d'enregistrement
+                fields:
+                    - { property: codeContent, label: Code d'enregistrement }
+                    - { property: company, label: Société }
+                    - { property: role, label: Role }
+                    - { property: maxNbOfUsers, label: Nombre maximum d'utilisateur }
 
 
+        Role:
+            class: App\Entity\Role
+            label: Roles
+            help: 'La hiérarchie des rôles va de 3 pour les assistants qualité à 1 pour le directeur.'
+            list:
+                title: '%%entity_label%%'
+                fields:
+                    - { property: title, label: Titre }
+                    - { property: rank, label: Niveau hiérarchique }
+                    - { property: registerCodes, label: Code d'enregistrement }
+                    - { property: users, label: utilisateurs }
+                    - { property: creationDate, label: Date de création }
+            form:
+                fields:
+                    - { property: title, label: Titre }
+                    - { property: rank, label: Niveau hiérarchique }
+                    - { property: registerCodes, label: Code d'enregistrement }
+                    - { property: users, label: utilisateurs }

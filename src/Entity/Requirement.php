@@ -179,7 +179,7 @@ class Requirement
     public function removeResponse(Result $result): self
     {
         if ($this->results->contains($result)) {
-            $this->responses->removeElement($result);
+            $this->results->removeElement($result);
             // set the owning side to null (unless already changed)
             if ($result->getRequirement() === $this) {
                 $result->setRequirement(null);
@@ -187,5 +187,9 @@ class Requirement
         }
 
         return $this;
+    }
+
+    public function __toString(){
+        return $this->description;
     }
 }
