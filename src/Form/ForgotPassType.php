@@ -31,7 +31,7 @@ class ForgotPassType extends AbstractType
                        ]
                     ]
                 )
-            ->add('codeContent',
+            ->add('code',
                 null,
                 [
                     'constraints' => [

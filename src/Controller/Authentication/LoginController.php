@@ -87,8 +87,9 @@ class LoginController extends AbstractController
 
             $audits = $auditRepository->findBy(['user' => $user], ['lastModificationDate' => 'DESC']);
 
+
             foreach ($audits as $audit){
-                $audits[] = [
+                $auditList[] = [
                     "uuidAudit" => $certification->getId(),
                     "certificationTitle" => $audit->getCertification()->getTitle(),
                     "lastModification" => $audit->getLastModificationDate(),
@@ -96,7 +97,6 @@ class LoginController extends AbstractController
                     "progression" => $audit->getProgression(),
                 ];
             }
-
 
 
             return $this->responseManager->response200(
@@ -109,13 +109,14 @@ class LoginController extends AbstractController
                     "email" => $user->getEmail(),
                     "uuidUser" => $user->getId(),
                     "roleName" => $user->getRole()->getTitle(),
+                    "rank" => $user->getRole()->getRank(),
                     "userSociety" => [
                         "uuidSociety" => $user->getCompany()->getId(),
                         "societyName" => $user->getCompany()->getName()
                     ],
                     "userEnable" => $user->getUserEnable(),
                     "certifications" => $certifications,
-                    "audits" => $audits
+                    "audits" => $auditList
                 ]
             );
 
@@ -147,7 +148,7 @@ class LoginController extends AbstractController
             }
 
             $user = $this->userRepository->findOneBy(['email' => $data["email"]]);
-            $registerCode = $this->registerCodeRepository->findOneBy(['codeContent' => $data["codeContent"]]);
+            $registerCode = $this->registerCodeRepository->findOneBy(['codeContent' => $data["code"]]);
 
             if ($user === null || $user->getRegisterCode() !== $registerCode) {
                 return $this->responseManager->response403(

@@ -4,11 +4,29 @@ easy_admin:
             date:     'd/m/Y'
             time:     'H:i'
             datetime: 'd/m/Y'
+    design:
+        menu:
+            - label: Gestion Clients
+              children: ['Company', 'RegisterCode', 'Role', 'User']
+            - label: 'Certifications'
+              icon: 'certificate'
+
+
     entities:
         Company:
             class: App\Entity\Company
             label: Sociétés
             list:
+                title: Sociétés
+                actions:
+                    - { name: new, label: Créer une société }
+                fields:
+                    - { property: name, label: Nom }
+                    - { property: certifications, label: Certifications }
+                    - { property: registerCodes, label: Code d'enregistrement}
+                    - { property: users, label: Utilisateurs }
+                    - { property: creationDate, label: Date de création}
+            show:
                 title: Sociétés
                 fields:
                     - { property: name, label: Nom }
@@ -16,18 +34,34 @@ easy_admin:
                     - { property: registerCodes, label: Code d'enregistrement}
                     - { property: users, label: Utilisateurs }
                     - { property: creationDate, label: Date de création}
-            form:
-                title: Modifier la société
+            new:
+                title: Créer une société
+                fields:
+                    - { property: name, label: Nom }
+                    - { property: certifications, label: Certifications }
+#                    - { property: registerCodes, label: Code d'enregistrement}
+            edit:
+                title: Modifier cette société
                 fields:
                     - { property: name, label: Nom }
                     - { property: certifications, label: Certifications }
                     - { property: registerCodes, label: Code d'enregistrement}
-                    - { property: users, label: Utilisateurs }
+#                    - { property: users, label: Utilisateurs }
 
         RegisterCode:
             class: App\Entity\RegisterCode
             label: Codes d'enregistrement
             list:
+                title: Codes d'enregistrement
+                actions:
+                    - { name: new, label: Créer un code d'enregistrement }
+                fields:
+                    - { property: codeContent, label: Code d'enregistrement }
+                    - { property: company, label: Société }
+                    - { property: role, label: Role }
+                    - { property: maxNbOfUsers, label: Nb max d'utilisateur }
+                    - { property: creationDate, label: Date de création }
+            show:
                 title: Codes d'enregistrement
                 fields:
                     - { property: codeContent, label: Code d'enregistrement }
@@ -35,7 +69,14 @@ easy_admin:
                     - { property: role, label: Role }
                     - { property: maxNbOfUsers, label: Nb max d'utilisateur }
                     - { property: creationDate, label: Date de création }
-            form:
+            new:
+                title: Créer un code d'enregistrement
+                fields:
+                    - { property: codeContent, label: Code d'enregistrement }
+                    - { property: company, label: Société }
+                    - { property: role, label: Role }
+                    - { property: maxNbOfUsers, label: Nombre maximum d'utilisateur }
+            edit:
                 title: Modifier le code d'enregistrement
                 fields:
                     - { property: codeContent, label: Code d'enregistrement }
@@ -43,22 +84,76 @@ easy_admin:
                     - { property: role, label: Role }
                     - { property: maxNbOfUsers, label: Nombre maximum d'utilisateur }
 
-
         Role:
             class: App\Entity\Role
-            label: Roles
-            help: 'La hiérarchie des rôles va de 3 pour les assistants qualité à 1 pour le directeur.'
+            label: Rôles
+            help: La hiérarchie des rôles va de 3 pour les assistants qualité à 1 pour le directeur.
             list:
-                title: '%%entity_label%%'
+                title: Rôles
+                actions:
+                    - { name: new, label: Créer un rôle }
                 fields:
                     - { property: title, label: Titre }
                     - { property: rank, label: Niveau hiérarchique }
                     - { property: registerCodes, label: Code d'enregistrement }
                     - { property: users, label: utilisateurs }
                     - { property: creationDate, label: Date de création }
-            form:
+            show:
+                title: Rôles
                 fields:
                     - { property: title, label: Titre }
                     - { property: rank, label: Niveau hiérarchique }
                     - { property: registerCodes, label: Code d'enregistrement }
                     - { property: users, label: utilisateurs }
+                    - { property: creationDate, label: Date de création }
+            new:
+                title: Créer un rôle
+                fields:
+                    - { property: title, label: Titre }
+                    - { property: rank, label: Niveau hiérarchique }
+                    - { property: registerCodes, label: Code d'enregistrement }
+                    - { property: users, label: utilisateurs }
+            edit:
+                title: Modifier un rôle
+                fields:
+                    - { property: title, label: Titre }
+                    - { property: rank, label: Niveau hiérarchique }
+                    - { property: registerCodes, label: Code d'enregistrement }
+                    - { property: users, label: utilisateurs }
+
+        User:
+            class: App\Entity\User
+            label: Utilisateurs
+            disabled_actions: [new]
+            list:
+                title: utilisateurs
+                fields:
+                    - { property: email, label: Email }
+                    - { property: firstName, label: Prénom }
+                    - { property: lastName, label: Nom }
+                    - { property: userEnable, label: Utilisateur activé }
+                    - { property: company, label: Société }
+                    - { property: role, label: Rôle }
+                    - { property: registerCode, label: Code d'enregistrement }
+                    - { property: creationDate, label: Date de création }
+            show:
+                title: Utilisateur
+                fields:
+                    - { property: email, label: Email }
+                    - { property: firstName, label: Prénom }
+                    - { property: lastName, label: Nom }
+                    - { property: userEnable, label: Utilisateur activé }
+                    - { property: company, label: Société }
+                    - { property: role, label: Rôle }
+                    - { property: registerCode, label: Code d'enregistrement }
+                    - { property: creationDate, label: Date de création }
+            edit:
+                title: Modifier le code d'enregistrement
+                fields:
+                    - { property: email, label: Email }
+                    - { property: firstName, label: Prénom }
+                    - { property: lastName, label: Nom }
+                    - { property: userEnable, label: Utilisateur activé }
+#                    - { property: company, label: Société }
+#                    - { property: role, label: Rôle }
+#                    - { property: registerCode, label: Code d'enregistrement }

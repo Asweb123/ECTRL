@@ -7,23 +7,24 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Uuid;
 
-class EditAuditType extends AbstractType
+class GetUserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('uuidResult',
+            ->add('uuidUser',
                 null,
-                [
-                    'constraints' =>  [
-                        new Uuid(
-                            [
-                                'message' => "Id d'audit non valide."
-                            ]
-                        )
+                    [
+                        'constraints' =>  [
+                            new Uuid(
+                                [
+                                    'message' => "Id d'utilisateur invalide."
+                                ]
+                            )
+                        ]
                     ]
-                ]
-            )
+                )
+
         ;
     }
 
@@ -31,7 +32,6 @@ class EditAuditType extends AbstractType
     {
         $resolver->setDefaults([
             'csrf_protection' => false,
-            'allow_extra_fields' => true
         ]);
     }
 }

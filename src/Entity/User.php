@@ -249,18 +249,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getUserAware(): ?bool
-    {
-        return $this->userAware;
-    }
-
-    public function setUserAware(bool $userAware): self
-    {
-        $this->userAware = $userAware;
-
-        return $this;
-    }
-
     public function getCompany(): ?Company
     {
         return $this->company;

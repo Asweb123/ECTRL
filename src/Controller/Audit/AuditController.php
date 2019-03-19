@@ -257,7 +257,6 @@ class AuditController extends AbstractController
                 if($result->getState() === 1 || $result->getState() ===3){
                     $progression++;
                 }
-
             }
 
             $audit->setLastModificationDate(new \Datetime('now'));
