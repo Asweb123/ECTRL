@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CompanyRepository")
- * @UniqueEntity("codeContent", message="Ce code d'enregistrement est déjà utilisé.")
+ * @UniqueEntity("name", message="Ce nom d'entreprise est déjà utilisé.")
  */
 class Company
 {
@@ -22,7 +22,7 @@ class Company
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\Type("string")
      * @Assert\NotBlank()
      * @Assert\NotNull()

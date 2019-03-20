@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190312233237 extends AbstractMigration
+final class Version20190319194213 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,9 +22,8 @@ final class Version20190312233237 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE audit ADD user_id CHAR(36) NOT NULL COMMENT \'(DC2Type:guid)\', ADD last_modification DATETIME NOT NULL');
-        $this->addSql('ALTER TABLE audit ADD CONSTRAINT FK_9218FF79A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
-        $this->addSql('CREATE INDEX IDX_9218FF79A76ED395 ON audit (user_id)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_6C3C6D752B36786B ON certification (title)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_4FBF094F5E237E06 ON company (name)');
     }
 
     public function down(Schema $schema) : void
@@ -32,8 +31,7 @@ final class Version20190312233237 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE audit DROP FOREIGN KEY FK_9218FF79A76ED395');
-        $this->addSql('DROP INDEX IDX_9218FF79A76ED395 ON audit');
-        $this->addSql('ALTER TABLE audit DROP user_id, DROP last_modification');
+        $this->addSql('DROP INDEX UNIQ_6C3C6D752B36786B ON certification');
+        $this->addSql('DROP INDEX UNIQ_4FBF094F5E237E06 ON company');
     }
 }

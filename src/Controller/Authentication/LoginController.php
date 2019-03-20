@@ -88,13 +88,17 @@ class LoginController extends AbstractController
             $audits = $auditRepository->findBy(['user' => $user], ['lastModificationDate' => 'DESC']);
 
 
+
+            $auditList = [];
             foreach ($audits as $audit){
                 $auditList[] = [
-                    "uuidAudit" => $certification->getId(),
+                    "uuidAudit" => $audit->getId(),
                     "certificationTitle" => $audit->getCertification()->getTitle(),
                     "lastModification" => $audit->getLastModificationDate(),
-                    "score" => $audit->getScore(),
-                    "progression" => $audit->getProgression(),
+                    "score" => $audit->getScore().'%',
+                    "auditStatus" => $audit->getStatus(),
+                    "auditCreatedAt" => $audit->getCreationDate(),
+                    "progression" => $audit->getProgression().'%',
                 ];
             }
 
@@ -123,6 +127,7 @@ class LoginController extends AbstractController
         }
 
         catch(\Exception $ex){
+            dump($ex);
             return $this->responseManager->response500();
         }
 

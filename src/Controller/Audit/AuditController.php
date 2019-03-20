@@ -11,6 +11,7 @@ namespace App\Controller\Audit;
 
 use App\Entity\Audit;
 use App\Entity\Result;
+use App\Form\DeleteAuditType;
 use App\Form\EditAuditType;
 use App\Form\GetAuditType;
 use App\Form\NewAuditType;
@@ -131,11 +132,10 @@ class AuditController extends AbstractController
                     "uuidUser" => $user->getId(),
                     "certificationsTitle" => $certification->getTitle(),
                     "uuidAudit" => $audit->getId(),
-                    "requirements" => $requirements,
+                    "requirementsLeft" => $requirements,
                     "metadata" => $metadata
                 ]
             );
-
         }
 
         catch(\Exception $ex){
@@ -148,7 +148,7 @@ class AuditController extends AbstractController
     /**
      * @Route("/audit/{uuidAudit}", name="getAudit", methods={"GET"})
      */
-    public function getAudit($uuidAudit)
+    public function getAudit($uuidAudit,  ResultRepository $resultRepository)
     {
         try {
 
@@ -173,20 +173,52 @@ class AuditController extends AbstractController
                 );
             }
 
+            foreach($audit->getCertification()->getRequirements() as $requirement){
+                $result = $resultRepository->findOneBy(['audit' => $audit, 'requirement' => $requirement]);
+                if($result->getState() === 0 || $result->getState() === 2){
+                  $requirementsLeft[] = [
+                        "uuidRequirement" => $requirement->getId(),
+                        "themeTitle" => $requirement->getTheme()->getTitle(),
+                        "themeDescription" => $requirement->getTheme()->getDescription(),
+                        "themeRankCertification" => $requirement->getTheme()->getRankCertification(),
+                        "requirementDescription" => $requirement->getDescription(),
+                        "requirementRankTheme" => $requirement->getRankTheme(),
+                        "requirementRankCertification" => $requirement->getRankCertification(),
+                        "uuidResult" => $result->getId(),
+                        "state" => $result->getState(),
+                        ];
+                 }
+             }
+
+            $certificationThemeList = $this->themeRepository->findBy(['certification' => $audit->getCertification()], ['rankCertification' => 'ASC']);
+            foreach ($certificationThemeList as $key => $theme){
+                $totalRequirementsNb = count($theme->getRequirements());
+                $requirementsLeftNb = 0;
+                foreach($theme->getRequirements() as $requirement){
+                    $result = $resultRepository->findOneBy(['audit' => $audit, 'requirement' => $requirement]);
+                    if($result->getState() === 0 || $result->getState() === 2){
+                        $requirementsLeftNb ++;
+                    }
+                }
+                $metadata[] = [
+                    "requirementsT".($key+1)."Nb" => $totalRequirementsNb,
+                    "requirementsT".($key+1)."LeftNb" => $requirementsLeftNb
+                ];
+            }
+
             return $this->responseManager->response200(
                 200,
-                "Get the requested audit.",
-                "Audit récupéré avec succès.",
+                "Audit requested.",
+                "Audit demandé.",
                 [
+                    "uuidUser" => $audit->getUser()->getId(),
+                    "uuidCertification" => $audit->getCertification()->getId(),
+                    "certificationsTitle" => $audit->getCertification()->getTitle(),
                     "uuidAudit" => $audit->getId(),
-                    "certificationTitle" => $audit->getCertification()->getTitle(),
-                    "creationDate" => $audit->getCreationDate(),
-                    "lastModificationDate" => $audit->getLastModificationDate(),
-                    "score" => $audit->getScore(),
-                    "progression" => $audit->getProgression()
+                    "requirementsLeft" => $requirementsLeft,
+                    "metadata" => $metadata
                 ]
             );
-
         }
 
         catch(\Exception $ex){
@@ -235,58 +267,25 @@ class AuditController extends AbstractController
             $this->em->persist($currentResult);
             $this->em->flush();
 
-            $audit = $this->auditRepository->find($currentResult->getAudit()->getId());
-            $certification = $this->certificationRepository->find($currentResult->getAudit()->getCertification()->getId());
-            $requirementList = $this->requirementRepository->findBy(['certification' => $certification], ['rankCertification' => 'ASC']);
-
-            $progression = 0;
-            foreach($requirementList as $requirement){
-                $result = $resultRepository->findOneBy(['audit' => $audit, 'requirement' => $requirement]);
-                $requirements[] = [
-                    "uuidRequirement" => $requirement->getId(),
-                    "themeTitle" => $requirement->getTheme()->getTitle(),
-                    "themeDescription" => $requirement->getTheme()->getDescription(),
-                    "themeRankCertification" => $requirement->getTheme()->getRankCertification(),
-                    "requirementDescription" => $requirement->getDescription(),
-                    "requirementRankTheme" => $requirement->getRankTheme(),
-                    "requirementRankCertification" => $requirement->getRankCertification(),
-                    "uuidResult" => $result->getId(),
-                    "state" => $result->getState(),
-                ];
-
-                if($result->getState() === 1 || $result->getState() ===3){
-                    $progression++;
-                }
-            }
-
+            $audit = $currentResult->getAudit();
             $audit->setLastModificationDate(new \Datetime('now'));
 
-            $progression = $scoreAndProgManager->perCentCalculator($progression, count($requirementList));
-            $audit->setProgression($progression);
-
-
-            if($progression >= 100){
-                $score = $scoreAndProgManager->scoreCalculator($requirementList, $audit);
-                $audit->setScore($score);
-
-                $user = $result->getAudit()->getUser();
-                $sendNotificationManager->sendNotification($user);
+            $progressionRaw = 0;
+            foreach($audit->getResults() as $result){
+                if($result->getState() === 1 || $result->getState() === 3){
+                    $progressionRaw++;
+                }
             }
 
-            $certificationThemeList = $this->themeRepository->findBy(['certification' => $certification], ['rankCertification' => 'ASC']);
-            foreach ($certificationThemeList as $key => $theme){
-                $totalRequirementsNb = count($theme->getRequirements());
-                $requirementsLeftNb = 0;
-                foreach($theme->getRequirements() as $requirement){
-                    $result = $resultRepository->findOneBy(['audit' => $audit, 'requirement' => $requirement]);
-                    if($result->getState() === 0 || $result->getState() === 2){
-                        $requirementsLeftNb ++;
-                    }
-                }
-                $metadata[] = [
-                    "requirementsT".($key+1)."Nb" => $totalRequirementsNb,
-                    "requirementsT".($key+1)."LeftNb" => $requirementsLeftNb
-                ];
+            $progression = $scoreAndProgManager->perCentCalculator($progressionRaw, count($audit->getResults()));
+            $audit->setProgression($progression);
+
+            if($progression >= 100){
+                $score = $scoreAndProgManager->scoreCalculator($audit->getCertification()->getRequirements(), $audit);
+                $audit->setScore($score);
+                $audit->setStatus(2);
+                $user = $result->getAudit()->getUser();
+                $sendNotificationManager->sendNotification($user);
             }
 
             $this->em->persist($audit);
@@ -297,18 +296,59 @@ class AuditController extends AbstractController
                 "Requirement result saved.",
                 "Le resultat pour cette exigence à bien été sauvegardé.",
                 [
-                    "uuidUser" => $result->getAudit()->getUser()->getId(),
-                    "certificationsTitle" => $certification->getTitle(),
-                    "uuidAudit" => $result->getAudit()->getId(),
-                    "requirements" => $requirements,
-                    "metadata" => $metadata
+                    "uuidUser" => $audit->getUser()->getId(),
+                    "certificationsTitle" => $audit->getCertification()->getTitle(),
+                    "uuidAudit" => $audit->getId(),
                 ]
             );
-
         }
 
         catch(\Exception $ex){
-            dump($ex);
+            return $this->responseManager->response500();
+        }
+
+    }
+
+    /**
+     * @Route("/audit", name="audit", methods={"DELETE"})
+     */
+    public function deleteAudit(Request $request)
+    {
+        try {
+            $data = json_decode($request->getContent(), true);
+
+            $form = $this->createForm(DeleteAuditType::class);
+            $form->submit($data);
+            if($form->isValid() === false) {
+                return $this->responseManager->response403(
+                    403,
+                    "wrong format values",
+                    $form->getErrors(true)->getChildren()->getMessage()
+                );
+            }
+
+            $audit = $this->auditRepository->find($data['uuidAudit']);
+
+            if($audit === null){
+                return $this->responseManager->response404(
+                    404,
+                    "No audit for the given id",
+                    "L’audit recherché n’existe pas."
+                );
+            }
+
+            $this->em->remove($audit);
+            $this->em->flush();
+
+            return $this->responseManager->response200(
+                200,
+                "Audit deleted.",
+                "Audit supprimé.",
+                []
+            );
+        }
+
+        catch(\Exception $ex){
             return $this->responseManager->response500();
         }
 

@@ -54,7 +54,7 @@ class Audit
     private $company;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer")
      */
     private $score;
 
@@ -63,12 +63,19 @@ class Audit
      */
     private $results;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $status;
+
     public function __construct(){
         $this->isFinished = false;
         $this->creationDate = new \Datetime('now');
         $this->lastModificationDate = new \Datetime('now');
         $this->isFinished = false;
+        $this->score = 0;
         $this->progression = 0;
+        $this->status = 1;
         $this->results = new ArrayCollection();
     }
 
@@ -194,5 +201,17 @@ class Audit
 
     public function __toString(){
         return $this->id;
+    }
+
+    public function getStatus(): ?int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
     }
 }

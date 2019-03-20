@@ -5,19 +5,33 @@ easy_admin:
             time:     'H:i'
             datetime: 'd/m/Y'
     design:
+        brand_color: '#58c0c1'
+        assets:
+            favicon: '/assets/backend/favicon.png'
         menu:
-            - label: Gestion Clients
-              children: ['Company', 'RegisterCode', 'Role', 'User']
-            - label: 'Certifications'
-              icon: 'certificate'
-
+           # - label: Gestion Clients
+           #   children: ['Company', 'RegisterCode', 'Role', 'User']
+           # - label: Gestion des modèles d'audits
+           #   icon: tasks
+           #   children: ['Certification', 'Theme', 'Requirement']
+           - { label: Gestion Clients }
+           - { entity: Company, icon: industry }
+           - { entity: RegisterCode, icon: barcode }
+           - { entity: Role, icon: users }
+           - { entity: User, icon: address-card }
+           - { label: Gestion des modèles d'audits }
+           - { entity: Certification, icon: list-alt }
+           - { entity: Theme, icon: list-ol }
+           - { entity: Requirement, icon: check-square }
 
     entities:
         Company:
             class: App\Entity\Company
             label: Sociétés
+            icon: tasks
             list:
                 title: Sociétés
+                max_results: 100
                 actions:
                     - { name: new, label: Créer une société }
                 fields:
@@ -28,6 +42,7 @@ easy_admin:
                     - { property: creationDate, label: Date de création}
             show:
                 title: Sociétés
+                max_results: 100
                 fields:
                     - { property: name, label: Nom }
                     - { property: certifications, label: Certifications }
@@ -53,6 +68,7 @@ easy_admin:
             label: Codes d'enregistrement
             list:
                 title: Codes d'enregistrement
+                max_results: 100
                 actions:
                     - { name: new, label: Créer un code d'enregistrement }
                 fields:
@@ -63,6 +79,7 @@ easy_admin:
                     - { property: creationDate, label: Date de création }
             show:
                 title: Codes d'enregistrement
+                max_results: 100
                 fields:
                     - { property: codeContent, label: Code d'enregistrement }
                     - { property: company, label: Société }
@@ -94,6 +111,7 @@ easy_admin:
                     - { name: new, label: Créer un rôle }
                 fields:
                     - { property: title, label: Titre }
+                    - { property: description, label: Description }
                     - { property: rank, label: Niveau hiérarchique }
                     - { property: registerCodes, label: Code d'enregistrement }
                     - { property: users, label: utilisateurs }
@@ -110,15 +128,14 @@ easy_admin:
                 title: Créer un rôle
                 fields:
                     - { property: title, label: Titre }
+                    - { property: description, label: Description }
                     - { property: rank, label: Niveau hiérarchique }
-                    - { property: registerCodes, label: Code d'enregistrement }
-                    - { property: users, label: utilisateurs }
             edit:
                 title: Modifier un rôle
                 fields:
                     - { property: title, label: Titre }
+                    - { property: description, label: Description }
                     - { property: rank, label: Niveau hiérarchique }
-                    - { property: registerCodes, label: Code d'enregistrement }
                     - { property: users, label: utilisateurs }
 
         User:
@@ -127,6 +144,7 @@ easy_admin:
             disabled_actions: [new]
             list:
                 title: utilisateurs
+                max_results: 100
                 fields:
                     - { property: email, label: Email }
                     - { property: firstName, label: Prénom }
@@ -138,6 +156,7 @@ easy_admin:
                     - { property: creationDate, label: Date de création }
             show:
                 title: Utilisateur
+                max_results: 100
                 fields:
                     - { property: email, label: Email }
                     - { property: firstName, label: Prénom }
@@ -154,6 +173,123 @@ easy_admin:
                     - { property: firstName, label: Prénom }
                     - { property: lastName, label: Nom }
                     - { property: userEnable, label: Utilisateur activé }
-#                    - { property: company, label: Société }
-#                    - { property: role, label: Rôle }
-#                    - { property: registerCode, label: Code d'enregistrement }
+
+
+
+        Certification:
+            class: App\Entity\Certification
+            label: Modèles d'audits
+            list:
+                title: Modèles d'audits
+                max_results: 100
+                actions:
+                    - { name: new, label: Créer un modèle }
+                fields:
+                    - { property: title, label: Intitulé }
+                    - { property: description, label: Description }
+                    - { property: themes, label: Thèmes }
+                    - { property: requirements, label: Exigences }
+                    - { property: companies, label: Sociétés }
+                    - { property: audits, label: Nb d'Audits }
+                    - { property: creationDate, label: Date de création}
+            show:
+                title: Modèle d'audit
+                max_results: 100
+                fields:
+                    - { property: title, label: Intitulé }
+                    - { property: description, label: Description }
+                    - { property: themes, label: Thèmes }
+                    - { property: requirements, label: Exigences }
+                    - { property: companies, label: Sociétés }
+                    - { property: creationDate, label: Date de création}
+            new:
+                title: Créer un modèle d'audit
+                fields:
+                    - { property: title, label: Intitulé }
+                    - { property: description, label: Description }
+            edit:
+                title: Modifier un modèle d'audit
+                fields:
+                    - { property: title, label: Intitulé }
+                    - { property: description, label: Description }
+
+        Theme:
+            class: App\Entity\Theme
+            label: Themes
+            list:
+                title: Themes des modèles d'audits
+                max_results: 100
+                actions:
+                    - { name: new, label: Créer un thème }
+                fields:
+                    - { property: title, label: Intitulé }
+                    - { property: description, label: Description }
+                    - { property: certification, label: Appartient à la grille }
+                    - { property: rankCertification, label: Position dans la grille }
+                    - { property: requirements, label: Exigences de ce thème }
+                    - { property: creationDate, label: Date de création}
+            show:
+                title: Theme d'un audit
+                max_results: 100
+                fields:
+                    - { property: title, label: Intitulé }
+                    - { property: description, label: Description }
+                    - { property: certification, label: Appartient à la grille }
+                    - { property: rankCertification, label: Position dans la grille }
+                    - { property: creationDate, label: Date de création}
+            new:
+                title: Créer un thème
+                fields:
+                    - { property: title, label: Intitulé }
+                    - { property: description, label: Description }
+                    - { property: certification, label: Appartient à la grille }
+                    - { property: rankCertification, label: Position dans la grille }
+            edit:
+                title: Modifier un thème
+                fields:
+                    - { property: title, label: Intitulé }
+                    - { property: description, label: Description }
+                    - { property: certification, label: Appartient à la grille }
+                    - { property: rankCertification, label: Position dans la grille }
+
+        Requirement:
+            class: App\Entity\Requirement
+            label: Exigences
+            list:
+                title: Exigences des modèles d'audits
+                max_results: 100
+                actions:
+                    - { name: new, label: Créer une exigence }
+                fields:
+                    - { property: description, label: Description }
+                    - { property: certification, label: Appartient au modèle de grille }
+                    - { property: rankCertification, label: Position dans modèle de grille }
+                    - { property: theme, label: Appartient au thème }
+                    - { property: rankTheme, label: Position dans le thème }
+                    - { property: creationDate, label: Date de création}
+            show:
+                title: Exigence d'un modèle
+                max_results: 100
+                fields:
+                    - { property: description, label: Description }
+                    - { property: certification, label: Appartient au modèle de grille }
+                    - { property: rankCertification, label: Position dans modèle de grille }
+                    - { property: theme, label: Appartient au thème }
+                    - { property: rankTheme, label: Position dans le thème }
+                    - { property: creationDate, label: Date de création}
+            new:
+                title: Créer une exigence
+                fields:
+                    - { property: description, label: Description }
+                    - { property: certification, label: Appartient au modèle de grille }
+                    - { property: rankCertification, label: Position dans modèle de grille }
+                    - { property: theme, label: Appartient au thème }
+                    - { property: rankTheme, label: Position dans le thème }
+            edit:
+                title: Modifier une exigence
+                fields:
+                    - { property: description, label: Description }
+                    - { property: certification, label: Appartient au modèle de grille }
+                    - { property: rankCertification, label: Position dans modèle de grille }
+                    - { property: theme, label: Appartient au thème }
+                    - { property: rankTheme, label: Position dans le thème }

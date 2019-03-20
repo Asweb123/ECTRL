@@ -58,11 +58,13 @@ class UserDataController extends AbstractController
 
             foreach ($audits as $audit){
                 $auditList[] = [
-                    "uuidAudit" => $certification->getId(),
+                    "uuidAudit" => $audit->getId(),
                     "certificationTitle" => $audit->getCertification()->getTitle(),
                     "lastModification" => $audit->getLastModificationDate(),
-                    "score" => $audit->getScore(),
-                    "progression" => $audit->getProgression(),
+                    "auditStatus" => $audit->getStatus(),
+                    "auditCreatedAt" => $audit->getCreationDate(),
+                    "score" => $audit->getScore().'%',
+                    "progression" => $audit->getProgression().'%',
                 ];
             }
 
