@@ -11,15 +11,26 @@
 
 .info-wrap {
     padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .info-title {
     text-align: center;
     font-size: 2.5rem;
+    margin-bottom: 0;
 }
 
-.img-hand {
+.img-check, .img-warning, .img-password {
+    width: 8rem;
+    margin: 2rem auto;
+}
 
+.img-warning {
+    width: 8rem;
+    margin: 2rem auto;
 }
 
 .info {
@@ -47,3 +58,4 @@
     border-color: #b8dee3;
     font-weight: 400;
 }
+

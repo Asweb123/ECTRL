@@ -113,6 +113,7 @@ class LoginController extends AbstractController
                     "email" => $user->getEmail(),
                     "uuidUser" => $user->getId(),
                     "roleName" => $user->getRole()->getTitle(),
+                    "hasToken" => $user->getHasToken(),
                     "rank" => $user->getRole()->getRank(),
                     "userSociety" => [
                         "uuidSociety" => $user->getCompany()->getId(),
@@ -198,8 +199,11 @@ class LoginController extends AbstractController
      */
     public function resetPassword(Request $request, $userId)
     {
-
         $user = $this->userRepository->find($userId);
+
+        if($user === null){
+            throw $this->createNotFoundException();
+        }
 
         $form = $this->createForm(ResetPassType::class);
         $form->handleRequest($request);

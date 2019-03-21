@@ -40,6 +40,8 @@ class Requirement
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
      * @Assert\Type(
      *     type="integer",
      *     message="La valeur renseignée n'est pas un nombre entier."
@@ -50,6 +52,8 @@ class Requirement
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
      * @Assert\Type(
      *     type="integer",
      *     message="La valeur renseignée n'est pas un nombre entier."

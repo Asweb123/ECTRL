@@ -59,7 +59,7 @@ class AuditController extends AbstractController
 
 
     /**
-     * @Route("/audit", name="audit", methods={"POST"})
+     * @Route("/audit", name="newAudit", methods={"POST"})
      */
     public function newAudit(Request $request)
     {
@@ -105,6 +105,7 @@ class AuditController extends AbstractController
                     "themeTitle" => $requirement->getTheme()->getTitle(),
                     "themeDescription" => $requirement->getTheme()->getDescription(),
                     "themeRankCertification" => $requirement->getTheme()->getRankCertification(),
+                    "themeColor" => $requirement->getTheme()->getColor(),
                     "requirementDescription" => $requirement->getDescription(),
                     "requirementRankTheme" => $requirement->getRankTheme(),
                     "requirementRankCertification" => $requirement->getRankCertification(),
@@ -181,6 +182,7 @@ class AuditController extends AbstractController
                         "themeTitle" => $requirement->getTheme()->getTitle(),
                         "themeDescription" => $requirement->getTheme()->getDescription(),
                         "themeRankCertification" => $requirement->getTheme()->getRankCertification(),
+                        "themeColor" => $requirement->getTheme()->getColor(),
                         "requirementDescription" => $requirement->getDescription(),
                         "requirementRankTheme" => $requirement->getRankTheme(),
                         "requirementRankCertification" => $requirement->getRankCertification(),
@@ -286,6 +288,7 @@ class AuditController extends AbstractController
                 $audit->setStatus(2);
                 $user = $result->getAudit()->getUser();
                 $sendNotificationManager->sendNotification($user);
+
             }
 
             $this->em->persist($audit);
@@ -310,7 +313,7 @@ class AuditController extends AbstractController
     }
 
     /**
-     * @Route("/audit", name="audit", methods={"DELETE"})
+     * @Route("/audit", name="deleteAudit", methods={"DELETE"})
      */
     public function deleteAudit(Request $request)
     {

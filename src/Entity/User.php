@@ -115,12 +115,18 @@ class User implements UserInterface
      */
     private $expoPushTokens;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $hasToken;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
         $this->userEnable = false;
         $this->audits = new ArrayCollection();
         $this->expoPushTokens = new ArrayCollection();
+        $this->hasToken = false;
     }
 
     public function getId()
@@ -349,5 +355,17 @@ class User implements UserInterface
 
     public function __toString(){
         return $this->email;
+    }
+
+    public function getHasToken(): ?bool
+    {
+        return $this->hasToken;
+    }
+
+    public function setHasToken(bool $hasToken): self
+    {
+        $this->hasToken = $hasToken;
+
+        return $this;
     }
 }

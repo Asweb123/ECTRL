@@ -5,6 +5,7 @@ namespace App\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Uuid;
 
 class NewAuditType extends AbstractType
@@ -19,6 +20,15 @@ class NewAuditType extends AbstractType
                             new Uuid(
                                 [
                                     'message' => "Id d'utilisateur invalide."
+                                ]
+                            )
+                        ]
+                    ],
+                    [
+                        'constraints' =>  [
+                            new NotBlank(
+                                [
+                                    'message' => "Id d'utilisateur non renseignée."
                                 ]
                             )
                         ]

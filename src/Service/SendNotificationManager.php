@@ -28,23 +28,17 @@ class SendNotificationManager
 
         if($sender->getRole()->getRank() === 3){
             foreach($usersCompany as $user){
-                $superiorUsers = [];
-                if($user->getRole()->getRank() === 2){
+                if($user->getRole()->getRank() === 3){
                     $superiorUsers[] = $user;
-                    return $superiorUsers;
                 }
             }
 
             $title = 'ECTRL - Nouvel Audit validé !';
             $message = 'Rendez-vous sur l\'application ECTRL pour valider les résultats de l\'Audit réalisé par: '.$sender->getFirstName().' '.$sender->getLastName().'.';
-        }
-
-        if($sender->getRole()->getRank() === 2){
+        } elseif ($sender->getRole()->getRank() === 2){
             foreach($usersCompany as $user){
-                $superiorUsers = [];
                 if($user->getRole()->getRank() === 1){
                     $superiorUsers[] = $user;
-                    return $superiorUsers;
                 }
             }
 
@@ -54,8 +48,13 @@ class SendNotificationManager
         }
 
         foreach($superiorUsers as $superiorUser){
-            foreach($superiorUser->getExpoPushTokens as $expoPushToken){
-                $this->notificationManager->sendNotification($title, $message, $expoPushToken);
+            if($superiorUser->getExpoPushTokens() !== null){
+                foreach($superiorUser->getExpoPushTokens() as $expoPushToken){
+                    $token = $expoPushToken->getToken();
+                    $rep = $this->notificationManager->sendNotification($title, $message, $token, null);
+                  //  $rep = $this->notificationManager->sendNotification('Yo!', 'ça marche ou quoi? ;)', 'ExponentPushToken[8SDr1uLG8thkZKWWsekFYz]', null);
+
+                }
             }
         }
 

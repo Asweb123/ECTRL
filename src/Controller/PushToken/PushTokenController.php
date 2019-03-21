@@ -52,6 +52,8 @@ class PushTokenController extends AbstractController
             $expoPushToken->setUser($user);
             $expoPushToken->setToken($data['expoPushToken']);
 
+            $user->setHasToken(true);
+            $em->persist($user);
             $em->persist($expoPushToken);
             $em->flush();
 

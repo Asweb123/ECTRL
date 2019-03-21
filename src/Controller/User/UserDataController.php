@@ -79,6 +79,7 @@ class UserDataController extends AbstractController
                     "uuidUser" => $user->getId(),
                     "roleName" => $user->getRole()->getTitle(),
                     "rank" => $user->getRole()->getRank(),
+                    "hasToken" => $user->getHasToken(),
                     "userSociety" => [
                         "uuidSociety" => $user->getCompany()->getId(),
                         "societyName" => $user->getCompany()->getName()

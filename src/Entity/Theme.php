@@ -21,11 +21,29 @@ class Theme
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Type("string")
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Length(
+     *     min = 1,
+     *     max = 255,
+     *     minMessage="Le titre de la certification doit contenir au moins {{ limit }} caractère.",
+     *     maxMessage="Le titre de la certification doit contenir au maximum {{ limit }} caractères."
+     * )
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Type("string")
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Length(
+     *     min = 1,
+     *     max = 500,
+     *     minMessage="Le titre de la certification doit contenir au moins {{ limit }} caractère.",
+     *     maxMessage="Le titre de la certification doit contenir au maximum {{ limit }} caractères."
+     * )
      */
     private $description;
 
@@ -36,6 +54,13 @@ class Theme
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(
+     *     type="integer",
+     *     message="La valeur renseignée n'est pas un nombre entier."
+     * )
+     * @Assert\GreaterThan(0)
      */
     private $rankCertification;
 
@@ -49,6 +74,14 @@ class Theme
      * @ORM\OneToMany(targetEntity="App\Entity\Requirement", mappedBy="theme", orphanRemoval=true)
      */
     private $requirements;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Regex("/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/")
+     */
+    private $color;
 
     public function __construct()
     {
@@ -154,5 +187,17 @@ class Theme
 
     public function __toString(){
         return $this->title;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(string $color): self
+    {
+        $this->color = $color;
+
+        return $this;
     }
 }

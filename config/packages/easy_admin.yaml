@@ -7,13 +7,9 @@ easy_admin:
     design:
         brand_color: '#58c0c1'
         assets:
-            favicon: '/assets/backend/favicon.png'
+            favicon: '/favicon/favicon-32x32.png'
+            js: ['/js/codeGenerator.js']
         menu:
-           # - label: Gestion Clients
-           #   children: ['Company', 'RegisterCode', 'Role', 'User']
-           # - label: Gestion des modèles d'audits
-           #   icon: tasks
-           #   children: ['Certification', 'Theme', 'Requirement']
            - { label: Gestion Clients }
            - { entity: Company, icon: industry }
            - { entity: RegisterCode, icon: barcode }
@@ -23,6 +19,9 @@ easy_admin:
            - { entity: Certification, icon: list-alt }
            - { entity: Theme, icon: list-ol }
            - { entity: Requirement, icon: check-square }
+
+
+
 
     entities:
         Company:
@@ -54,14 +53,12 @@ easy_admin:
                 fields:
                     - { property: name, label: Nom }
                     - { property: certifications, label: Certifications }
-#                    - { property: registerCodes, label: Code d'enregistrement}
             edit:
                 title: Modifier cette société
                 fields:
                     - { property: name, label: Nom }
                     - { property: certifications, label: Certifications }
                     - { property: registerCodes, label: Code d'enregistrement}
-#                    - { property: users, label: Utilisateurs }
 
         RegisterCode:
             class: App\Entity\RegisterCode
@@ -89,7 +86,7 @@ easy_admin:
             new:
                 title: Créer un code d'enregistrement
                 fields:
-                    - { property: codeContent, label: Code d'enregistrement }
+                    - { property: codeContent, label: Code d'enregistrement, css_class: code-generator }
                     - { property: company, label: Société }
                     - { property: role, label: Role }
                     - { property: maxNbOfUsers, label: Nombre maximum d'utilisateur }
@@ -224,8 +221,8 @@ easy_admin:
                 fields:
                     - { property: title, label: Intitulé }
                     - { property: description, label: Description }
-                    - { property: certification, label: Appartient à la grille }
-                    - { property: rankCertification, label: Position dans la grille }
+                    - { property: certification, label: Appartient au modèle }
+                    - { property: rankCertification, label: Position dans modèle }
                     - { property: requirements, label: Exigences de ce thème }
                     - { property: creationDate, label: Date de création}
             show:
@@ -234,23 +231,26 @@ easy_admin:
                 fields:
                     - { property: title, label: Intitulé }
                     - { property: description, label: Description }
-                    - { property: certification, label: Appartient à la grille }
-                    - { property: rankCertification, label: Position dans la grille }
+                    - { property: certification, label: Appartient au modèle }
+                    - { property: rankCertification, label: Position dans modèle }
+                    - { property: color, label: Couleur }
                     - { property: creationDate, label: Date de création}
             new:
                 title: Créer un thème
                 fields:
                     - { property: title, label: Intitulé }
                     - { property: description, label: Description }
-                    - { property: certification, label: Appartient à la grille }
-                    - { property: rankCertification, label: Position dans la grille }
+                    - { property: certification, label: Appartient au modèle }
+                    - { property: rankCertification, label: Position dans modèle }
+                    - { property: color, label: Couleur, help: La couleur de thème doit être au format hexadécimal }
             edit:
                 title: Modifier un thème
                 fields:
                     - { property: title, label: Intitulé }
                     - { property: description, label: Description }
-                    - { property: certification, label: Appartient à la grille }
-                    - { property: rankCertification, label: Position dans la grille }
+                    - { property: certification, label: Appartient au modèle }
+                    - { property: rankCertification, label: Position dans modèle }
+                    - { property: color, label: Couleur, help: La couleur de thème doit être au format hexadécimal }
 
         Requirement:
             class: App\Entity\Requirement
@@ -262,34 +262,34 @@ easy_admin:
                     - { name: new, label: Créer une exigence }
                 fields:
                     - { property: description, label: Description }
-                    - { property: certification, label: Appartient au modèle de grille }
-                    - { property: rankCertification, label: Position dans modèle de grille }
+                    - { property: certification, label: Appartient au modèle }
+                    - { property: rankCertification, label: Position dans modèle }
                     - { property: theme, label: Appartient au thème }
-                    - { property: rankTheme, label: Position dans le thème }
+                    - { property: rankTheme, label: Position dans thème }
                     - { property: creationDate, label: Date de création}
             show:
                 title: Exigence d'un modèle
                 max_results: 100
                 fields:
                     - { property: description, label: Description }
-                    - { property: certification, label: Appartient au modèle de grille }
-                    - { property: rankCertification, label: Position dans modèle de grille }
+                    - { property: certification, label: Appartient au modèle }
+                    - { property: rankCertification, label: Position dans modèle }
                     - { property: theme, label: Appartient au thème }
-                    - { property: rankTheme, label: Position dans le thème }
+                    - { property: rankTheme, label: Position dans thème }
                     - { property: creationDate, label: Date de création}
             new:
                 title: Créer une exigence
                 fields:
                     - { property: description, label: Description }
-                    - { property: certification, label: Appartient au modèle de grille }
-                    - { property: rankCertification, label: Position dans modèle de grille }
+                    - { property: certification, label: Appartient au modèle }
+                    - { property: rankCertification, label: Position dans modèle }
                     - { property: theme, label: Appartient au thème }
-                    - { property: rankTheme, label: Position dans le thème }
+                    - { property: rankTheme, label: Position dans thème }
             edit:
                 title: Modifier une exigence
                 fields:
                     - { property: description, label: Description }
-                    - { property: certification, label: Appartient au modèle de grille }
-                    - { property: rankCertification, label: Position dans modèle de grille }
+                    - { property: certification, label: Appartient au modèle }
+                    - { property: rankCertification, label: Position dans modèle }
                     - { property: theme, label: Appartient au thème }
-                    - { property: rankTheme, label: Position dans le thème }
+                    - { property: rankTheme, label: Position dans thème }
