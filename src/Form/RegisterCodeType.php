@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Type;
 
 class RegisterCodeType extends AbstractType
@@ -16,7 +17,7 @@ class RegisterCodeType extends AbstractType
             ->add('code',
                  null,
                      [
-                        'constraints' => [
+                         'constraints' => [
                             new Type(
                                 [
                                     'type' => 'string',
@@ -27,10 +28,15 @@ class RegisterCodeType extends AbstractType
                                 [
                                     'message' => "Veuillez renseigner votre code d'enregistrement."
                                 ]
+                            ),
+                            new NotNull(
+                                [
+                                    'message' => "Veuillez renseigner votre code d'enregistrement."
+                                ]
                             )
-                        ]
+                         ]
                      ]
-                )
+                 )
         ;
     }
 

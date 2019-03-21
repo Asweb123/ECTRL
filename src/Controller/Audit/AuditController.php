@@ -286,8 +286,8 @@ class AuditController extends AbstractController
                 $score = $scoreAndProgManager->scoreCalculator($audit->getCertification()->getRequirements(), $audit);
                 $audit->setScore($score);
                 $audit->setStatus(2);
-                $user = $result->getAudit()->getUser();
-                $sendNotificationManager->sendNotification($user);
+               // $user = $result->getAudit()->getUser();
+               // $sendNotificationManager->sendNotification($user);
 
             }
 

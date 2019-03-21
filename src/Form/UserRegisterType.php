@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Type;
 
@@ -22,6 +23,22 @@ class UserRegisterType extends AbstractType
                   null,
                     [
                         'constraints' => [
+                            new NotBlank(
+                                [
+                                    'message' => "Veuillez renseigner votre code d'enregistrement."
+                                ]
+                            ),
+                            new NotNull(
+                                [
+                                    'message' => "Veuillez renseigner votre code d'enregistrement."
+                                ]
+                            ),
+                            new Type(
+                                [
+                                    'type' => 'string',
+                                    'message' => "Le code d'enregistrement renseigné n'est pas valide."
+                                ]
+                            ),
                             new Regex(
                                 [
                                     'pattern' => '/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\W]{8,}$/',

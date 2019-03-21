@@ -7,6 +7,8 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Regex;
 
 class ResetPassType extends AbstractType
@@ -29,6 +31,16 @@ class ResetPassType extends AbstractType
                             'label' => 'Répétez le mot de passe :'
                         ],
                     'constraints' => [
+                        new NotBlank(
+                            [
+                                'message' => "Veuillez renseigner votre mot de passe."
+                            ]
+                        ),
+                        new NotNull(
+                            [
+                                'message' => "Veuillez renseigner votre mot de passe."
+                            ]
+                        ),
                         new Regex(
                             [
                                 'pattern' => '/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\W]{8,}$/',

@@ -24,6 +24,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotNull(message="Veuillez renseigner votre adresse mail.")
+     * @Assert\NotBlank(message="Veuillez renseigner votre adresse mail.")
      * @Assert\Email(message="L'adresse email renseignée n'est pas une adresse valide.")
      */
     private $email;
@@ -42,8 +44,8 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Type("string")
-     * @Assert\NotNull()
-     * @Assert\NotBlank()
+     * @Assert\NotNull(message="Veuillez renseigner votre prénom.")
+     * @Assert\NotBlank(message="Veuillez renseigner votre prénom.")
      * @Assert\Length(
      *     min = 2,
      *     max = 50,
@@ -61,8 +63,8 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Type("string")
-     * @Assert\NotNull()
-     * @Assert\NotBlank()
+     * @Assert\NotNull(message="Veuillez renseigner votre nom.")
+     * @Assert\NotBlank(message="Veuillez renseigner votre nom.")
      * @Assert\Length(
      *     min = 2,
      *     max = 50,

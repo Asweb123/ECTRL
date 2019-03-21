@@ -87,8 +87,6 @@ class LoginController extends AbstractController
 
             $audits = $auditRepository->findBy(['user' => $user], ['lastModificationDate' => 'DESC']);
 
-
-
             $auditList = [];
             foreach ($audits as $audit){
                 $auditList[] = [
@@ -156,7 +154,7 @@ class LoginController extends AbstractController
             $user = $this->userRepository->findOneBy(['email' => $data["email"]]);
             $registerCode = $this->registerCodeRepository->findOneBy(['codeContent' => $data["code"]]);
 
-            if ($user === null || $user->getRegisterCode() !== $registerCode) {
+            if ($user === null || $registerCode === null || $user->getRegisterCode() !== $registerCode) {
                 return $this->responseManager->response403(
                     403,
                     "Wrong crédentials.",
@@ -210,7 +208,6 @@ class LoginController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $user->setPassword($this->userPasswordEncoder->encodePassword($user, $data['password']));
-
             $this->em->persist($user);
             $this->em->flush();
 

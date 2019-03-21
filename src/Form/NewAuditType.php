@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Uuid;
 
 class NewAuditType extends AbstractType
@@ -17,18 +18,19 @@ class NewAuditType extends AbstractType
                 null,
                     [
                         'constraints' =>  [
-                            new Uuid(
-                                [
-                                    'message' => "Id d'utilisateur invalide."
-                                ]
-                            )
-                        ]
-                    ],
-                    [
-                        'constraints' =>  [
                             new NotBlank(
                                 [
                                     'message' => "Id d'utilisateur non renseignée."
+                                ]
+                            ),
+                            new NotNull(
+                                [
+                                    'message' => "Id d'utilisateur non renseignée."
+                                ]
+                            ),
+                            new Uuid(
+                                [
+                                    'message' => "Id d'utilisateur invalide."
                                 ]
                             )
                         ]
@@ -38,6 +40,16 @@ class NewAuditType extends AbstractType
                     null,
                     [
                         'constraints' =>  [
+                            new NotBlank(
+                                [
+                                    'message' => "Id de certification non renseignée."
+                                ]
+                            ),
+                            new NotNull(
+                                [
+                                    'message' => "Id de certification non renseignée."
+                                ]
+                            ),
                             new Uuid(
                                 [
                                     'message' => "Id de certification invalide."
@@ -46,8 +58,6 @@ class NewAuditType extends AbstractType
                         ]
                     ]
             )
-
-
         ;
     }
 

@@ -47,6 +47,16 @@ class RegisterController extends AbstractController
         try {
             $data = json_decode($request->getContent(), true);
 
+            $formUser = $this->createForm(UserRegisterType::class, new User());
+            $formUser->submit($data);
+            if ($formUser->isValid() === false) {
+                return $this->responseManager->response403(
+                    403,
+                    "Wrong users values",
+                    $formUser->getErrors(true)->getChildren()->getMessage()
+                );
+            }
+
             $formCode = $this->createForm(RegisterCodeType::class);
             $formCode->submit($data);
             if($formCode->isValid() === false) {
@@ -63,7 +73,7 @@ class RegisterController extends AbstractController
                 return $this->responseManager->response403(
                     403,
                     "Wrong register code value",
-                    "Le code d'enregistrement renseigné n'est pas valide."
+                    "Le code d'enregistrement renseigné n'existe pas."
                 );
             }
 
@@ -75,15 +85,6 @@ class RegisterController extends AbstractController
                 );
             }
 
-            $formUser = $this->createForm(UserRegisterType::class, new User());
-            $formUser->submit($data);
-            if ($formUser->isValid() === false) {
-                return $this->responseManager->response403(
-                    403,
-                    "wrong users values",
-                    $formUser->getErrors(true)->getChildren()->getMessage()
-                );
-            }
 
             $user = new User();
             $user->setEmail($data['email']);
@@ -117,8 +118,8 @@ class RegisterController extends AbstractController
 
             return $this->responseManager->response200(
                 200,
-                "Register done",
-                "Enregistrement effectué",
+                "Register done.",
+                "Enregistrement effectué.",
                 ["email" => $user->getEmail()]
             );
         }
@@ -137,6 +138,11 @@ class RegisterController extends AbstractController
     {
 
         $user = $this->userRepository->find($userId);
+
+        if($user === null){
+            throw $this->createNotFoundException();
+        }
+
         $registerCode = $user->getRegisterCode();
 
         if($registerCodeManager->NbOfUsersChecker($registerCode) === false){

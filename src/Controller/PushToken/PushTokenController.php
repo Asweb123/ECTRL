@@ -67,7 +67,6 @@ class PushTokenController extends AbstractController
         }
 
         catch(\Exception $ex){
-            dump($ex);
             return $responseManager->response500();
         }
 

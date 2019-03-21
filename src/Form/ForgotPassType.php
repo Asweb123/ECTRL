@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Type;
 
 class ForgotPassType extends AbstractType
@@ -18,14 +19,19 @@ class ForgotPassType extends AbstractType
                 null,
                     [
                        'constraints' => [
-                           new Email(
-                               [
-                                   'message' => "L'adresse email renseignée n'est pas une adresse email valide."
-                               ]
-                           ),
                            new NotBlank(
                                [
                                    'message' => "Veuillez renseigner votre adresse email."
+                               ]
+                           ),
+                           new NotNull(
+                               [
+                                   'message' => "Veuillez renseigner votre adresse email."
+                               ]
+                           ),
+                           new Email(
+                               [
+                                   'message' => "L'adresse email renseignée n'est pas une adresse email valide."
                                ]
                            )
                        ]
@@ -35,15 +41,20 @@ class ForgotPassType extends AbstractType
                 null,
                 [
                     'constraints' => [
+                        new NotBlank(
+                            [
+                                'message' => "Veuillez renseigner votre code d'enregistrement."
+                            ]
+                        ),
+                        new NotNull(
+                            [
+                                'message' => "Veuillez renseigner votre code d'enregistrement."
+                            ]
+                        ),
                         new Type(
                             [
                                 'type' => 'string',
                                 'message' => "Le code d'enregistrement renseigné n'est pas valide."
-                            ]
-                        ),
-                        new NotBlank(
-                            [
-                                'message' => "Veuillez renseigner votre code d'enregistrement."
                             ]
                         )
                     ]

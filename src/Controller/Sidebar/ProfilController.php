@@ -104,7 +104,6 @@ class ProfilController extends AbstractController
                     "Wrong password format",
                     $form->getErrors(true)->getChildren()->getMessage()
                 );
-
             }
 
             $user = $this->userRepository->find($data["uuidUser"]);

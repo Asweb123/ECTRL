@@ -38,7 +38,7 @@ class Audit
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="audits")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $user;
 
