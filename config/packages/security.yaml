@@ -8,16 +8,16 @@ security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         # used to reload user from session & other features (e.g. switch_user)
-        #app_user_provider:
-        #    entity:
-        #        class: App\Entity\User
-        #        property: email
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
         # used to reload user from session & other features (e.g. switch_user)
-        backend_users:
-            memory:
-                users:
-                    ekadmin1: { password: '$argon2i$v=19$m=1024,t=2,p=2$NDlabU5vNllpWnRzRVlXMQ$8c1tgwlBIKce2sEpKndDrqpFvv4m0BvJrEwIquKqiKk', roles: ['ROLE_ADMIN'] }
-                    ekadmin2: { password: '$argon2i$v=19$m=1024,t=2,p=2$ODE0NzY5eDJwYXlwSzRycA$z1eKY7NAw/N7dHOWN3AC/0yKfknceLUSmUhrX7L+fJQ', roles: ['ROLE_ADMIN'] }
+        #backend_users:
+        #    memory:
+        #        users:
+        #            ekadmin1: { password: '$argon2i$v=19$m=1024,t=2,p=2$NDlabU5vNllpWnRzRVlXMQ$8c1tgwlBIKce2sEpKndDrqpFvv4m0BvJrEwIquKqiKk', roles: ['ROLE_ADMIN'] }
+        #            ekadmin2: { password: '$argon2i$v=19$m=1024,t=2,p=2$ODE0NzY5eDJwYXlwSzRycA$z1eKY7NAw/N7dHOWN3AC/0yKfknceLUSmUhrX7L+fJQ', roles: ['ROLE_ADMIN'] }
         # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
