@@ -5,14 +5,14 @@ namespace App\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeUserController extends AbstractController
+class ModelsAuditController extends AbstractController
 {
     /**
-     * @Route("/accueil", name="accueil")
+     * @Route("/admin/modele-d'audit", name="admin-models-audits")
      */
     public function index()
     {
-        return $this->render('admin/home.html.twig', [
+        return $this->render('admin/dashboard.html.twig', [
 
         ]);
     }
