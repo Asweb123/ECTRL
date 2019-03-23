@@ -72,7 +72,6 @@ class Audit
         $this->isFinished = false;
         $this->creationDate = new \Datetime('now');
         $this->lastModificationDate = new \Datetime('now');
-        $this->isFinished = false;
         $this->score = 0;
         $this->progression = 0;
         $this->status = 1;

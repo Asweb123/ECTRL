@@ -22,19 +22,33 @@ class AuditRepository extends ServiceEntityRepository
     // /**
     //  * @return Audit[] Returns an array of Audit objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findLastAudits($company)
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('a.company = :val1')
+            ->andWhere('a.status = :val2')
+            ->setParameters(['val1' => $company, 'val2' => 2])
+            ->orderBy('a.lastModificationDate', 'DESC')
+            ->setMaxResults(5)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
+    public function findLast6MonthsAudits($company)
+    {
+        $date6MonthsAgo = new \DateTime('-6 months');
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.company = :val1')
+            ->andWhere('a.status = :val2')
+            ->andWhere('a.lastModificationDate > :val3')
+            ->setParameters(['val1' => $company, 'val2' => 2, 'val3' => $date6MonthsAgo])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 
     /*
     public function findOneBySomeField($value): ?Audit

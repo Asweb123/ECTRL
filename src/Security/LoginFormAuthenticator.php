@@ -98,7 +98,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         if(in_array('ROLE_SUPER_ADMIN', $roles) === true){
             return new RedirectResponse($this->urlGenerator->generate('easyadmin'));
         }
-      //  dump($user->getRoles()); die();
 
     }
 

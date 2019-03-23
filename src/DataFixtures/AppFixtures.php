@@ -71,21 +71,21 @@ class AppFixtures extends Fixture
         $requirement5T2->setTheme($theme2);
 
         $requirement6T2 = new Requirement();
-        $requirement6T2->setDescription("La politique de l'entreprise est-elle communiquée à l’ensemble des employés?");
+        $requirement6T2->setDescription("Les documents nécessaires à la conformité des caractéristiques du produit sont-ils disponibles et à jour?");
         $requirement6T2->setRankCertification(6);
         $requirement6T2->setRankTheme(2);
         $requirement6T2->setCertification($certificationIFS);
         $requirement6T2->setTheme($theme2);
 
         $requirement7T2 = new Requirement();
-        $requirement7T2->setDescription("L'organigramme est-il à jour et affiché dans les locaux?");
+        $requirement7T2->setDescription("Les enregistrements sont-ils lisibles, authentiques, et gérés de manière à empêcher toute modification ultérieure des données?");
         $requirement7T2->setRankCertification(7);
         $requirement7T2->setRankTheme(3);
         $requirement7T2->setCertification($certificationIFS);
         $requirement7T2->setTheme($theme2);
 
         $requirement8T2 = new Requirement();
-        $requirement8T2->setDescription("Les compétences, responsabilités et délégations de responsabilités sont-elles clairement établies?");
+        $requirement8T2->setDescription("La chambre froide est-elle à une température constante de +3°?");
         $requirement8T2->setRankCertification(8);
         $requirement8T2->setRankTheme(4);
         $requirement8T2->setCertification($certificationIFS);
