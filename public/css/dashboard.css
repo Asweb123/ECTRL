@@ -1,0 +1,61 @@
+.white-chart {
+    background-color: white;
+    border-radius: 3px;
+    padding: 1rem;
+}
+
+.apexcharts-menu-item {
+    color: #262626;
+    text-align: center;
+
+}
+
+.wrapper-infos{
+    flex-direction: column;
+}
+
+.wrapper-chart1, .wrapper-chart2, .wrapper-infos1, .wrapper-infos2  {
+    padding: 15px;
+}
+
+.wrapper-chart1{
+    width: 100%;
+}
+
+#chart2 {
+    height: 364px;
+    max-width: 350px;
+    margin: auto;
+}
+
+
+
+@media screen and (min-width: 1200px) {
+    .wrapper-charts{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    .wrapper-chart2 {
+        width: 500px;
+    }
+}
+
+@media screen and (min-width: 1480px) {
+
+
+    .wrapper-infos{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    .wrapper-infos1{
+        width: 50%;
+    }
+
+    .wrapper-infos2{
+        width: 50%;
+    }
+}

@@ -27,7 +27,7 @@ class AuditRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.company = :val1')
-            ->andWhere('a.status = :val2')
+            ->andWhere('a.status >= :val2')
             ->setParameters(['val1' => $company, 'val2' => 2])
             ->orderBy('a.lastModificationDate', 'DESC')
             ->setMaxResults(5)
@@ -36,14 +36,27 @@ class AuditRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findLast6MonthsAudits($company)
+    public function findLastMonthsAudits($company, $monthsNumber)
     {
-        $date6MonthsAgo = new \DateTime('-6 months');
+        $date6MonthsAgo = new \DateTime('-'.$monthsNumber.' months');
         return $this->createQueryBuilder('a')
             ->andWhere('a.company = :val1')
-            ->andWhere('a.status = :val2')
+            ->andWhere('a.status >= :val2')
             ->andWhere('a.lastModificationDate > :val3')
             ->setParameters(['val1' => $company, 'val2' => 2, 'val3' => $date6MonthsAgo])
+            ->orderBy('a.lastModificationDate', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findAllAudits($company)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.company = :val1')
+            ->andWhere('a.status >= :val2')
+            ->setParameters(['val1' => $company, 'val2' => 2])
+            ->orderBy('a.lastModificationDate', 'ASC')
             ->getQuery()
             ->getResult()
             ;

@@ -35,7 +35,7 @@ easy_admin:
                     - { name: new, label: Créer une société }
                 fields:
                     - { property: name, label: Nom }
-                    - { property: certifications, label: Certifications }
+                    - { property: certifications, label: Modèle d'audit }
                     - { property: registerCodes, label: Code d'enregistrement}
                     - { property: users, label: Utilisateurs }
                     - { property: creationDate, label: Date de création}
@@ -44,7 +44,7 @@ easy_admin:
                 max_results: 100
                 fields:
                     - { property: name, label: Nom }
-                    - { property: certifications, label: Certifications }
+                    - { property: certifications, label: Modèle d'audit }
                     - { property: registerCodes, label: Code d'enregistrement}
                     - { property: users, label: Utilisateurs }
                     - { property: creationDate, label: Date de création}
@@ -52,12 +52,12 @@ easy_admin:
                 title: Créer une société
                 fields:
                     - { property: name, label: Nom }
-                    - { property: certifications, label: Certifications }
+# easyadmin bug who don't save one tot many relation  - { property: certifications, label: Modèle d'audit }
             edit:
                 title: Modifier cette société
                 fields:
                     - { property: name, label: Nom }
-                    - { property: certifications, label: Certifications }
+# easyadmin bug who don't save one tot many relation   - { property: certifications, label: Modèle d'audit }
                     - { property: registerCodes, label: Code d'enregistrement}
 
         RegisterCode:
@@ -204,11 +204,13 @@ easy_admin:
                 fields:
                     - { property: title, label: Intitulé }
                     - { property: description, label: Description }
+                    - { property: companies, label: Sociétés }
             edit:
                 title: Modifier un modèle d'audit
                 fields:
                     - { property: title, label: Intitulé }
                     - { property: description, label: Description }
+                    - { property: companies, label: Sociétés }
 
         Theme:
             class: App\Entity\Theme

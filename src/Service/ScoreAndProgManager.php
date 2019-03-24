@@ -61,7 +61,7 @@ class ScoreAndProgManager
     public function recurrentRequirementsFailed($company)
     {
 
-        $last6MonthsAudits = $this->auditRepository->findLast6MonthsAudits($company);
+        $last6MonthsAudits = $this->auditRepository->findLastMonthsAudits($company, 6);
 
         $resultList = [];
         foreach ($last6MonthsAudits as $audit){
@@ -80,7 +80,8 @@ class ScoreAndProgManager
                 $requirementList[$result->getRequirement()->getId()]++;
             }
         }
-        $recurrentRequirement= array_slice($requirementList, 0, 4);
+        arsort($requirementList);
+        $recurrentRequirement= array_slice($requirementList, 0, 5);
 
         $recurrentRequirementList = [];
         foreach ($recurrentRequirement as $key => $recurrence){
@@ -94,4 +95,64 @@ class ScoreAndProgManager
 
         return $recurrentRequirementList;
     }
+
+    public function auditsPerScore($company)
+    {
+        $last12MonthsAudits = $this->auditRepository->findLastMonthsAudits($company,12);
+
+        $auditPerScore = [0, 0, 0, 0, 0];
+        foreach($last12MonthsAudits as $audit){
+            if($audit->getScore() >= 95){
+                $auditPerScore[0]++;
+            }
+            if($audit->getScore() >= 85 && $audit->getScore() < 95){
+                $auditPerScore[1]++;
+            }
+            if($audit->getScore() >= 75 && $audit->getScore() < 85){
+                $auditPerScore[2]++;
+            }
+            if($audit->getScore() >= 65 && $audit->getScore() < 75){
+                $auditPerScore[3]++;
+            }
+            if($audit->getScore() < 65){
+                $auditPerScore[4]++;
+            }
+        }
+
+        return $auditPerScore;
+    }
+
+    public function auditsScorePerType($company)
+    {
+        $allAudits = $this->auditRepository->findAllAudits($company);
+
+        $auditsScorePerType = [];
+        foreach($company->getCertifications() as $certification){
+                $auditsScorePerType[$certification->getTitle()] = ["name" => $certification->getTitle(), "data" => []];
+        }
+
+        foreach($allAudits as $audit){
+            $date = $audit->getLastModificationDate();
+            $timestampDate = $date->getTimestamp() * 1000;
+
+            $scorePerDateAudit = [$timestampDate, $audit->getScore()];
+
+            foreach( $auditsScorePerType as $certification){
+                if(in_array($audit->getCertification()->getTitle(), $certification)){
+                    array_push($certification["data"], $scorePerDateAudit);
+                }
+                $auditsScorePerType[$audit->getCertification()->getTitle()] = $certification;
+            }
+        }
+/*
+        foreach($auditsScorePerType as $key => $certification){
+            if(empty($certification["data"])){
+                unset($auditsScorePerType[$key]);
+            }
+        }
+*/
+
+        return $auditsScorePerType;
+    }
+
 }

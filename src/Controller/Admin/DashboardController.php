@@ -23,12 +23,17 @@ class DashboardController extends AbstractController
         $lastAudits = $auditRepository->findLastAudits($company);
         $averageLastAuditsScore = $scoreAndProgManager->averageLastAuditsScore($lastAudits);
         $recurrentRequirementList = $scoreAndProgManager->recurrentRequirementsFailed($company);
+        $auditsPerScore = $scoreAndProgManager->auditsPerScore($company);
+        $auditsScorePerType = $scoreAndProgManager->auditsScorePerType($company);
+
 
         return $this->render('admin/dashboard.html.twig', [
              "company" => $company,
              "lastAudits" => $lastAudits,
              "averageLastAuditsScore" => $averageLastAuditsScore,
-             "recurrentRequirementList" => $recurrentRequirementList
+             "recurrentRequirementList" => $recurrentRequirementList,
+             "auditsPerScore" => $auditsPerScore,
+             "auditsScorePerType" => $auditsScorePerType
         ]);
     }
 }
