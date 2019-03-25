@@ -39,13 +39,12 @@ class AuditsController extends AbstractController
     {
         $audit = $auditRepository->find($auditId);
         $company = $audit->getCompany();
-        $requirements = $audit->getCertification()->getRequirements();
-
+        $results = $audit->getResults();
 
         return $this->render('admin/audit.html.twig', [
             "audit" => $audit,
             "company" => $company,
-            "requirements" => $requirements
+            "results" => $results
         ]);
     }
 }
