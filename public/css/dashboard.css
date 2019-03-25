@@ -1,3 +1,7 @@
+td {
+    font-weight: 400;
+}
+
 .white-chart {
     background-color: white;
     border-radius: 3px;
@@ -58,4 +62,75 @@
     .wrapper-infos2{
         width: 50%;
     }
+}
+
+.pagination{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.page-item.active .page-link {
+   background-color: #2CB4C9;
+}
+
+.page-link {
+    color: #00bcd4;
+    font-weight: 400;
+    border-radius: 3px;
+}
+
+.page-link:focus{
+    box-shadow: inherit;
+}
+
+.navigation > nav > ul > li:first-child > a{
+    text-indent: -9999px;
+    line-height: 0;
+}
+
+.navigation > nav > ul > li:first-child > a:after{
+    content: "Précédent";
+    text-indent: 0;
+    display: block;
+    line-height: initial;
+}
+
+.navigation > nav > ul > li.page-item.disabled > span{
+    text-indent: -9999px;
+    line-height: 0;
+}
+
+.navigation > nav > ul > li.page-item.disabled > span:after{
+    content: "Précédent";
+    text-indent: 0;
+    display: block;
+    line-height: initial;
+}
+
+.navigation > nav > ul > li:last-child > a{
+    text-indent: -9999px;
+    line-height: 0;
+}
+
+.navigation > nav > ul > li:last-child > a:after{
+    content: "Précédent";
+    text-indent: 0;
+    display: block;
+    line-height: initial;
+}
+
+.header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.score-audit-detail{
+    margin:0;
+    font-size: 2rem;
+}
+
+.back-btn-text {
+    color: white;
 }

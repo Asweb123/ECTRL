@@ -44,7 +44,7 @@
             </div>
             <div class="card-body table-responsive">
                 <table class="table table-hover">
-                    <thead class="text-warning">
+                    <thead class="text-danger">
                     <th>Exigence</th>
                     <th class="text-center">Certification</th>
                     <th class="text-center">Récurence</th>
@@ -197,19 +197,6 @@
 
         },
         series: {{ auditsPerScore|json_encode() }},
-        /*
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 200
-                },
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }]
-        */
     };
 
     var chart2 = new ApexCharts(

@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "easycorp/easyadmin-bundle": "^2.1",
+        "knplabs/knp-paginator-bundle": "^3.0",
         "ramsey/uuid-doctrine": "^1.5",
         "sensio/framework-extra-bundle": "^5.2",
         "solvecrew/expo-notifications-bundle": "^1.2",

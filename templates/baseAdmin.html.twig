@@ -15,7 +15,7 @@
         {% endblock %}
     </head>
     <body class="">
-        <div class="sidebar" data-color="green" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
+        <div class="sidebar" data-color="azure" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
             <div class="logo">
                 <a href="{{ path("admin-dashboard") }}" class="simple-text logo-normal">
                     ECTRL<br/>
@@ -37,7 +37,7 @@
                         </a>
                     </li>
                     <li class="nav-item {% block sideNavAudits %}{% endblock %}">
-                        <a class="nav-link" href="{{ path("admin-audits") }}">
+                        <a class="nav-link" href="{{ path("admin-auditList") }}">
                             <i class="material-icons">content_paste</i>
                             <p>Audits</p>
                         </a>

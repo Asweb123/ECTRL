@@ -12,10 +12,7 @@ class DashboardController extends AbstractController
     /**
      * @Route("/admin/dashboard", name="admin-dashboard")
      */
-    public function index(
-        AuditRepository $auditRepository,
-        ScoreAndProgManager $scoreAndProgManager
-    )
+    public function index(AuditRepository $auditRepository, ScoreAndProgManager $scoreAndProgManager)
     {
         $user = $this->getUser();
 
@@ -25,7 +22,6 @@ class DashboardController extends AbstractController
         $recurrentRequirementList = $scoreAndProgManager->recurrentRequirementsFailed($company);
         $auditsPerScore = $scoreAndProgManager->auditsPerScore($company);
         $auditsScorePerType = $scoreAndProgManager->auditsScorePerType($company);
-
 
         return $this->render('admin/dashboard.html.twig', [
              "company" => $company,

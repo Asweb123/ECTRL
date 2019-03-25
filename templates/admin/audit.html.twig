@@ -1,0 +1,42 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Audits{% endblock %}
+
+{% block sideNavAudits %}active{% endblock %}
+
+{% block content %}
+<div class="wrapper-audit">
+    <div class="card">
+        <div class="card-header card-header-info header-flex">
+            <div class="header-right">
+                <h4 class="card-title">Détail de l'audit - {{ audit.certification.title }}</h4>
+                <p class="card-category">Réalisé le {{ audit.lastModificationDate|date("d/m/Y") }} par {{ audit.user.firstName }} {{ audit.user.lastName }}</p>
+            </div>
+            <div>
+                <p class="score-audit-detail">{{ audit.score }}%</p>
+            </div>
+        </div>
+        <div class="card-body table-responsive">
+            <table class="table table-hover">
+                <thead class="text-info">
+                <th>Exigence</th>
+                <th class="text-center">Résultat</th>
+                </thead>
+                <tbody>
+                {% for requirement in requirements %}
+                    <tr>
+                        <td>{{ requirement.description }}</td>
+                        <td class="text-center">{{ audit.certification.title }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="pagination">
+        <a href="#" class="back-btn-text"><button class="btn btn-info">Retour</button></a>
+    </div>
+</div>
+{% endblock %}
+
+

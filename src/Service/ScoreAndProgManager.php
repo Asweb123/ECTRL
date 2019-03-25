@@ -124,7 +124,7 @@ class ScoreAndProgManager
 
     public function auditsScorePerType($company)
     {
-        $allAudits = $this->auditRepository->findAllAudits($company);
+        $allAudits = $this->auditRepository->findAllAudits($company, 'ASC');
 
         $auditsScorePerType = [];
         foreach($company->getCertifications() as $certification){

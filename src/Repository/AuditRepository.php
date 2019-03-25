@@ -50,15 +50,26 @@ class AuditRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findAllAudits($company)
+    public function findAllAudits($company, $order)
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.company = :val1')
             ->andWhere('a.status >= :val2')
             ->setParameters(['val1' => $company, 'val2' => 2])
-            ->orderBy('a.lastModificationDate', 'ASC')
+            ->orderBy('a.lastModificationDate', $order)
             ->getQuery()
             ->getResult()
+            ;
+    }
+
+    public function findAuditList($company, $order)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.company = :val1')
+            ->andWhere('a.status >= :val2')
+            ->setParameters(['val1' => $company, 'val2' => 2])
+            ->orderBy('a.lastModificationDate', $order)
+
             ;
     }
 

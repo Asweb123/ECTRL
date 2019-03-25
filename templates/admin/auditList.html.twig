@@ -1,0 +1,43 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Audits{% endblock %}
+
+{% block sideNavAudits %}active{% endblock %}
+
+{% block content %}
+<div class="wrapper-audit">
+    <div class="card">
+        <div class="card-header card-header-info">
+            <h4 class="card-title">Liste de tous les audits de la société</h4>
+            <p class="card-category">Nombre total d'audits réalisés: {{ pagination.getTotalItemCount }}</p>
+        </div>
+        <div class="card-body table-responsive">
+            <table class="table table-hover">
+                <thead class="text-info">
+                <th>Date</th>
+                <th class="text-center">Réalisé par</th>
+                <th class="text-center">Certification</th>
+                <th class="text-center">Score</th>
+                <th class="text-center">Détail</th>
+                </thead>
+                <tbody>
+                {% for audit in pagination %}
+                    <tr>
+                        <td>{{ audit.lastModificationDate|date("d/m/Y") }}</td>
+                        <td class="text-center">{{ audit.user.firstName }} {{ audit.user.lastName }}</td>
+                        <td class="text-center">{{ audit.certification.title }}</td>
+                        <td class="text-center">{{ audit.score }}%</td>
+                        <td class="text-center"><a href="{{ path('admin-auditDetail', {'auditId' : audit.id}) }}"><i class="material-icons text-info">content_paste</i></a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+</div>
+{% endblock %}
+
+
