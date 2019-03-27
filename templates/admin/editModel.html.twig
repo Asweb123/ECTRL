@@ -5,66 +5,75 @@
 {% block sideNavModels %}active{% endblock %}
 
 {% block content %}
-    <div class="model-actions-wrapper model-detail-action">
-        <button onclick="location.href='{{ path('admin-editModel', {'modelId' : model.id}) }}'" type="button" class="btn btn-warning ">Modifier</button>
-        <button class="btn btn-danger" id="deleteModelBtn">Supprimer</button>
-    </div>
 <div class="wrapper-audit">
-    <div class="card">
+
+    <div class="card model-card-header">
         <div class="card-header card-header-success header-flex">
-            <div class="header-right">
-                <h4 class="card-title">Modèle d'audits - {{ model.title }}</h4>
-                <p class="card-category">Créé le {{ model.CreationDate|date("d/m/Y") }}</p>
+            <div class="header-center">
+                <h4 class="card-title text-center">{{ model.title }}</h4>
+                <p class="card-category text-center">Créé le {{ model.CreationDate|date("d/m/Y") }}</p>
             </div>
         </div>
         <div class="card-body card-model">
-            <span>{{ model.description }}</span>
+            <div class="text-center">{{ model.description }}</div>
         </div>
     </div>
-        {% for theme in model.themes %}
-        <div class="card card-nav-tabs theme-card">
-            <div class="card-header card-header-success">
-                Thème {{ theme.rankCertification }}
-            </div>
-            <div class="card-body">
-                <h4 class="card-title">{{ theme.title }}</h4>
-                <p class="card-text">{{ theme.description }}</p>
-                <div class="card-body table-responsive">
-                    <table class="table table-hover">
-                        <thead class="text-success">
-                        <th>ID</th>
-                        <th>Exigence</th>
-                        </thead>
-                        <tbody>
-                        {% for requirement in theme.requirements %}
-                            <tr>
-                                <td>{{ requirement.rankCertification }}</td>
-                                <td>{{ requirement.description }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+
+    {% for theme in model.themes %}
+    <div class="card card-nav-tabs theme-card">
+        <div class="card-header card-header-success">
+            Thème {{ theme.rankCertification }}
+        </div>
+        <div class="card-body">
+            <h4 class="card-title">{{ theme.title }}</h4>
+            <p class="card-text">{{ theme.description }}</p>
+            <div class="card-body table-responsive">
+                <table class="table table-hover">
+                    <thead class="text-success">
+                    <th>ID</th>
+                    <th>Exigence</th>
+                    </thead>
+                    <tbody>
+                    {% for requirement in theme.requirements %}
+                        <tr>
+                            <td>{{ requirement.rankTheme }}</td>
+                            <td>{{ requirement.description }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
-        {% endfor %}
-    <div class="pagination">
-        <a href="{{ app.request.headers.get('referer') }}" class="back-btn-text"><button class="btn btn-success">Retour</button></a>
+    </div>
+    {% endfor %}
+
+    <div class="btn-centered">
+        <button id="addThemeBtn" class="btn btn-info my-5">Ajouter un thème</button>
+    </div>
+
+
+    <div class="btn-centered">
+        <a href="{{ path('admin-modelList') }}" class="back-btn-text"><button class="btn btn-outline-secondary">Retour à la liste de modèles d'audits</button></a>
     </div>
 </div>
 
-<div id="deleteModelModal" class="card modalDash deleteModal">
-    <div id="modal-content-model" class="modal-content">
-        <div class="card-header card-header-danger mb-3">
-            <h4 class="card-title">Suppression du modèle d'audits</h4>
+<div id="addThemeModal" class="card modalDash deleteModal">
+    <div id="modalThemeContent" class="modal-content">
+        <div class="card-header card-header-danger">
+            <h4 class="card-title text-center">Ajouter un thème</h4>
         </div>
         <div class="card-body">
-            <h5>Souhaitez-vous vraiment supprimer ce modèle d'audits?</h5>
-            <p class="p-model">{{ model.title }}<br/>
-                {{ model.description }}</p>
-            <div class="actions-modal">
-                <button class="btn btn-outline-secondary btn-modal">Annuler</button>
-                <a href="{{ path('admin-deleteModel', {'modelId' : model.id}) }}" class="btn btn-danger btn-modal">Supprimer</a>
+            <h5 class="text-center my-3">Ajoutez un titre et une description au nouveau thème</h5>
+            <div class="">
+                {{ form_start(form, {'action': path('admin-editModel', {modelId : model.id}), 'method': 'POST'}) }}
+                {{ form_errors(form) }}
+                {{ form_row(form.title) }}
+                {{ form_row(form.description) }}
+                <div class="actions-modal">
+                    <button id="addThemeCancel" class="btn btn-outline-secondary btn-modal">Annuler</button>
+                    <button id="addThemeSave" type="submit" class="btn btn-info btn-modal">Ajouter</button>
+                </div>
+                {{ form_end(form) }}
             </div>
         </div>
     </div>
@@ -74,24 +83,129 @@
 
 {% block javascripts %}
 {{ parent() }}
-<script>
-    var modal = document.getElementById('deleteModelModal');
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <script>
+        var btnModalUp = document.getElementById("addThemeBtn");
+        var modal = document.getElementById('addThemeModal');
+        var modalContent = document.getElementById("modalThemeContent");
+        var btnDelete = document.getElementById("addThemeCancel");
 
-    var modalContent = document.getElementById('modal-content-model');
+        btnModalUp.onclick = function () {
+            modal.style.display = "flex";
+        };
 
-    var btn = document.getElementById('deleteModelBtn');
+        btnDelete.onclick = function () {
+            //    modal.style.animation = "fadeOut 0.3s";
+            //   modalContent.style.animation = "zoomOut 0.3s";
+            modal.style.display = "none";
+        };
 
-    var span = document.getElementsByClassName("deleteCancel")[1];
+        $(document).ready(function () {
+            var form = $("[name='add_theme']");
+            form.on('submit', function (e) {
+                //e.preventDefault();
+                if ($('#add_theme_title').val() !== '' || $('#add_theme_description').val() !== '') {
+                    btn = $('#addThemeSave');
+                    btn.prop('disabled', true);
+                    btn.html('Ajout en cours...');
+                }
+            });
+        })
 
-    btn.onclick = function() {
-        modal.style.display = "flex";
-    };
 
-    span.onclick = function() {
-        //    modal.style.animation = "fadeOut 0.3s";
-        //   modalContent.style.animation = "zoomOut 0.3s";
-        modal.style.display = "none";
-    };
+
+
+        var clients = [
+            { "requirement": "Otto Clay"},
+            { "requirement": "Connor Johnston"},
+            { "requirement": "Lacey Hess"},
+        ];
+
+
+        $("#theme1").jsGrid({
+
+
+            data: clients,
+
+            fields: [
+                { name: "requirement", title: "Exigence", type: "text", width: 500, validate: "required"},
+                { type: "control" },
+
+            ],
+
+            autoload: false,
+            controller: {
+                loadData: function(filter) {
+                    return $.ajax({
+                        type: "GET",
+                        url: "/items",
+                        data: filter
+                    });
+                },
+
+                insertItem: function(item) {
+                    return $.ajax({
+                        type: "POST",
+                        url: "/items",
+                        data: item
+                    });
+                },
+
+                updateItem: function(item) {
+                    return $.ajax({
+                        type: "PUT",
+                        url: "/items",
+                        data: item
+                    });
+                },
+
+                deleteItem: function(item) {
+                    return $.ajax({
+                        type: "DELETE",
+                        url: "/items",
+                        data: item
+                    });
+                },
+            },
+
+            width: "100%",
+            height: "auto",
+
+            heading: true,
+            filtering: false,
+            inserting: true,
+            editing: true,
+            selecting: true,
+            sorting: false,
+            paging: false,
+            pageLoading: false,
+
+            rowClass: function(item, itemIndex) {  },
+            rowClick: function(args) {  },
+            rowDoubleClick: function(args) {  },
+
+            noDataContent: "Ajoutez une exigence en cliquant sur le +",
+
+            confirmDeleting: true,
+            deleteConfirm: "Souhaitez vous vraiment supprimer cette exigence?",
+
+            invalidNotify: function(args) {  },
+            invalidMessage: "Données invalides!",
+
+            loadIndication: true,
+            loadIndicationDelay: 500,
+            loadMessage: "Veuillez patienter...",
+            loadShading: true,
+
+            updateOnResize: true,
+
+            rowRenderer: null,
+            headerRowRenderer: null,
+            //   filterRowRenderer: null,
+            insertRowRenderer: null,
+            editRowRenderer: null
+
+        });
 
 </script>
 {% endblock %}

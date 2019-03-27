@@ -245,6 +245,7 @@ td {
     text-align: right;
 }
 
+
 .btn-link{
     padding: 15px;
 }
@@ -322,4 +323,9 @@ td {
     border-radius: 0 0 6px 6px;
 }
 
+.btn-centered{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
 

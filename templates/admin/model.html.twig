@@ -6,14 +6,16 @@
 
 {% block content %}
 <div class="wrapper-audit">
+    {% if model.isChild == true%}
     <div class="model-actions-wrapper model-detail-action">
         <button onclick="location.href='{{ path('admin-editModel', {'modelId' : model.id}) }}'" type="button" class="btn btn-warning ">Modifier</button>
         <button class="btn btn-danger" id="deleteBtn">Supprimer</button>
     </div>
+    {% endif %}
     <div class="card model-card-header">
         <div class="card-header card-header-success header-flex">
             <div class="header-center">
-                <h4 class="card-title">Modèle d'audits - {{ model.title }}</h4>
+                <h4 class="card-title">{{ model.title }}</h4>
                 <p class="card-category">Créé le {{ model.CreationDate|date("d/m/Y") }}</p>
             </div>
         </div>
@@ -21,6 +23,7 @@
             <span>{{ model.description }}</span>
         </div>
     </div>
+
 
     {% for theme in model.themes %}
     <div class="card card-nav-tabs theme-card">
@@ -75,6 +78,7 @@
 
 {% block javascripts %}
 {{ parent() }}
+
 <script>
     var btnModalUp = document.getElementById("deleteBtn");
     var modal = document.getElementById('deleteModal');
@@ -91,6 +95,5 @@
         //   modalContent.style.animation = "zoomOut 0.3s";
         modal.style.display = "none";
     };
-
 </script>
 {% endblock %}

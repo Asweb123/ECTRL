@@ -73,6 +73,11 @@ class Certification
      */
     private $requirements;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isChild;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
@@ -80,6 +85,7 @@ class Certification
         $this->audits = new ArrayCollection();
         $this->themes = new ArrayCollection();
         $this->requirements = new ArrayCollection();
+        $this->setIsChild(false);
     }
 
     public function getId()
@@ -244,5 +250,17 @@ class Certification
 
     public function __toString(){
         return $this->title;
+    }
+
+    public function getIsChild(): ?bool
+    {
+        return $this->isChild;
+    }
+
+    public function setIsChild(bool $isChild): self
+    {
+        $this->isChild = $isChild;
+
+        return $this;
     }
 }

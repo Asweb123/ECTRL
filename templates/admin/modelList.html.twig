@@ -22,8 +22,10 @@
                 </div>
                 <div class="model-actions-wrapper">
                     <button onclick="location.href='{{ path('admin-modelDetail', {'modelId' : model.id}) }}'" type="button" class="btn btn-info btn-link">Voir</button>
+                    {% if model.isChild == true%}
                     <button onclick="location.href='{{ path('admin-editModel', {'modelId' : model.id}) }}'" type="button" class="btn btn-warning btn-link">Modifier</button>
                     <button id="deleteBtn{{ key }}" class="btn btn-danger btn-link">Supprimer</button>
+                    {% endif %}
                 </div>
             </div>
 
