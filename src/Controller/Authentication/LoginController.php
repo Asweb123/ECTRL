@@ -77,6 +77,14 @@ class LoginController extends AbstractController
                 );
             }
 
+            if ($user->getIsBanned() === true) {
+                return $this->responseManager->response403(
+                    403,
+                    "user banned by the company.",
+                    "Vous ne possédez plus des droits nécessaires pour accéder à l'application."
+                );
+            }
+
             foreach ($user->getCompany()->getCertifications() as $certification){
                 $certifications[] = [
                     "uuidCertification" => $certification->getId(),

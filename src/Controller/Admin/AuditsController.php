@@ -38,6 +38,11 @@ class AuditsController extends AbstractController
     public function auditDetail($auditId, AuditRepository $auditRepository)
     {
         $audit = $auditRepository->find($auditId);
+
+        if($audit === null) {
+            throw $this->createNotFoundException();
+        }
+
         $company = $audit->getCompany();
         $results = $audit->getResults();
 

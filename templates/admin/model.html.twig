@@ -1,0 +1,96 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Modèle d'audit - {{ model.title }}{% endblock %}
+
+{% block sideNavModels %}active{% endblock %}
+
+{% block content %}
+<div class="wrapper-audit">
+    <div class="model-actions-wrapper model-detail-action">
+        <button onclick="location.href='{{ path('admin-editModel', {'modelId' : model.id}) }}'" type="button" class="btn btn-warning ">Modifier</button>
+        <button class="btn btn-danger" id="deleteBtn">Supprimer</button>
+    </div>
+    <div class="card model-card-header">
+        <div class="card-header card-header-success header-flex">
+            <div class="header-center">
+                <h4 class="card-title">Modèle d'audits - {{ model.title }}</h4>
+                <p class="card-category">Créé le {{ model.CreationDate|date("d/m/Y") }}</p>
+            </div>
+        </div>
+        <div class="card-body header-center">
+            <span>{{ model.description }}</span>
+        </div>
+    </div>
+
+    {% for theme in model.themes %}
+    <div class="card card-nav-tabs theme-card">
+        <div class="card-header card-header-success">
+            Thème {{ theme.rankCertification }}
+        </div>
+        <div class="card-body">
+            <h4 class="card-title">{{ theme.title }}</h4>
+            <p class="card-text">{{ theme.description }}</p>
+            <div class="card-body table-responsive">
+                <table class="table table-hover">
+                    <thead class="text-success">
+                    <th>ID</th>
+                    <th>Exigence</th>
+                    </thead>
+                    <tbody>
+                    {% for requirement in theme.requirements %}
+                        <tr>
+                            <td>{{ requirement.rankCertification }}</td>
+                            <td>{{ requirement.description }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="pagination">
+        <a href="{{ app.request.headers.get('referer') }}" class="back-btn-text"><button class="btn btn-success">Retour</button></a>
+    </div>
+</div>
+
+
+<div id="deleteModal" class="card modalDash deleteModal">
+    <div id="modal-content-model" class="modal-content">
+        <div class="card-header card-header-danger mb-3">
+            <h4 class="card-title text-center">Suppression d'un modèle</h4>
+        </div>
+        <div class="card-body">
+            <h5 class="text-center">Souhaitez-vous vraiment supprimer ce modèle d'audit?</h5>
+            <p class="text-center">{{ model.title }}</p>
+            <div class="actions-modal">
+                <button id="deleteCancel" class="btn btn-outline-secondary btn-modal">Annuler</button>
+                <a id="deleteAction" href="{{ path('admin-deleteModel', {'modelId' : model.id}) }}" class="btn btn-danger btn-modal">Supprimer</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    var btnModalUp = document.getElementById("deleteBtn");
+    var modal = document.getElementById('deleteModal');
+    var modalContent = document.getElementById("modal-content");
+    var btnDelete = document.getElementById("deleteCancel");
+
+
+    btnModalUp.onclick = function() {
+        modal.style.display = "flex";
+    };
+
+    btnDelete.onclick = function() {
+        //    modal.style.animation = "fadeOut 0.3s";
+        //   modalContent.style.animation = "zoomOut 0.3s";
+        modal.style.display = "none";
+    };
+
+</script>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Utilisateurs{% endblock %}
+
+{% block sideNavUsers %}active{% endblock %}
+
+{% block content %}
+<div class="wrapper-audit">
+    <div class="card">
+        <div class="card-header card-header-info">
+            <h4 class="card-title">Utilisateurs de l'application ECTRL</h4>
+            <p class="card-category">Nombre d'utilisateurs enregistrés: {{ users|length }}</p>
+        </div>
+        <div class="card-body table-responsive">
+            <table class="table table-hover">
+                <thead class="text-info">
+                <th>Nom</th>
+                <th class="text-center">Prénom</th>
+                <th class="text-center">Rôle</th>
+                <th class="text-center">Adresse email</th>
+                <th class="text-center">Date d'inscription</th>
+                <th class="text-center">Désactivation</th>
+                </thead>
+                <tbody>
+                {% for key, user in users %}
+                    <tr>
+                        <td>{{ user.lastName }}</td>
+                        <td class="text-center">{{ user.firstName }}</td>
+                        <td class="text-center">{{ user.role.title }}</td>
+                        <td class="text-center">{{ user.email }}</td>
+                        <td class="text-center">{{ user.creationDate|date("d/m/Y") }}</td>
+                        <td class="text-center">
+                            <button id="deleteBtn{{ key }}" class="deleteBtn text-danger" >Désactiver</button>
+                            <div id="deleteModal{{ key }}" class="modalDash deleteModal">
+                                <div id="modal-content{{ key }}" class="modal-content">
+                                    <div class="card-header card-header-danger mb-3">
+                                        <h4 class="card-title">Désactivation d'utilisateur</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5>Souhaitez-vous vraiment désactiver cette utilisateur?</h5>
+                                        <p>{{ user.firstName }} {{ user.lastName }} - {{ user.role.title }}</p>
+                                        <div class="navigation">
+                                            <button class="btn btn-info deleteCancel">Non</button>
+                                            <a href="{{ path('admin-deleteUser', {userId : user.id}) }}" class="btn btn-danger">Oui</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    {% for key in users|keys %}
+    var modal{{ key }} = document.getElementById('deleteModal{{ key }}');
+
+    var modalContent{{ key }} = document.getElementById('modal-content{{ key }}');
+
+    var btn{{ key }} = document.getElementById("deleteBtn{{ key }}");
+
+    var span{{ key }} = document.getElementsByClassName("deleteCancel")[{{ key }}];
+
+    btn{{ key }}.onclick = function() {
+        modal{{ key }}.style.display = "flex";
+    };
+
+    span{{ key }}.onclick = function() {
+    //    modal{{ key }}.style.animation = "fadeOut 0.3s";
+     //   modalContent{{ key }}.style.animation = "zoomOut 0.3s";
+        modal{{ key }}.style.display = "none";
+    };
+
+    {% endfor %}
+</script>
+{% endblock %}
+
+

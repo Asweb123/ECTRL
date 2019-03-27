@@ -6,11 +6,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CertificationRepository")
- * @UniqueEntity("title", message="Ce nom de certification est déjà utilisé.")
  */
 class Certification
 {
@@ -22,15 +20,15 @@ class Certification
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255)
      * @Assert\Type("string")
      * @Assert\NotBlank()
      * @Assert\NotNull()
      * @Assert\Length(
      *     min = 1,
      *     max = 255,
-     *     minMessage="Le titre de la certification doit contenir au moins {{ limit }} caractère.",
-     *     maxMessage="Le titre de la certification doit contenir au maximum {{ limit }} caractères."
+     *     minMessage="Le titre du modèle d'audit doit contenir au moins {{ limit }} caractère.",
+     *     maxMessage="Le titre du modèle d'audit doit contenir au maximum {{ limit }} caractères."
      * )
      *
      */
@@ -44,8 +42,8 @@ class Certification
      * @Assert\Length(
      *     min = 1,
      *     max = 500,
-     *     minMessage="Le titre de la certification doit contenir au moins {{ limit }} caractère.",
-     *     maxMessage="Le titre de la certification doit contenir au maximum {{ limit }} caractères."
+     *     minMessage="Le titre du modèle d'audit doit contenir au moins {{ limit }} caractère.",
+     *     maxMessage="Le titre du modèle d'audit doit contenir au maximum {{ limit }} caractères."
      * )
      */
     private $description;

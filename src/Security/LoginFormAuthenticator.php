@@ -74,6 +74,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             throw new CustomUserMessageAuthenticationException('Veuillez d\'abord valider votre compte grâce au lien contenu dans le mail envoyé lors de votre inscription à l\'application ECTRL.');
         }
 
+        if ($user->getisBanned() === true) {
+            throw new CustomUserMessageAuthenticationException('Votre compte a été désactivé. Accès refusé.');
+        }
+
         return $user;
     }
 

@@ -71,7 +71,7 @@ td {
 }
 
 .page-item.active .page-link {
-   background-color: #2CB4C9;
+   background-color: #00bcd4;
 }
 
 .page-link {
@@ -134,3 +134,192 @@ td {
 .back-btn-text {
     color: white;
 }
+
+.deleteBtn {
+    background-color: inherit;
+    border: none;
+}
+
+.deleteBtn, a {
+    vertical-align: sub;
+}
+
+.deleteBtn:focus {
+    outline-width: 0;
+}
+
+.deleteBtn:hover {
+    cursor: pointer;
+}
+
+
+
+.modalDash {
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    position: fixed; /* Stay in place */
+    z-index: 999; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    animation: fadeIn 0.4s;
+    margin: 0;
+}
+
+.modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    background-color: #fefefe;
+    margin: 1rem; /* 15% from the top and centered */
+    padding: 0px;
+    border: 1px solid #888;
+    width: fit-content; /* Could be more or less, depending on screen size */
+    animation: zoomIn 0.3s;
+}
+
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@keyframes zoomIn {
+    from {transform: scale(0.6)}
+    to {transform: scale(1)}
+}
+
+@keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+
+@keyframes zoomOut {
+    from {transform: scale(1)}
+    to {transform: scale(0.6)}
+}
+
+.model-wrapper{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+}
+
+.model-card {
+    max-width: 100%;
+}
+
+@media screen and (min-width: 768px){
+    .model-card {
+        max-width: 49%;
+    }
+}
+
+.model-description {
+    margin-bottom: 0;
+}
+.model-actions-wrapper{
+    text-align: right;
+}
+
+.btn-link{
+    padding: 15px;
+}
+
+.model-card-header {
+    width: 100%;
+    margin: auto;
+}
+
+.model-detail-action{
+    margin-bottom: 3rem;
+}
+
+.header-center {
+    text-align: center;
+    margin: auto;
+}
+
+.theme-card {
+    margin-top:4rem;
+}
+
+.model-detail-action > a > button{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.p-model {
+    text-align: center;
+}
+
+.actions-modal {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    margin: auto;
+    width: fit-content;
+}
+
+@media screen and (min-width: 576px){
+    .actions-modal {
+        flex-direction: row;
+    }
+}
+
+.btn-modal{
+    margin: 5px .5rem;
+}
+
+.btn-newModel-wrapper {
+    text-align: right;
+}
+
+.action-create-btn{
+    display: flex;
+    flex-direction: column;
+    max-width: fit-content;
+    margin: auto;
+}
+
+@media screen and (min-width: 576px){
+    .action-create-btn{
+        flex-direction: row-reverse;
+        margin: 0 100%;
+    }
+}
+
+
+.jsgrid-grid-header {
+    border-radius: 6px 6px 0 0;
+}
+
+
+.jsgrid-grid-body {
+    border-radius: 0 0 6px 6px;
+}
+
+

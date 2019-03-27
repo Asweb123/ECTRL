@@ -137,12 +137,13 @@ class ScoreAndProgManager
 
             $scorePerDateAudit = [$timestampDate, $audit->getScore()];
 
-            foreach( $auditsScorePerType as $certification){
+            foreach($auditsScorePerType as $certification){
                 if(in_array($audit->getCertification()->getTitle(), $certification)){
                     array_push($certification["data"], $scorePerDateAudit);
+                    $auditsScorePerType[$audit->getCertification()->getTitle()] = $certification;
                 }
-                $auditsScorePerType[$audit->getCertification()->getTitle()] = $certification;
             }
+
         }
 /*
         foreach($auditsScorePerType as $key => $certification){
@@ -151,7 +152,6 @@ class ScoreAndProgManager
             }
         }
 */
-
         return $auditsScorePerType;
     }
 

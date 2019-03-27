@@ -149,6 +149,7 @@ easy_admin:
                     - { property: userEnable, label: Utilisateur activé }
                     - { property: company, label: Société }
                     - { property: role, label: Rôle }
+                    - { property: isBanned, label: Utilisateur banni }
                     - { property: registerCode, label: Code d'enregistrement }
                     - { property: creationDate, label: Date de création }
             show:
@@ -161,6 +162,7 @@ easy_admin:
                     - { property: userEnable, label: Utilisateur activé }
                     - { property: company, label: Société }
                     - { property: role, label: Rôle }
+                    - { property: isBanned, label: Utilisateur banni }
                     - { property: registerCode, label: Code d'enregistrement }
                     - { property: creationDate, label: Date de création }
             edit:
@@ -170,6 +172,7 @@ easy_admin:
                     - { property: firstName, label: Prénom }
                     - { property: lastName, label: Nom }
                     - { property: userEnable, label: Utilisateur activé }
+                    - { property: isBanned, label: Utilisateur banni }
 
 
 

@@ -103,7 +103,7 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\RegisterCode", inversedBy="users")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $registerCode;
 
@@ -122,6 +122,11 @@ class User implements UserInterface
      */
     private $hasToken;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isBanned;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
@@ -129,6 +134,7 @@ class User implements UserInterface
         $this->audits = new ArrayCollection();
         $this->expoPushTokens = new ArrayCollection();
         $this->hasToken = false;
+        $this->isBanned = false;
     }
 
     public function getId()
@@ -367,6 +373,18 @@ class User implements UserInterface
     public function setHasToken(bool $hasToken): self
     {
         $this->hasToken = $hasToken;
+
+        return $this;
+    }
+
+    public function getIsBanned(): ?bool
+    {
+        return $this->isBanned;
+    }
+
+    public function setIsBanned(bool $isBanned): self
+    {
+        $this->isBanned = $isBanned;
 
         return $this;
     }

@@ -30,4 +30,13 @@ class RegisterCodeManager
 
         return true;
     }
+
+    public function nbOfUsersRemover($registerCode, $user)
+    {
+        $registerCode->removeUser($user);
+        $this->em->persist($registerCode);
+        $this->em->flush();
+
+        return true;
+    }
 }
