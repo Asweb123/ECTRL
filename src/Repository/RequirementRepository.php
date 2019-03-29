@@ -22,29 +22,17 @@ class RequirementRepository extends ServiceEntityRepository
     // /**
     //  * @return Requirement[] Returns an array of Requirement objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findNextRequirements($theme, $rankTheme)
     {
         return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('r.theme = :val1')
+            ->andWhere('r.rankTheme > :val2')
+            ->setParameters(['val1' => $theme, 'val2' => $rankTheme])
+            ->orderBy('r.rankTheme', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Requirement
-    {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

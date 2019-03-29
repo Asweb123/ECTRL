@@ -60,7 +60,7 @@ class Requirement
      * )
      * @Assert\GreaterThan(0)
      */
-    private $rankCertification;
+ //   private $rankCertification;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Certification", inversedBy="requirements")
@@ -126,17 +126,17 @@ class Requirement
         return $this;
     }
 
-    public function getRankCertification(): ?int
-    {
-        return $this->rankCertification;
-    }
-
-    public function setRankCertification(int $rankCertification): self
-    {
-        $this->rankCertification = $rankCertification;
-
-        return $this;
-    }
+ //   public function getRankCertification(): ?int
+ //   {
+ //       return $this->rankCertification;
+ //   }
+ //
+ //   public function setRankCertification(int $rankCertification): self
+ //   {
+ //       $this->rankCertification = $rankCertification;
+ //
+ //       return $this;
+ //   }
 
     public function getCertification(): ?Certification
     {

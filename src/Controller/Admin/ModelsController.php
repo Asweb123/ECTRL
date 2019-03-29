@@ -10,7 +10,7 @@ use App\Repository\CertificationRepository;
 use App\Repository\CompanyRepository;
 use App\Service\ThemeManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -119,7 +119,6 @@ class ModelsController extends AbstractController
             ]);
         }
 
-
         return $this->render('admin/editModel.html.twig', [
             "model" => $model,
             "company" => $company,
@@ -129,7 +128,7 @@ class ModelsController extends AbstractController
 
 
     /**
-     * @Route("/admin/model-ajout-theme/{modelId}", name="admin-addTheme", methods={"POST"})
+     * @Route("/admin/model-suppression-theme/{themeId}", name="admin-deleteTheme")
      */
     public function addTheme(Request $request, $modelId, CertificationRepository $certificationRepository, ThemeManager $themeManager)
     {

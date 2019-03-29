@@ -108,7 +108,7 @@ class AuditController extends AbstractController
                     "themeColor" => $requirement->getTheme()->getColor(),
                     "requirementDescription" => $requirement->getDescription(),
                     "requirementRankTheme" => $requirement->getRankTheme(),
-                    "requirementRankCertification" => $requirement->getRankCertification(),
+               //     "requirementRankCertification" => $requirement->getRankCertification(),
                     "uuidResult" => $result->getId(),
                     "state" => $result->getState()
                 ];
@@ -185,7 +185,7 @@ class AuditController extends AbstractController
                         "themeColor" => $requirement->getTheme()->getColor(),
                         "requirementDescription" => $requirement->getDescription(),
                         "requirementRankTheme" => $requirement->getRankTheme(),
-                        "requirementRankCertification" => $requirement->getRankCertification(),
+                    //    "requirementRankCertification" => $requirement->getRankCertification(),
                         "uuidResult" => $result->getId(),
                         "state" => $result->getState(),
                         ];

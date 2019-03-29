@@ -102,19 +102,19 @@ class ScoreAndProgManager
 
         $auditPerScore = [0, 0, 0, 0, 0];
         foreach($last12MonthsAudits as $audit){
-            if($audit->getScore() >= 95){
+            if($audit->getScore() >= 90){
                 $auditPerScore[0]++;
             }
-            if($audit->getScore() >= 85 && $audit->getScore() < 95){
+            if($audit->getScore() >= 80 && $audit->getScore() < 90){
                 $auditPerScore[1]++;
             }
-            if($audit->getScore() >= 75 && $audit->getScore() < 85){
+            if($audit->getScore() >= 70 && $audit->getScore() < 80){
                 $auditPerScore[2]++;
             }
-            if($audit->getScore() >= 65 && $audit->getScore() < 75){
+            if($audit->getScore() >= 60 && $audit->getScore() < 70){
                 $auditPerScore[3]++;
             }
-            if($audit->getScore() < 65){
+            if($audit->getScore() < 60){
                 $auditPerScore[4]++;
             }
         }

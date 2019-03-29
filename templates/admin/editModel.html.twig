@@ -4,8 +4,19 @@
 
 {% block sideNavModels %}active{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset("css/jsgrid/jsgrid.css") }}" rel="stylesheet">
+    <link href="{{ asset("css/jsgrid/theme.css") }}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 <div class="wrapper-audit">
+    {% if model.isChild == true%}
+        <div class="model-actions-wrapper model-detail-action">
+            <button class="btn btn-danger" id="deleteBtn">Supprimer</button>
+        </div>
+    {% endif %}
 
     <div class="card model-card-header">
         <div class="card-header card-header-success header-flex">
@@ -19,7 +30,7 @@
         </div>
     </div>
 
-    {% for theme in model.themes %}
+    {% for key, theme in model.themes %}
     <div class="card card-nav-tabs theme-card">
         <div class="card-header card-header-success">
             Thème {{ theme.rankCertification }}
@@ -27,21 +38,8 @@
         <div class="card-body">
             <h4 class="card-title">{{ theme.title }}</h4>
             <p class="card-text">{{ theme.description }}</p>
-            <div class="card-body table-responsive">
-                <table class="table table-hover">
-                    <thead class="text-success">
-                    <th>ID</th>
-                    <th>Exigence</th>
-                    </thead>
-                    <tbody>
-                    {% for requirement in theme.requirements %}
-                        <tr>
-                            <td>{{ requirement.rankTheme }}</td>
-                            <td>{{ requirement.description }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+            <div class="">
+                <div id="theme{{ key }}"></div>
             </div>
         </div>
     </div>
@@ -79,12 +77,45 @@
     </div>
 </div>
 
+<div id="deleteModal" class="card modalDash deleteModal">
+    <div id="modal-content-model" class="modal-content">
+        <div class="card-header card-header-danger mb-3">
+            <h4 class="card-title text-center">Suppression d'un modèle</h4>
+        </div>
+        <div class="card-body">
+            <h5 class="text-center">Souhaitez-vous vraiment supprimer ce modèle d'audit?</h5>
+            <p class="text-center">{{ model.title }}</p>
+            <div class="actions-modal">
+                <button id="deleteCancel" class="btn btn-outline-secondary btn-modal">Annuler</button>
+                <a id="deleteAction" href="{{ path('admin-deleteModel', {'modelId' : model.id}) }}" class="btn btn-danger btn-modal">Supprimer</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
     <script>
+        var deleteBtnModalUp = document.getElementById("deleteBtn");
+        var deleteModal = document.getElementById('deleteModal');
+        var deleteModalContent = document.getElementById("modal-content");
+        var deleteBtnDelete = document.getElementById("deleteCancel");
+
+
+        deleteBtnModalUp.onclick = function() {
+            deleteModal.style.display = "flex";
+        };
+
+        deleteBtnDelete.onclick = function() {
+            //    modal.style.animation = "fadeOut 0.3s";
+            //   modalContent.style.animation = "zoomOut 0.3s";
+            deleteModal.style.display = "none";
+        };
+
+
         var btnModalUp = document.getElementById("addThemeBtn");
         var modal = document.getElementById('addThemeModal');
         var modalContent = document.getElementById("modalThemeContent");
@@ -110,43 +141,44 @@
                     btn.html('Ajout en cours...');
                 }
             });
-        })
+        });
 
 
+    {% for key, theme in model.themes %}
+
+        $("#theme{{ key }}").jsGrid({
+
+            loadIndicator: {
+                show: function() {
+                    console.log("loading started");
+                },
+                hide: function() {
+                    console.log("loading finished");
+                }
+            },
 
 
-        var clients = [
-            { "requirement": "Otto Clay"},
-            { "requirement": "Connor Johnston"},
-            { "requirement": "Lacey Hess"},
-        ];
-
-
-        $("#theme1").jsGrid({
-
-
-            data: clients,
 
             fields: [
-                { name: "requirement", title: "Exigence", type: "text", width: 500, validate: "required"},
-                { type: "control" },
-
+                { name: "uuid", type: "text", visible: false },
+                { name: "requirement", title: "Exigence", type: "text", width: "auto", validate: "required"},
+                { type: "control"}
             ],
 
-            autoload: false,
+            autoload: true,
             controller: {
-                loadData: function(filter) {
+                loadData: function() {
                     return $.ajax({
                         type: "GET",
-                        url: "/items",
-                        data: filter
+                        url: "{{ path('admin-getRequirements', {themeId : theme.id}) }}",
+
                     });
                 },
 
                 insertItem: function(item) {
                     return $.ajax({
                         type: "POST",
-                        url: "/items",
+                        url: "{{ path('admin-postRequirements', {themeId : theme.id}) }}",
                         data: item
                     });
                 },
@@ -154,7 +186,7 @@
                 updateItem: function(item) {
                     return $.ajax({
                         type: "PUT",
-                        url: "/items",
+                        url: "{{ path('admin-putRequirements', {themeId : theme.id}) }}",
                         data: item
                     });
                 },
@@ -162,11 +194,13 @@
                 deleteItem: function(item) {
                     return $.ajax({
                         type: "DELETE",
-                        url: "/items",
+                        url: "{{ path('admin-deleteRequirements', {themeId : theme.id}) }}",
                         data: item
                     });
                 },
             },
+
+
 
             width: "100%",
             height: "auto",
@@ -184,7 +218,7 @@
             rowClick: function(args) {  },
             rowDoubleClick: function(args) {  },
 
-            noDataContent: "Ajoutez une exigence en cliquant sur le +",
+            noDataContent: "Ajoutez une exigence en cliquant sur le + juste au dessus.",
 
             confirmDeleting: true,
             deleteConfirm: "Souhaitez vous vraiment supprimer cette exigence?",
@@ -206,6 +240,8 @@
             editRowRenderer: null
 
         });
+
+    {% endfor %}
 
 </script>
 {% endblock %}

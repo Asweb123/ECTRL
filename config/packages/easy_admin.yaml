@@ -268,7 +268,7 @@ easy_admin:
                 fields:
                     - { property: description, label: Description }
                     - { property: certification, label: Appartient au modèle }
-                    - { property: rankCertification, label: Position dans modèle }
+#                    - { property: rankCertification, label: Position dans modèle }
                     - { property: theme, label: Appartient au thème }
                     - { property: rankTheme, label: Position dans thème }
                     - { property: creationDate, label: Date de création}
@@ -278,7 +278,7 @@ easy_admin:
                 fields:
                     - { property: description, label: Description }
                     - { property: certification, label: Appartient au modèle }
-                    - { property: rankCertification, label: Position dans modèle }
+ #                   - { property: rankCertification, label: Position dans modèle }
                     - { property: theme, label: Appartient au thème }
                     - { property: rankTheme, label: Position dans thème }
                     - { property: creationDate, label: Date de création}
@@ -287,7 +287,7 @@ easy_admin:
                 fields:
                     - { property: description, label: Description }
                     - { property: certification, label: Appartient au modèle }
-                    - { property: rankCertification, label: Position dans modèle }
+#                    - { property: rankCertification, label: Position dans modèle }
                     - { property: theme, label: Appartient au thème }
                     - { property: rankTheme, label: Position dans thème }
             edit:
@@ -295,6 +295,6 @@ easy_admin:
                 fields:
                     - { property: description, label: Description }
                     - { property: certification, label: Appartient au modèle }
-                    - { property: rankCertification, label: Position dans modèle }
+#                    - { property: rankCertification, label: Position dans modèle }
                     - { property: theme, label: Appartient au thème }
                     - { property: rankTheme, label: Position dans thème }
