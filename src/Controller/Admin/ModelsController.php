@@ -6,13 +6,16 @@ use App\Entity\Certification;
 use App\Entity\Theme;
 use App\Form\AddThemeType;
 use App\Form\EditThemeType;
+use App\Form\ImportCsvType;
 use App\Form\NewModelCertificationType;
 use App\Repository\CertificationRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\ThemeRepository;
+use App\Service\CsvManager;
 use App\Service\ThemeManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,36 +74,6 @@ class ModelsController extends AbstractController
             "company" => $company
         ]);
     }
-
-
-//    /**
-//     * @Route("/admin/model-creation", name="admin-createModel")
-//     */
-//    public function NewModel(Request $request)
-//    {
-//        $user = $this->getUser();
-//        $company = $user->getCompany();
-//
-//        $certification = new Certification();
-//
-//        $form = $this->createForm(NewModelCertificationType::class, $certification);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $certification->addCompany($company);
-//            $certification->setIsChild(true);
-//
-//            $entityManager = $this->getDoctrine()->getManager();
-//            $entityManager->persist($certification);
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('admin-editModel', ["modelId" => $certification->getId()]);
-//        }
-//        return $this->render('admin/modelNew.html.twig', [
-//            "company" => $company,
-//            "form" => $form->createView()
-//        ]);
-//    }
 
 
     /**
@@ -214,6 +187,73 @@ class ModelsController extends AbstractController
 
         return $this->redirectToRoute('admin-modelList', [
             "company" => $company
+        ]);
+    }
+
+    /**
+     * @Route("/admin/importation-csv", name="admin-importCsv")
+     */
+    public function importModel(Request $request, CsvManager $csvManager)
+    {
+        $user = $this->getUser();
+        $company = $user->getCompany();
+
+
+
+
+
+
+
+        $form = $this->createForm(ImportCsvType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $data = $form->getData();
+
+            $file = $data['file'];
+            $csvManager->csvToDbManager($file);
+          //  return $this->redirectToRoute('admin-importCsvProcess');
+           // return $this->redirectToRoute('admin-modelDetail', ["modelId" => $certification->getId()]);
+        }
+
+
+        return $this->render('admin/importCsv.html.twig', [
+            "company" => $company,
+            "form" => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/admin/traitement-csv", name="admin-importCsvProcess")
+     */
+    public function processModel(Request $request)
+    {
+        $user = $this->getUser();
+        $company = $user->getCompany();
+
+        $file = $request->files->get('importCsv');
+
+
+
+
+
+        /*
+                $form = $this->createForm(ImportCsvType::class, $file);
+
+                $form->handleRequest($request);
+
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $data = $form->getData();
+
+
+                    return $this->redirectToRoute('admin-modelDetail', ["modelId" => $certification->getId()]);
+                }
+        */
+
+        return $this->render('admin/modelList.html.twig', [
+            "company" => $company,
+
         ]);
     }
 }

@@ -11,7 +11,6 @@ use Doctrine\ORM\EntityManagerInterface;
 class ThemeManager
 {
     private $em;
-    private $requirementRepository;
     private $themeRepository;
 
     public function __construct(EntityManagerInterface $em, ThemeRepository $themeRepository)
@@ -19,7 +18,7 @@ class ThemeManager
         $this->em = $em;
         $this->themeRepository = $themeRepository;
     }
-
+/*
     public function Ranker($theme, $model)
     {
         $rank = count($model->getThemes()) + 1;
@@ -28,7 +27,7 @@ class ThemeManager
 
         return $theme;
     }
-
+*/
 
     public function colorSetter($theme, $rank)
     {

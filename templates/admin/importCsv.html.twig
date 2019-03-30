@@ -1,0 +1,91 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{%  block stylesheets %}
+    {{ parent() }}
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+{% endblock %}
+
+{% block title %}Importer un modèle{% endblock %}
+
+{% block sideNavModels %}active{% endblock %}
+
+{% block content %}
+
+<div class="wrapper-audit">
+    <div class="card">
+        <div class="card-header card-header-success header-flex mb-4">
+            <div class="header-center">
+                <h4 class="card-title text-center">Importez un nouveau modèle d'audit</h4>
+                <p class="card-category"></p>
+            </div>
+        </div>
+        <div class="card-body card-model">
+            <h4 class="card-title text-center">Veuillez importer un fichier au format .csv afin de générer automatiquement un nouveau modèle d'audit.</h4>
+            <p class="card-category text-center mb-4">Cliquer <a href="#">ici</a> pour télécharger un exemple de fichier csv au format attendu.</p>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+
+{#
+            <div class="filePlugin-wrapper">
+                <input name="importCsv" id="filePlugin" type="file" class="mb-4">
+            </div>
+#}
+            <div class="action-create-btn">
+                <input type="submit" class="btn btn-info" value="Importer">
+                <button onclick="location.href='{{ path('admin-modelList') }}'" type="button" class="btn btn-secondary">Retour</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.filePlugin-wrapper').animate({'opacity': 1}, 500);
+        });
+        const inputElement = document.querySelector('#filePlugin');
+        FilePond.registerPlugin(
+            FilePondPluginFileValidateType,
+            FilePondPluginFileValidateSize,
+        );
+        const pond = FilePond.create( inputElement );
+        pond.setOptions({
+            server: '{{ path('admin-importCsv') }}',
+            checkValidity: true,
+            dropValidation: true,
+/*
+            acceptedFileTypes: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'],
+            labelFileTypeNotAllowed: 'Fichier de type non valide',
+            fileValidateTypeLabelExpectedTypes: 'Attendu: .csv',
+*/
+            labelFileWaitingForSize: 'Calcul de la taille du fichier',
+            labelFileSizeNotAvailable: 'Taille non disponible',
+            labelFileLoading: 'Chargement',
+            labelFileLoadError: 'Erreur lors du chargement',
+            labelFileProcessing: 'Téléchargement',
+            labelFileProcessingComplete: 'Téléchargement terminé',
+            labelFileProcessingAborted: 'Téléchargement annulé',
+            labelFileProcessingError: 'Erreur lors du téléchargement',
+            labelTapToCancel: 'Annuler',
+            labelTapToRetry: 'Appuyer pour réessayer',
+            labelTapToUndo: '',
+            labelButtonRemoveItem: 'Supprimer',
+            labelButtonRetryItemLoad: 'Recommencer',
+            labelButtonAbortItemProcessing: 'Annuler',
+            labelButtonUndoItemProcessing: 'Annuler',
+            labelButtonRetryItemProcessing: 'Recommencer',
+            labelButtonProcessItem: 'Téléchargement',
+            labelIdle: `Glissez/déposez ici ou <span class="filepond--label-action">sélectionnez</span> votre modèle d'audit`,
+            required: true,
+        });
+    </script>
+{% endblock %}

@@ -173,6 +173,7 @@
 {{ parent() }}
     <script type="text/javascript" src="{{ asset('js/jsgrid.min.js') }}"></script>
     <script>
+
         jsGrid.setDefaults({
             width: "100%",
             height: "auto",
@@ -184,25 +185,81 @@
             sorting: false,
             paging: false,
             pageLoading: false,
-      //      rowClass: function(item, itemIndex) {  },
-      //      rowClick: function(args) {  },
-      //      rowDoubleClick: function(args) {  },
+            //      rowClass: function(item, itemIndex) {  },
+            //      rowClick: function(args) {  },
+            //      rowDoubleClick: function(args) {  },
             noDataContent: "Ajoutez une exigence en cliquant sur le bouton d'ajout (+).",
-            confirmDeleting: true,
+            confirmDeleting: false,
             deleteConfirm: "Souhaitez vous vraiment supprimer cette exigence?",
-       //     invalidNotify: function(args) {  },
+            invalidNotify: function (args) {
+            },
             invalidMessage: "Données invalides!",
             loadIndication: true,
             loadIndicationDelay: 0,
             loadMessage: "Veuillez patienter...",
             loadShading: true,
             updateOnResize: true,
-       //     rowRenderer: null,
-       //     headerRowRenderer: null,
-       //     filterRowRenderer: null,
-      //      insertRowRenderer: null,
-      //      editRowRenderer: null
+            //     rowRenderer: null,
+            //     headerRowRenderer: null,
+            //     filterRowRenderer: null,
+            //      insertRowRenderer: null,
+            //      editRowRenderer: null
         });
+
+        (function(jsGrid) {
+
+            jsGrid.locales.fr = {
+                grid: {
+                    noDataContent: "Pas de données",
+                    deleteConfirm: "Êtes-vous sûr ?",
+                    pagerFormat: "Pages: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} de {pageCount}",
+                    pagePrevText: "<",
+                    pageNextText: ">",
+                    pageFirstText: "<<",
+                    pageLastText: ">>",
+                    loadMessage: "Chargement en cours...",
+                    invalidMessage: "Des données incorrectes sont entrés !"
+                },
+
+                loadIndicator: {
+                    message: "Chargement en cours..."
+                },
+
+                fields: {
+                    control: {
+                        searchModeButtonTooltip: "Recherche",
+                        insertModeButtonTooltip: "Ajouter une entrée",
+                        editButtonTooltip: "Changer",
+                        deleteButtonTooltip: "Effacer",
+                        searchButtonTooltip: "Trouve",
+                        clearFilterButtonTooltip: "Effacer",
+                        insertButtonTooltip: "Ajouter",
+                        updateButtonTooltip: "Sauvegarder",
+                        cancelEditButtonTooltip: "Annuler"
+                    }
+                },
+
+                validators: {
+                    required: { message: "Champ requis" },
+                    rangeLength: { message: "Longueur de la valeur du champ est hors de la plage définie" },
+                    minLength: { message: "La valeur du champ est trop court" },
+                    maxLength: { message: "La valeur du champ est trop long" },
+                    pattern: { message: "La valeur du champ ne correspond pas à la configuration définie" },
+                    range: { message: "La valeur du champ est hors de la plage définie" },
+                    min: { message: "La valeur du champ est trop petit" },
+                    max: { message: "La valeur du champ est trop grande" }
+                }
+            };
+
+        }(jsGrid, jQuery));
+
+
+
+
+
+
+
+
 
 
 

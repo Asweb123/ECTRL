@@ -304,7 +304,13 @@ td {
 }
 
 .btn-newModel-wrapper {
-    text-align: right;
+    text-align: center;
+}
+
+@media screen and (min-width: 576px){
+    .btn-newModel-wrapper {
+        text-align: right;
+    }
 }
 
 .action-create-btn{
@@ -312,6 +318,7 @@ td {
     flex-direction: column;
     max-width: fit-content;
     margin: auto;
+
 }
 
 @media screen and (min-width: 576px){
@@ -365,3 +372,13 @@ td {
     width: 90px;
     height: auto;
 }
+
+.createModelbtns {
+    width: 220px
+}
+
+.filePlugin-wrapper{
+    height: 100px;
+    opacity: 0;
+}
+

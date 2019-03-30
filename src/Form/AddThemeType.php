@@ -24,8 +24,6 @@ class AddThemeType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => Theme::class,
-        ]);
+        $resolver->setDefaults(['data_class' => Theme::class]);
     }
 }

@@ -5,8 +5,9 @@
 {% block sideNavModels %}active{% endblock %}
 
 {% block content %}
-    <div class="btn-newModel-wrapper">
-        <button id="newModelBtn" class="btn btn-info btn-newModel btn-sm">Créer un nouveau modèle</button>
+    <div class="btn-newModel-wrapper mb-4">
+        <button onclick="location.href='{{ path('admin-importCsv') }}'" class="btn btn-info btn-newModel btn-sm createModelbtns">Importer un nouveau modèle</button>
+        <button id="newModelBtn" class="btn btn-info btn-newModel btn-sm createModelbtns">Créer un nouveau modèle</button>
     </div>
 
     <div id="modelModal" class="card modalDash deleteModal">
