@@ -63,32 +63,6 @@ class RequirementManager
         $newRequirement->setCertification($theme->getCertification());
         $newRequirement->setRankTheme($previousRequirementRankTheme + 1);
 
-    //    if($previousRequirementRankTheme !== 0){
-    //        $previousRequirement = $this->requirementRepository->findPreviousRequirement($previousRequirementRankTheme, $theme);
-    //        $newRequirement->setRankCertification($previousRequirement->getRankCertification() + 1);
-    //    }
-
-    //    if($previousRequirementRankTheme === 0) {
-    //        if ($theme->getRankCertification() > 1) {
-    //            $previousTheme = $this->themeRepository->findOneBy(["rankCertification" => ($theme->getRankCertification() - 1)]);
-    //            $previousRequirementRankThemeForPreviousTheme = count($previousTheme->getRequirements());
-    //            $previousRequirementForPreviousTheme = $this->requirementRepository->findPreviousRequirement($previousRequirementRankThemeForPreviousTheme, $previousTheme);
-    //            $newRequirement->setRankCertification($previousRequirementForPreviousTheme->getRankCertification() + 1);
-    //        } else {
-    //            $newRequirement->setRankCertification(1);
-    //        }
-    //    }
-
-    //    $currentNextRequirements = $this->requirementRepository->findNextRequirements($model, $newRequirement->getRankCertification());
-    //    if($currentNextRequirements !== null){
-    //        foreach($currentNextRequirements as $requirement){
-    //            $requirement->setRankCertification($requirement->getRankCertification() + 1);
-    //            $this->em->persist($requirement);
-    //        }
-    //
-    //        $this->em->flush();
-    //    }
-
         return $newRequirement;
     }
 
@@ -97,15 +71,15 @@ class RequirementManager
         $theme = $requirement->getTheme();
         $themeRequirementsNb = count($theme->getRequirements());
 
-        $this->em->remove($requirement);
-
         if ($themeRequirementsNb !== 1 || $themeRequirementsNb !== $requirement->getRankTheme()){
             $nextRequirements = $this->requirementRepository->findNextRequirements($theme, $requirement->getRankTheme());
             foreach($nextRequirements as $nextRequirement){
                 $nextRequirement->setRankTheme($nextRequirement->getrankTheme() - 1);
                 $this->em->persist($nextRequirement);
             }
-            $this->em->flush();
         }
+        $this->em->remove($requirement);
+        $this->em->flush();
+
     }
 }

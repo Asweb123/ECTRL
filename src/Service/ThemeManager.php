@@ -5,8 +5,20 @@ namespace App\Service;
 
 
 
+use App\Repository\ThemeRepository;
+use Doctrine\ORM\EntityManagerInterface;
+
 class ThemeManager
 {
+    private $em;
+    private $requirementRepository;
+    private $themeRepository;
+
+    public function __construct(EntityManagerInterface $em, ThemeRepository $themeRepository)
+    {
+        $this->em = $em;
+        $this->themeRepository = $themeRepository;
+    }
 
     public function Ranker($theme, $model)
     {
@@ -20,7 +32,7 @@ class ThemeManager
 
     public function colorSetter($theme, $rank)
     {
-        $colors = ['#43E870', '#56B5FF', '#FFF85A', '#A143E8', '#FF6A5A', '#ACFF38', '#3BFFEF', '#D04BE8', '#D16D39', '#F5DD4F'];
+        $colors = ['#9AD9DB', '#247474', '#7786FB', '#99F0B8', '#B87AFF', '#5BC1C2', '#FAC392', '#F28181', '#75AAA9', '#D4B0FF'];
 
         $rank = $rank % 10;
 
@@ -29,4 +41,20 @@ class ThemeManager
         return $theme;
     }
 
+    public function deleteThemeManager($theme)
+    {
+        $model = $theme->getCertification();
+        $modelThemesNb = count($model->getThemes());
+
+        if ($modelThemesNb !== 1 || $modelThemesNb !== $theme->getRankCertification()){
+            $nextThemes = $this->themeRepository->findNextThemes($model, $theme->getRankCertification());
+            foreach($nextThemes as $nextTheme){
+                $nextTheme->setRankCertification($nextTheme->getrankcertification() - 1);
+                $this->em->persist($nextTheme);
+            }
+        }
+        $this->em->remove($theme);
+        $this->em->flush();
+
+    }
 }

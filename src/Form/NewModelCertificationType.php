@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\Certification;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,7 +16,7 @@ class NewModelCertificationType extends AbstractType
             ->add('title', TextType::class, [
                 "label" => "Titre :"
             ])
-            ->add('description', TextareaType::class, [
+            ->add('description', TextType::class, [
                 "label" => "Description :"
             ])
         ;

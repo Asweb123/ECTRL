@@ -7,7 +7,7 @@
 {% block content %}
 <div class="wrapper-audit">
     <div class="card">
-        <div class="card-header card-header-info">
+        <div class="card-header card-header-warning">
             <h4 class="card-title">Utilisateurs de l'application ECTRL</h4>
             <p class="card-category">Nombre d'utilisateurs enregistrés: {{ users|length }}</p>
         </div>
@@ -40,8 +40,8 @@
                                         <h5>Souhaitez-vous vraiment désactiver cette utilisateur?</h5>
                                         <p>{{ user.firstName }} {{ user.lastName }} - {{ user.role.title }}</p>
                                         <div class="navigation">
-                                            <button class="btn btn-info deleteCancel">Non</button>
-                                            <a href="{{ path('admin-deleteUser', {userId : user.id}) }}" class="btn btn-danger">Oui</a>
+                                            <button class="btn btn-outline-secondary deleteCancel">Annuler</button>
+                                            <a href="{{ path('admin-deleteUser', {userId : user.id}) }}" class="btn btn-danger">Désactiver</a>
                                         </div>
                                     </div>
                                 </div>
@@ -61,11 +61,8 @@
 <script>
     {% for key in users|keys %}
     var modal{{ key }} = document.getElementById('deleteModal{{ key }}');
-
     var modalContent{{ key }} = document.getElementById('modal-content{{ key }}');
-
     var btn{{ key }} = document.getElementById("deleteBtn{{ key }}");
-
     var span{{ key }} = document.getElementsByClassName("deleteCancel")[{{ key }}];
 
     btn{{ key }}.onclick = function() {

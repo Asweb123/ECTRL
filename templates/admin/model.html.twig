@@ -8,8 +8,8 @@
 <div class="wrapper-audit">
     {% if model.isChild == true%}
     <div class="model-actions-wrapper model-detail-action">
-        <button onclick="location.href='{{ path('admin-editModel', {'modelId' : model.id}) }}'" type="button" class="btn btn-warning ">Modifier</button>
-        <button class="btn btn-danger" id="deleteBtn">Supprimer</button>
+        <button onclick="location.href='{{ path('admin-editModel', {'modelId' : model.id}) }}'" type="button" class="btn btn-warning btn-edit btn-sm">Modifier modèle</button>
+        <button class="btn btn-danger btn-edit btn-sm" id="deleteBtn">Supprimer modèle</button>
     </div>
     {% endif %}
     <div class="card model-card-header">
@@ -27,7 +27,7 @@
 
     {% for theme in model.themes %}
     <div class="card card-nav-tabs theme-card">
-        <div class="card-header card-header-success">
+        <div class="card-header card-header-success" style="background: linear-gradient(60deg, {{ theme.color }}, {{ theme.color }} 33%);">
             Thème {{ theme.rankCertification }}
         </div>
         <div class="card-body">
@@ -42,7 +42,7 @@
                     <tbody>
                     {% for requirement in theme.requirements %}
                         <tr>
-                            <td class="text-center">{{ requirement.rankTheme }}</td>
+                            <td class="text-center">{{ theme.rankCertification }}.{{ requirement.rankTheme }}</td>
                             <td class="requirementModel">{{ requirement.description }}</td>
                         </tr>
                     {% endfor %}

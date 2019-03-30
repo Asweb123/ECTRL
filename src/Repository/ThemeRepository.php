@@ -19,6 +19,18 @@ class ThemeRepository extends ServiceEntityRepository
         parent::__construct($registry, Theme::class);
     }
 
+    public function findNextThemes($certification, $rankCertification)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.certification = :val1')
+            ->andWhere('r.rankCertification > :val2')
+            ->setParameters(['val1' => $certification, 'val2' => $rankCertification])
+            ->orderBy('r.rankCertification', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return Theme[] Returns an array of Theme objects
     //  */

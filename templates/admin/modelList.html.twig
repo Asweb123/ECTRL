@@ -6,16 +6,43 @@
 
 {% block content %}
     <div class="btn-newModel-wrapper">
-        <a href="{{ path('admin-createModel') }}" class="btn btn-info btn-newModel">Créer un nouveau modèle</a>
+        <button id="newModelBtn" class="btn btn-info btn-newModel btn-sm">Créer un nouveau modèle</button>
+    </div>
+
+    <div id="modelModal" class="card modalDash deleteModal">
+        <div id="modelModalContent" class="modal-content">
+            <div class="card-header card-header-danger">
+                <h4 class="card-title text-center">Nouveau modèle d'audits</h4>
+            </div>
+            <div class="card-body">
+                <h5 class="text-center my-3">Renseignez un titre ainsi qu'une description pour votre nouveau modèle d'audits.</h5>
+                <div>
+                    {{ form_start(form) }}
+                    {{ form_errors(form) }}
+                    {{ form_label(form.title) }}
+                    {{ form_widget(form.title) }}
+                    {{ form_label(form.description) }}
+                    {{ form_widget(form.description) }}
+                    <div class="actions-modal mt-4">
+                        <button type=button id="newModelCancel" class="btn btn-outline-secondary btn-modal">Annuler</button>
+                        <button id="newModelAction" type="submit" class="btn btn-info btn-modal">Créer</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="model-wrapper">
         {% for key, model in models %}
             <div id="modelDeleter{{ key }}" class="card model-card">
-                <div class="card-header card-header-text card-header-success">
+                <div class="card-header card-header-text card-header-success ekalitRelative">
                     <div class="card-text">
                         <h4 class="card-title">{{ model.title }}</h4>
                     </div>
+                    {% if model.isChild == false%}
+                        <img src="{{ asset('img/ekalitMini.png') }}" class="ekalitLabel">
+                    {% endif %}
                 </div>
                 <div class="card-body">
                     <p class="model-description">{{ model.description }}</p>
@@ -25,25 +52,27 @@
                     {% if model.isChild == true%}
                     <button onclick="location.href='{{ path('admin-editModel', {'modelId' : model.id}) }}'" type="button" class="btn btn-warning btn-link">Modifier</button>
                     <button id="deleteBtn{{ key }}" class="btn btn-danger btn-link">Supprimer</button>
+
+                    <div id="deleteModal{{ key }}" class="card modalDash deleteModal">
+                        <div id="modal-content-model{{ key }}" class="modal-content">
+                            <div class="card-header card-header-danger mb-3">
+                                <h4 class="card-title text-center">Suppression d'un modèle</h4>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="text-center">Souhaitez-vous vraiment supprimer ce modèle d'audit?</h5>
+                                <p class="text-center">{{ model.title }}</p>
+                                <div class="actions-modal">
+                                    <button id="deleteCancel{{ key }}" class="btn btn-outline-secondary btn-modal">Annuler</button>
+                                    <a id="deleteAction{{ key }}" href="{{ path('admin-deleteModel', {'modelId' : model.id}) }}" class="btn btn-danger btn-modal">Supprimer</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     {% endif %}
                 </div>
             </div>
 
-            <div id="deleteModal{{ key }}" class="card modalDash deleteModal">
-                <div id="modal-content-model{{ key }}" class="modal-content">
-                    <div class="card-header card-header-danger mb-3">
-                        <h4 class="card-title text-center">Suppression d'un modèle</h4>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="text-center">Souhaitez-vous vraiment supprimer ce modèle d'audit?</h5>
-                        <p class="text-center">{{ model.title }}</p>
-                        <div class="actions-modal">
-                            <button id="deleteCancel{{ key }}" class="btn btn-outline-secondary btn-modal">Annuler</button>
-                            <a id="deleteAction{{ key }}" href="{{ path('admin-deleteModel', {'modelId' : model.id}) }}" class="btn btn-danger btn-modal">Supprimer</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         {% endfor %}
     </div>
 
@@ -53,42 +82,65 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
+        // new model
+        var addBtnModalUp = document.getElementById("newModelBtn");
+        var addModal = document.getElementById('modelModal');
+        var addModalContent = document.getElementById("newModelContent");
+        var addBtnCancel = document.getElementById("newModelCancel");
 
-        {% for key in models|keys %}
-
-        var btnModalUp{{ key }} = document.getElementById("deleteBtn{{ key }}");
-        var modal{{ key }} = document.getElementById('deleteModal{{ key }}');
-        var modalContent{{ key }} = document.getElementById("modal-content{{ key }}");
-        var btnDelete{{ key }} = document.getElementById("deleteCancel{{ key }}");
-        var modelDeleter{{ key }} = document.getElementById("modelDeleter{{ key }}");
-
-        btnModalUp{{ key }}.onclick = function() {
-            modal{{ key }}.style.display = "flex";
+        addBtnModalUp.onclick = function () {
+            addModal.style.display = "flex";
         };
-
-        btnDelete{{ key }}.onclick = function() {
+        addBtnDelete.onclick = function () {
             //    modal.style.animation = "fadeOut 0.3s";
             //   modalContent.style.animation = "zoomOut 0.3s";
-            modal{{ key }}.style.display = "none";
+            addModal.style.display = "none";
         };
 
+        //Add Theme process
+        var form = $("[name='model']");
+        form.on('submit', function (e) {
+            // e.preventDefault();
+            if ($('#add_theme_title').val() !== '' || $('#add_theme_description').val() !== '') {
+                addBtn = $('#addThemeSave');
+                addBtn.prop('disabled', true);
+                addBtn.html('Ajout en cours...');
 
-
-        var deleteLink = $('#deleteAction{{ key }}');
-
-        deleteLink.on('click', function(e) {
-            e.preventDefault();
-
-            $.ajax({
-                method: 'GET',
-                url: deleteLink.attr('href')
-            });
-
-            modelDeleter{{ key }}.style.display = "none";
-            modal{{ key }}.style.display = "none";
-
+            }
         });
 
+        {% for key, model in models %}
+            {% if model.isChild == true%}
+            var btnModalUp{{ key }} = document.getElementById("deleteBtn{{ key }}");
+            var modal{{ key }} = document.getElementById('deleteModal{{ key }}');
+            var modalContent{{ key }} = document.getElementById("modal-content{{ key }}");
+            var btnDelete{{ key }} = document.getElementById("deleteCancel{{ key }}");
+            var modelDeleter{{ key }} = document.getElementById("modelDeleter{{ key }}");
+
+            btnModalUp{{ key }}.onclick = function() {
+                modal{{ key }}.style.display = "flex";
+            };
+
+            btnDelete{{ key }}.onclick = function() {
+                //    modal.style.animation = "fadeOut 0.3s";
+                //   modalContent.style.animation = "zoomOut 0.3s";
+                modal{{ key }}.style.display = "none";
+            };
+
+            var deleteLink = $('#deleteAction{{ key }}');
+            deleteLink.on('click', function(e) {
+                e.preventDefault();
+
+                $.ajax({
+                    method: 'GET',
+                    url: deleteLink.attr('href')
+                });
+
+                modelDeleter{{ key }}.style.display = "none";
+                modal{{ key }}.style.display = "none";
+
+            });
+        {% endif %}
         {% endfor %}
 
 

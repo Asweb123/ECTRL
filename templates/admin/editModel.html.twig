@@ -14,7 +14,7 @@
 <div class="wrapper-audit">
     {% if model.isChild == true%}
         <div class="model-actions-wrapper model-detail-action">
-            <button class="btn btn-danger" id="deleteBtn">Supprimer</button>
+            <button class="btn btn-danger btn-edit btn-sm" id="deleteBtn">Supprimer modèle</button>
         </div>
     {% endif %}
 
@@ -30,25 +30,99 @@
         </div>
     </div>
 
-    {% for key, theme in model.themes %}
-    <div class="card card-nav-tabs theme-card">
-        <div class="card-header card-header-success">
-            Thème {{ theme.rankCertification }}
-        </div>
-        <div class="card-body">
-            <h4 class="card-title">{{ theme.title }}</h4>
-            <p class="card-text">{{ theme.description }}</p>
-            <div class="">
-                <div id="theme{{ key }}"></div>
+    {% if model.themes|length == 0 %}
+        {% set key = 0 %}
+
+        <div class="card card-nav-tabs theme-card">
+            <div class="card-header card-header-success" style="background: linear-gradient(60deg, #247474, #247474 33%);">
+                <h4 class="card-title text-center">Définissez le premier thème d'exigences qualité</h4>
+            </div>
+            <div class="card-body">
+                <h5 class="text-center my-3">Ajoutez un titre et une description au premier thème</h5>
+                <div class="">
+                    {{ form_start(formAddTheme, {'action': path('admin-editModel', {modelId : model.id}), 'method': 'POST'}) }}
+                    {{ form_errors(formAddTheme) }}
+                    {{ form_row(formAddTheme.title) }}
+                    {{ form_row(formAddTheme.description) }}
+                    <div class="actions-modal">
+                        <button id="addThemeSave" type="submit" class="btn btn-info btn-modal">Ajouter</button>
+                    </div>
+                    {{ form_end(formAddTheme) }}
+                </div>
             </div>
         </div>
-    </div>
-    {% endfor %}
 
+    {% else %}
+
+        {% for key, theme in model.themes %}
+
+        <div class="card card-nav-tabs theme-card">
+            <div class="card-header card-header-succes header-theme" style="background: linear-gradient(60deg, {{ theme.color }}, {{ theme.color }} 33%);">
+                <div>
+                    Thème {{ theme.rankCertification }}
+                </div>
+                <div>
+                    <button id="editTheme{{ key }}" class="btn btn-sm btn-warning"><i class="fas fa-edit" style="font-size: 13px;"></i></button>
+                    <button id="deleteTheme{{ key }}" class="btn btn-sm btn-danger"><i class="fas fa-trash" style="font-size: 13px;"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <h4 id="themeTitle{{ key }}" class="card-title">{{ theme.title }}</h4>
+                <p id="themeDescritption{{ key }}" class="card-text">{{ theme.description }}</p>
+                <div class="">
+                    <div id="theme{{ key }}"></div>
+                </div>
+            </div>
+        </div>
+
+            <div id="editThemeModal{{ key }}" class="card modalDash deleteModal">
+                <div id="editThemeModalThemeContent{{ key }}" class="modal-content">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title text-center">Modifier le thème</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="text-center my-3">Modifier le titre et/ou la description du thème {{ theme.rankCertification }}</h5>
+
+                        <div>
+                            {{ form_start(formEditTheme[key], {'action': path('admin-editModel', {modelId : model.id}), 'method': 'PUT', 'attr': {'id': key }}  ) }}
+                            {{ form_errors(formEditTheme[key]) }}
+                            {{ form_row(formEditTheme[key].title, {'attr': {'value': theme.title }}) }}
+                            {{ form_row(formEditTheme[key].description, {'attr': {'value': theme.description }}) }}
+                            {{ form_row(formEditTheme[key].id, {'attr': {'value': theme.id }}) }}
+                            <div class="actions-modal">
+                                <button type=button id="editThemeCancel{{ key }}" class="btn btn-outline-secondary btn-modal">Annuler</button>
+                                <button id="editThemeSave{{ key }}" type="submit" class="btn btn-info btn-modal">Modifier</button>
+                            </div>
+                            {{ form_end(formEditTheme[key]) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="deleteThemeModal{{ key }}" class="card modalDash deleteModal">
+                <div id="modal-content-theme{{ key }}" class="modal-content">
+                    <div class="card-header card-header-danger mb-3">
+                        <h4 class="card-title text-center">Suppression d'un modèle</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="text-center">Souhaitez-vous vraiment supprimer ce thème?</h5>
+                        <p class="text-center">{{ model.title }}</p>
+                        <div class="actions-modal">
+                            <button id="deleteThemeCancel{{ key }}" class="btn btn-outline-secondary btn-modal">Annuler</button>
+                            <button id="deleteThemeAction{{ key }}" onclick="location.href='{{ path('admin-deleteTheme', {'themeId' : theme.id}) }}'" class="btn btn-danger btn-modal">Supprimer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+    {% endif %}
+
+    {% if model.themes|length != 0 %}
     <div class="btn-centered">
         <button id="addThemeBtn" class="btn btn-info my-5">Ajouter un thème</button>
     </div>
-
+    {% endif %}
 
     <div class="btn-centered">
         <a href="{{ path('admin-modelList') }}" class="back-btn-text"><button class="btn btn-outline-secondary">Retour à la liste de modèles d'audits</button></a>
@@ -56,22 +130,22 @@
 </div>
 
 <div id="addThemeModal" class="card modalDash deleteModal">
-    <div id="modalThemeContent" class="modal-content">
+    <div id="addModalThemeContent" class="modal-content">
         <div class="card-header card-header-danger">
             <h4 class="card-title text-center">Ajouter un thème</h4>
         </div>
         <div class="card-body">
             <h5 class="text-center my-3">Ajoutez un titre et une description au nouveau thème</h5>
             <div class="">
-                {{ form_start(form, {'action': path('admin-editModel', {modelId : model.id}), 'method': 'POST'}) }}
-                {{ form_errors(form) }}
-                {{ form_row(form.title) }}
-                {{ form_row(form.description) }}
+                {{ form_start(formAddTheme, {'action': path('admin-editModel', {modelId : model.id}), 'method': 'POST'}) }}
+                {{ form_errors(formAddTheme) }}
+                {{ form_row(formAddTheme.title) }}
+                {{ form_row(formAddTheme.description) }}
                 <div class="actions-modal">
-                    <button id="addThemeCancel" class="btn btn-outline-secondary btn-modal">Annuler</button>
+                    <button type=button id="addThemeCancel" class="btn btn-outline-secondary btn-modal">Annuler</button>
                     <button id="addThemeSave" type="submit" class="btn btn-info btn-modal">Ajouter</button>
                 </div>
-                {{ form_end(form) }}
+                {{ form_end(formAddTheme) }}
             </div>
         </div>
     </div>
@@ -97,72 +171,152 @@
 
 {% block javascripts %}
 {{ parent() }}
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <script type="text/javascript" src="{{ asset('js/jsgrid.min.js') }}"></script>
     <script>
-        var deleteBtnModalUp = document.getElementById("deleteBtn");
-        var deleteModal = document.getElementById('deleteModal');
-        var deleteModalContent = document.getElementById("modal-content");
-        var deleteBtnDelete = document.getElementById("deleteCancel");
+        jsGrid.setDefaults({
+            width: "100%",
+            height: "auto",
+            heading: true,
+            filtering: false,
+            inserting: true,
+            editing: true,
+            selecting: true,
+            sorting: false,
+            paging: false,
+            pageLoading: false,
+      //      rowClass: function(item, itemIndex) {  },
+      //      rowClick: function(args) {  },
+      //      rowDoubleClick: function(args) {  },
+            noDataContent: "Ajoutez une exigence en cliquant sur le bouton d'ajout (+).",
+            confirmDeleting: true,
+            deleteConfirm: "Souhaitez vous vraiment supprimer cette exigence?",
+       //     invalidNotify: function(args) {  },
+            invalidMessage: "Données invalides!",
+            loadIndication: true,
+            loadIndicationDelay: 0,
+            loadMessage: "Veuillez patienter...",
+            loadShading: true,
+            updateOnResize: true,
+       //     rowRenderer: null,
+       //     headerRowRenderer: null,
+       //     filterRowRenderer: null,
+      //      insertRowRenderer: null,
+      //      editRowRenderer: null
+        });
 
 
-        deleteBtnModalUp.onclick = function() {
-            deleteModal.style.display = "flex";
-        };
-
-        deleteBtnDelete.onclick = function() {
-            //    modal.style.animation = "fadeOut 0.3s";
-            //   modalContent.style.animation = "zoomOut 0.3s";
-            deleteModal.style.display = "none";
-        };
-
-
-        var btnModalUp = document.getElementById("addThemeBtn");
-        var modal = document.getElementById('addThemeModal');
-        var modalContent = document.getElementById("modalThemeContent");
-        var btnDelete = document.getElementById("addThemeCancel");
-
-        btnModalUp.onclick = function () {
-            modal.style.display = "flex";
-        };
-
-        btnDelete.onclick = function () {
-            //    modal.style.animation = "fadeOut 0.3s";
-            //   modalContent.style.animation = "zoomOut 0.3s";
-            modal.style.display = "none";
-        };
 
         $(document).ready(function () {
-            var form = $("[name='add_theme']");
-            form.on('submit', function (e) {
-                //e.preventDefault();
+
+            // Delete Model
+            var deleteBtnModalUp = document.getElementById("deleteBtn");
+            var deleteModal = document.getElementById('deleteModal');
+            var deleteModalContent = document.getElementById("modal-content");
+            var deleteBtnDelete = document.getElementById("deleteCancel");
+
+            deleteBtnModalUp.onclick = function() {
+                deleteModal.style.display = "flex";
+            };
+            deleteBtnDelete.onclick = function() {
+                //    modal.style.animation = "fadeOut 0.3s";
+                //   modalContent.style.animation = "zoomOut 0.3s";
+                deleteModal.style.display = "none";
+            };
+
+            //Delete Model process
+            $("#deleteAction").on('click', function () {
+                this.prop('disabled', true);
+                this.html('Suppression...');
+            });
+
+
+
+            // Add Theme
+            var addBtnModalUp = document.getElementById("addThemeBtn");
+            var addModal = document.getElementById('addThemeModal');
+            var addModalContent = document.getElementById("addModalThemeContent");
+            var addBtnDelete = document.getElementById("addThemeCancel");
+
+            addBtnModalUp.onclick = function () {
+                addModal.style.display = "flex";
+            };
+            addBtnDelete.onclick = function () {
+                //    modal.style.animation = "fadeOut 0.3s";
+                //   modalContent.style.animation = "zoomOut 0.3s";
+                addModal.style.display = "none";
+            };
+
+            //Add Theme process
+            var addForm = $("[name='add_theme']");
+                addForm.on('submit', function (e) {
+               // e.preventDefault();
                 if ($('#add_theme_title').val() !== '' || $('#add_theme_description').val() !== '') {
-                    btn = $('#addThemeSave');
-                    btn.prop('disabled', true);
-                    btn.html('Ajout en cours...');
+                    addBtn = $('#addThemeSave');
+                    addBtn.prop('disabled', true);
+                    addBtn.html('Ajout en cours...');
+
                 }
             });
         });
 
 
+
+
     {% for key, theme in model.themes %}
 
-        $("#theme{{ key }}").jsGrid({
+        // Edit theme
+        var EditThemeBtnModalUp{{ key }} = document.getElementById("editTheme{{ key }}");
+        var EditThemeModal{{ key }} = document.getElementById('editThemeModal{{ key }}');
+        var EditThemeModalContent{{ key }} = document.getElementById("editThemeModalThemeContent{{ key }}");
+        var EditThemeCancelBtn{{ key }} = document.getElementById("editThemeCancel{{ key }}");
 
-            loadIndicator: {
-                show: function() {
-                    console.log("loading started");
-                },
-                hide: function() {
-                    console.log("loading finished");
+        EditThemeBtnModalUp{{ key }}.onclick = function () {
+            EditThemeModal{{ key }}.style.display = "flex";
+        };
+        EditThemeCancelBtn{{ key }}.onclick = function () {
+            //    modal.style.animation = "fadeOut 0.3s";
+            //   modalContent.style.animation = "zoomOut 0.3s";
+            EditThemeModal{{ key }}.style.display = "none";
+        };
+
+        $(document).ready(function () {
+            var editForm = $("#{{ key }}");
+            editForm.on('submit', function (e) {
+                if ($('#edit_theme_title').val() !== '' || $('#edit_theme_description').val() !== '') {
+                    editBtn = $('#editThemeSave{{ key }}');
+                    editBtn.prop('disabled', true);
+                    editBtn.html('Modification...');
                 }
-            },
+            });
+
+        // Delete theme
+        var deleteThemeBtnModalUp{{ key }} = document.getElementById("deleteTheme{{ key }}");
+        var deleteThemeModal{{ key }} = document.getElementById('deleteThemeModal{{ key }}');
+        var deleteThemeModalContent{{ key }} = document.getElementById("modal-content-theme{{ key }}");
+        var deleteThemeCancelBtn{{ key }} = document.getElementById("deleteThemeCancel{{ key }}");
+
+        deleteThemeBtnModalUp{{ key }}.onclick = function () {
+            deleteThemeModal{{ key }}.style.display = "flex";
+        };
+        deleteThemeCancelBtn{{ key }}.onclick = function () {
+            //    modal.style.animation = "fadeOut 0.3s";
+            //   modalContent.style.animation = "zoomOut 0.3s";
+            deleteThemeModal{{ key }}.style.display = "none";
+        };
+
+        //Delete Theme process
+        $('#deleteThemeAction{{ key }}').on('click', function () {
+            this.prop('disabled', true);
+            this.html('Suppression...');
+        });
 
 
+        $("#theme{{ key }}").jsGrid({
 
             fields: [
                 { name: "uuid", type: "text", visible: false },
                 { name: "requirement", title: "Exigence", type: "text", width: "auto", validate: "required"},
-                { type: "control"}
+                { type: "control", width: "70px"}
             ],
 
             autoload: true,
@@ -202,45 +356,11 @@
 
 
 
-            width: "100%",
-            height: "auto",
 
-            heading: true,
-            filtering: false,
-            inserting: true,
-            editing: true,
-            selecting: true,
-            sorting: false,
-            paging: false,
-            pageLoading: false,
 
-            rowClass: function(item, itemIndex) {  },
-            rowClick: function(args) {  },
-            rowDoubleClick: function(args) {  },
-
-            noDataContent: "Ajoutez une exigence en cliquant sur le + juste au dessus.",
-
-            confirmDeleting: true,
-            deleteConfirm: "Souhaitez vous vraiment supprimer cette exigence?",
-
-            invalidNotify: function(args) {  },
-            invalidMessage: "Données invalides!",
-
-            loadIndication: true,
-            loadIndicationDelay: 500,
-            loadMessage: "Veuillez patienter...",
-            loadShading: true,
-
-            updateOnResize: true,
-
-            rowRenderer: null,
-            headerRowRenderer: null,
-            //   filterRowRenderer: null,
-            insertRowRenderer: null,
-            editRowRenderer: null
 
         });
-
+        });
     {% endfor %}
 
 </script>

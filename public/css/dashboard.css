@@ -26,6 +26,10 @@ td {
     width: 100%;
 }
 
+#chart1 {
+    height: 364px;
+}
+
 #chart2 {
     height: 364px;
     max-width: 350px;
@@ -277,6 +281,10 @@ td {
     text-align: center;
 }
 
+.modal-content {
+    max-width: 30rem;
+}
+
 .actions-modal {
     display: flex;
     flex-direction: column-reverse;
@@ -330,4 +338,30 @@ td {
 
 .requirementModel {
     width: 100%;
+}
+
+.header-theme {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-edit {
+    width: 140px;
+}
+
+
+
+.ekalitRelative{
+    position: relative;
+}
+
+.ekalitLabel {
+    position: absolute;
+    top: 5px;
+    right: 0;
+    width: 90px;
+    height: auto;
 }

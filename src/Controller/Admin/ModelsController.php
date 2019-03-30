@@ -5,12 +5,15 @@ namespace App\Controller\Admin;
 use App\Entity\Certification;
 use App\Entity\Theme;
 use App\Form\AddThemeType;
+use App\Form\EditThemeType;
 use App\Form\NewModelCertificationType;
 use App\Repository\CertificationRepository;
 use App\Repository\CompanyRepository;
+use App\Repository\ThemeRepository;
 use App\Service\ThemeManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,15 +23,32 @@ class ModelsController extends AbstractController
     /**
      * @Route("/admin/modeles", name="admin-modelList")
      */
-    public function modelList(CompanyRepository $companyRepository)
+    public function modelList(Request $request, CompanyRepository $companyRepository)
     {
         $user = $this->getUser();
         $company = $companyRepository->find($user->getCompany()->getId());
         $models = $company->getCertifications();
 
+        $certification = new Certification();
+
+        $form = $this->createForm(NewModelCertificationType::class, $certification);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $certification->addCompany($company);
+            $certification->setIsChild(true);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($certification);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('admin-editModel', ["modelId" => $certification->getId()]);
+        }
+
         return $this->render('admin/modelList.html.twig', [
             "company" => $company,
-            "models" => $models
+            "models" => $models,
+            "form" => $form->createView()
         ]);
     }
 
@@ -48,125 +68,134 @@ class ModelsController extends AbstractController
 
         return $this->render('admin/model.html.twig', [
             "model" => $model,
-            "company" => $company,
-
+            "company" => $company
         ]);
     }
 
 
-    /**
-     * @Route("/admin/model-creation", name="admin-createModel")
-     */
-    public function NewModel(Request $request)
-    {
-        $user = $this->getUser();
-        $company = $user->getCompany();
-
-        $certification = new Certification();
-
-        $form = $this->createForm(NewModelCertificationType::class, $certification);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $certification->addCompany($company);
-            $certification->setIsChild(true);
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($certification);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('admin-editModel', ["modelId" => $certification->getId()]);
-        }
-        return $this->render('admin/modelNew.html.twig', [
-            "company" => $company,
-            "form" => $form->createView()
-        ]);
-    }
+//    /**
+//     * @Route("/admin/model-creation", name="admin-createModel")
+//     */
+//    public function NewModel(Request $request)
+//    {
+//        $user = $this->getUser();
+//        $company = $user->getCompany();
+//
+//        $certification = new Certification();
+//
+//        $form = $this->createForm(NewModelCertificationType::class, $certification);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $certification->addCompany($company);
+//            $certification->setIsChild(true);
+//
+//            $entityManager = $this->getDoctrine()->getManager();
+//            $entityManager->persist($certification);
+//            $entityManager->flush();
+//
+//            return $this->redirectToRoute('admin-editModel', ["modelId" => $certification->getId()]);
+//        }
+//        return $this->render('admin/modelNew.html.twig', [
+//            "company" => $company,
+//            "form" => $form->createView()
+//        ]);
+//    }
 
 
     /**
      * @Route("/admin/model-modification/{modelId}", name="admin-editModel")
      */
-    public function EditModel(Request $request, $modelId, ThemeManager $themeManager, CertificationRepository $certificationRepository)
+    public function editModel(Request $request, $modelId, ThemeManager $themeManager, CertificationRepository $certificationRepository, ThemeRepository $themeRepository)
     {
         $user = $this->getUser();
         $company = $user->getCompany();
         $model = $certificationRepository->find($modelId);
 
-        $theme = new Theme();
-        $form = $this->createForm(AddThemeType::class, $theme);
+        $newTheme = new Theme();
 
-        $theme = $themeManager->Ranker($theme, $model);
-        $theme = $themeManager->colorSetter($theme, $theme->getRankCertification());
-        $theme->setCertification($model);
+        $formAddTheme = $this->createForm(AddThemeType::class, $newTheme, ["method" => "POST"]);
 
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        $newTheme = $themeManager->Ranker($newTheme, $model);
+        $newTheme = $themeManager->colorSetter($newTheme, $newTheme->getRankCertification());
+        $newTheme->setCertification($model);
 
-            $model->addTheme($theme);
+        $formAddTheme->handleRequest($request);
+
+
+        if ($formAddTheme->isSubmitted() && $formAddTheme->isValid()) {
+
+            $model->addTheme($newTheme);
 
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($theme);
+            $entityManager->persist($newTheme);
             $entityManager->persist($model);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin-editModel', [
-                "modelId" => $model->getId(),
-                "model" => $model,
-                "company" => $company,
-                "form" => $form->createView()
-            ]);
+            return $this->redirectToRoute('admin-editModel', ["modelId" => $model->getId()]);
+        }
+
+        $formEditTheme = $this->createForm(EditThemeType::class, null, ["method" => "PUT"]);
+        $formEditTheme->handleRequest($request);
+
+        if ($formEditTheme->isSubmitted() && $formEditTheme->isValid()) {
+            $data = $formEditTheme->getData();
+
+            $editTheme = $themeRepository->find($data["id"]);
+
+            if($editTheme === null) {
+                return $this->createNotFoundException();
+            }
+
+            $editTheme->setTitle($data["title"]);
+            $editTheme->setDescription($data["description"]);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($editTheme);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('admin-editModel', ["modelId" => $model->getId()]);
+        }
+
+        if(count($model->getThemes()) !== 0){
+            foreach($model->getThemes() as $key => $theme){
+                $formEditThemeList[$key] = $formEditTheme->createView();
+            }
+        } else {
+            $formEditThemeList[0] = $formEditTheme->createView();
         }
 
         return $this->render('admin/editModel.html.twig', [
             "model" => $model,
             "company" => $company,
-            "form" => $form->createView()
+            "formAddTheme" => $formAddTheme->createView(),
+            "formEditTheme" => $formEditThemeList
+
         ]);
     }
 
 
     /**
-     * @Route("/admin/model-suppression-theme/{themeId}", name="admin-deleteTheme")
+     * @Route("/admin/suppression-theme/{themeId}", name="admin-deleteTheme")
      */
-    public function addTheme(Request $request, $modelId, CertificationRepository $certificationRepository, ThemeManager $themeManager)
+    public function deleteTheme($themeId, ThemeManager $themeManager, ThemeRepository $themeRepository)
     {
-        if($request->isXmlHttpRequest()){
-            $model = $certificationRepository->find($modelId);
 
-            $theme = new Theme();
-            $theme = $themeManager->Ranker($theme, $model);
-            $theme = $themeManager->colorSetter($theme, $theme->getRankCertification());
-            $theme->setCertification($model);
-
-            $form = $this->createForm(AddThemeType::class, $theme);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-
-                $model->addTheme($theme);
-
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($theme);
-                $entityManager->persist($model);
-                $entityManager->flush();
-                dump($theme);
-                return $this->render('admin/modelNew.html.twig', [
-                    "company" => $company,
-                    "form" => $form->createView()
-                ]);
-            }
+        $theme = $themeRepository->find($themeId);
+        if($theme === null){
+            return $this->createNotFoundException();
         }
 
-        return $this->render('admin/modelNew.html.twig', [
-            "company" => $company,
-            "form" => $form->createView()
-        ]);
+        $model = $theme->getCertification();
+
+        $themeManager->deleteThemeManager($theme);
+
+        return $this->redirectToRoute('admin-editModel', ["modelId" => $model->getId()]);
     }
 
     /**
-     * @Route("/admin/model-suppression/{modelId}", name="admin-deleteModel")
+     * @Route("/admin/suppression-model/{modelId}", name="admin-deleteModel")
      */
     public function DeleteModel($modelId, CertificationRepository $certificationRepository)
     {
