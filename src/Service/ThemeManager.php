@@ -18,7 +18,7 @@ class ThemeManager
         $this->em = $em;
         $this->themeRepository = $themeRepository;
     }
-/*
+
     public function Ranker($theme, $model)
     {
         $rank = count($model->getThemes()) + 1;
@@ -27,7 +27,7 @@ class ThemeManager
 
         return $theme;
     }
-*/
+
 
     public function colorSetter($theme, $rank)
     {

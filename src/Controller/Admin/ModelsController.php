@@ -198,23 +198,18 @@ class ModelsController extends AbstractController
         $user = $this->getUser();
         $company = $user->getCompany();
 
-
-
-
-
-
-
         $form = $this->createForm(ImportCsvType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $data = $form->getData();
+            $file = $form['file']->getData();
 
-            $file = $data['file'];
-            $csvManager->csvToDbManager($file);
-          //  return $this->redirectToRoute('admin-importCsvProcess');
-           // return $this->redirectToRoute('admin-modelDetail', ["modelId" => $certification->getId()]);
+            $fileContent = file_get_contents($file);
+
+            $model = $csvManager->csvToDbManager($fileContent, $company);
+
+            return $this->redirectToRoute('admin-modelDetail', ["modelId" => $model->getId()]);
         }
 
 
@@ -224,36 +219,4 @@ class ModelsController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/admin/traitement-csv", name="admin-importCsvProcess")
-     */
-    public function processModel(Request $request)
-    {
-        $user = $this->getUser();
-        $company = $user->getCompany();
-
-        $file = $request->files->get('importCsv');
-
-
-
-
-
-        /*
-                $form = $this->createForm(ImportCsvType::class, $file);
-
-                $form->handleRequest($request);
-
-                if ($form->isSubmitted() && $form->isValid()) {
-                    $data = $form->getData();
-
-
-                    return $this->redirectToRoute('admin-modelDetail', ["modelId" => $certification->getId()]);
-                }
-        */
-
-        return $this->render('admin/modelList.html.twig', [
-            "company" => $company,
-
-        ]);
-    }
 }

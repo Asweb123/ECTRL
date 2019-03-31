@@ -17,7 +17,7 @@ class ModelManager
         $this->em = $em;
         $this->certificationRepository = $certificationRepository;
     }
-
+/*
     public function modelReorder($themeToDelete)
     {
         $themeRank = $themeToDelete->getRankCertification;
@@ -44,9 +44,9 @@ class ModelManager
 
         $this->em->remove($themeToDelete);
       //  $this->em->flush();
-*/
+
         return $model;
 
     }
-
+*/
 }
