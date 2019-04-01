@@ -4004,7 +4004,7 @@ tbody.collapse.show {
   padding-bottom: 0.375rem;
   font-size: 125%;
 }
-
+/*
 .custom-file {
   position: relative;
   display: inline-block;
@@ -4062,12 +4062,12 @@ tbody.collapse.show {
   padding: 0.46875rem 1rem;
   line-height: 1.3;
   color: #495057;
-  content: "Browse";
+  content: "Rechercher";
   background-color: transparent;
   border-left: 0 solid #d2d2d2;
   border-radius: 0 0 0 0;
 }
-
+*/
 .nav {
   display: flex;
   flex-wrap: wrap;

@@ -21,7 +21,7 @@ class ThemeManager
 
     public function Ranker($theme, $model)
     {
-        $rank = count($model->getThemes()) + 1;
+        $rank = (count($model->getThemes()) + 1);
 
         $theme->setRankCertification($rank);
 

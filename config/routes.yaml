@@ -2,3 +2,6 @@ easy_admin_bundle:
         resource: '@EasyAdminBundle/Controller/AdminController.php'
         prefix: /ekadminectrl
         type: annotation
+
+logout:
+    path: /logout

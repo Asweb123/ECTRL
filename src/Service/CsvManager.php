@@ -12,8 +12,6 @@ namespace App\Service;
 use App\Entity\Certification;
 use App\Entity\Requirement;
 use App\Entity\Theme;
-use App\Repository\RequirementRepository;
-use App\Repository\ThemeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 
@@ -52,12 +50,12 @@ class CsvManager
             || array_key_exists(self::DT, $data[0]) === false
             || array_key_exists(self::EX, $data[0]) === false)
         {
-            return $error = "Votre fichier présente une erreur dans un ou plusieurs des entêtes présentés dans l'exemple (Entête obligatoire: Titre du modèle d'audit, Description du modèle d'audit, Titre du thème, Description du thème, Exigences du thème)";
+            return $error = "Votre fichier présente une erreur dans un ou plusieurs des entêtes présentés dans l'exemple (Entêtes obligatoires: Titre du modèle d'audit, Description du modèle d'audit, Titre du thème, Description du thème, Exigences du thème)";
         }
 
         //Audit check
         if ($data[0][self::AT] === "" && $data[0][self::AD] === "" && $data[0][self::TT] !== "" && $data[0][self::DT] !== "" && $data[0][self::EX] !== "") {
-            return $error = "Votre fichier ne respecte pas le formatage présenté dans l'exemple. Veuillez vérifiez le format de la ligne 2 de votre document.";
+            return $error = "Votre fichier ne respecte pas le formatage présenté dans l'exemple. Veuillez vérifier le format de la ligne 2 de votre document.";
         } else {
             $model = new Certification();
             $model->setTitle($data[0][self::AT]);
@@ -101,14 +99,18 @@ class CsvManager
                 $this->em->persist($model);
 
             } else {
-                return $error = "Votre fichier ne respecte pas le formatage présenté dans l'exemple. Veuillez vérifiez le format de la ligne " . ($key + 2) . " de votre document.";
+                return $error = "Votre fichier ne respecte pas le formatage présenté dans l'exemple. Veuillez vérifier le format de la ligne " . ($key + 2) . " de votre document.";
             }
 
         }
 
-        $this->em->flush();
+        if(isset($error)){
+            return $error;
+        }else {
+            $this->em->flush();
+            return $model;
+        }
 
-        return $model;
 
     }
 

@@ -33,7 +33,7 @@
     {% if model.themes|length == 0 %}
         {% set key = 0 %}
 
-        <div class="card card-nav-tabs theme-card">
+        <div class="card card-nav-tabs theme-card first-theme">
             <div class="card-header card-header-success" style="background: linear-gradient(60deg, #247474, #247474 33%);">
                 <h4 class="card-title text-center">Définissez le premier thème d'exigences qualité</h4>
             </div>
@@ -54,7 +54,7 @@
 
     {% else %}
 
-        {% for key, theme in model.themes %}
+        {% for key, theme in themes %}
 
         <div class="card card-nav-tabs theme-card">
             <div class="card-header card-header-succes header-theme" style="background: linear-gradient(60deg, {{ theme.color }}, {{ theme.color }} 33%);">
@@ -253,16 +253,6 @@
 
         }(jsGrid, jQuery));
 
-
-
-
-
-
-
-
-
-
-
         $(document).ready(function () {
 
             // Delete Model
@@ -317,9 +307,7 @@
         });
 
 
-
-
-    {% for key, theme in model.themes %}
+    {% for key, theme in themes %}
 
         // Edit theme
         var EditThemeBtnModalUp{{ key }} = document.getElementById("editTheme{{ key }}");
@@ -411,13 +399,8 @@
                 },
             },
 
-
-
-
-
-
         });
-        });
+    });
     {% endfor %}
 
 </script>

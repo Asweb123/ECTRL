@@ -2,18 +2,23 @@
 
 namespace App\Controller\Admin;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class NotificationsController extends AbstractController
+class NotificationController extends AbstractController
 {
     /**
      * @Route("/admin/notifications", name="admin-notifications")
      */
-    public function index()
+    public function userList()
     {
-        return $this->render('admin/dashboard.html.twig', [
+        $user = $this->getUser();
+        $company = $user->getCompany();
 
+        return $this->render('admin/notification.html.twig', [
+            "company" => $company,
         ]);
     }
+
 }

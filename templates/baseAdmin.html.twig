@@ -16,12 +16,14 @@
     </head>
     <body class="">
         <div class="sidebar" data-color="ekalit" data-background-color="white">
-            <div class="logo">
+            <div class="logo mb-3">
                 <a href="{{ path("admin-dashboard") }}" class="simple-text logo-normal">
                     <span class="ekalit" style="color:#4B8F90;">ECTRL</span><br/>
                     {{ company.name }}
                 </a>
             </div>
+            <h5 class="text-center name">{{ app.user.firstName }} {{ app.user.lastName }}</h5>
+            <div class="separator"></div>
             <div class="sidebar-wrapper">
                 <ul class="nav">
                     <li class="nav-item {% block sideNavDashboard %}{% endblock %}">
@@ -63,7 +65,7 @@
             <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
                 <div class="container-fluid">
                     <div class="navbar-wrapper">
-                        <a class="navbar-brand" href="#pablo">Dashboard</a>
+                        <p class="navbar-brand" href="{{ path("admin-dashboard") }}">Dashboard</p>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="sr-only">Toggle navigation</span>
@@ -76,14 +78,9 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link" href="#pablo" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="material-icons">logout</i>
-                                    <p class="d-lg-none d-md-block">
-                                        Compte
-                                    </p>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                                    <a class="dropdown-item" href="#">Profil</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Log out</a>
+                                    <a class="dropdown-item " href="{{ path('logout') }}">Déconnexion</a>
                                 </div>
                             </li>
                         </ul>

@@ -15,10 +15,14 @@ use App\Service\CsvManager;
 use App\Service\ThemeManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\MimeType\FileinfoMimeTypeGuesser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ModelsController extends AbstractController
@@ -89,7 +93,6 @@ class ModelsController extends AbstractController
 
         $formAddTheme = $this->createForm(AddThemeType::class, $newTheme, ["method" => "POST"]);
 
-
         $newTheme = $themeManager->Ranker($newTheme, $model);
         $newTheme = $themeManager->colorSetter($newTheme, $newTheme->getRankCertification());
         $newTheme->setCertification($model);
@@ -139,8 +142,11 @@ class ModelsController extends AbstractController
             $formEditThemeList[0] = $formEditTheme->createView();
         }
 
+        $themes = $themeRepository->findBy(['certification' => $model], ['rankCertification' => 'ASC']);
+
         return $this->render('admin/editModel.html.twig', [
             "model" => $model,
+            "themes" => $themes,
             "company" => $company,
             "formAddTheme" => $formAddTheme->createView(),
             "formEditTheme" => $formEditThemeList
@@ -207,9 +213,14 @@ class ModelsController extends AbstractController
 
             $fileContent = file_get_contents($file);
 
-            $model = $csvManager->csvToDbManager($fileContent, $company);
+            $return = $csvManager->csvToDbManager($fileContent, $company);
 
-            return $this->redirectToRoute('admin-modelDetail', ["modelId" => $model->getId()]);
+            if (is_string($return)) {
+                $form->addError(new FormError($return));
+            }
+        }
+        if ($form->isSubmitted() && $form->isValid()){
+            return $this->redirectToRoute('admin-modelDetail', ["modelId" => $return->getId()]);
         }
 
 
@@ -217,6 +228,18 @@ class ModelsController extends AbstractController
             "company" => $company,
             "form" => $form->createView()
         ]);
+    }
+
+
+    /**
+     * @Route("/admin/exemple-modele", name="admin-csvModel")
+     */
+    public function csvModel()
+    {
+        $root = $this->getParameter('kernel.project_dir');
+        $response = new BinaryFileResponse($root.'/public/csv/exempleaudit.csv');
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT,'exempleaudit.csv');
+        return $response;
     }
 
 }

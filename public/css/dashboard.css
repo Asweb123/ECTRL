@@ -143,11 +143,11 @@ td {
     background-color: inherit;
     border: none;
 }
-
+/*
 .deleteBtn, a {
     vertical-align: sub;
 }
-
+*/
 .deleteBtn:focus {
     outline-width: 0;
 }
@@ -377,8 +377,169 @@ td {
     width: 220px
 }
 
-.filePlugin-wrapper{
-    height: 100px;
+
+
+
+.custom-file {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 5rem;
+    margin-bottom: 0;
+    opacity: 1;
+    background-color: #e4e4e4;
+    border-radius: 6px;
+}
+
+.custom-file-input {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 5rem;
+    margin: 0;
     opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.custom-file-input:focus~.custom-file-control {
+    border-color: #9acffa;
+    box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.25);
+}
+
+.custom-file-input:focus~.custom-file-control::before {
+    border-color: #9acffa;
+}
+
+.custom-file-input:lang(en)~.custom-file-label::after {
+    content: "Cliquer dans cette fenêtre pour rechercher votre fichier";
+}
+
+.custom-file-label {
+    text-align: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    height: 5rem;
+    padding: 0.46875rem 1rem;
+    line-height: 1.3;
+    color: #495057;
+    background-color: transparent;
+    border: 0 solid #d2d2d2;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.custom-file-label::before {
+    margin-top: 1.4rem;
+    vertical-align: center;
+    text-align: center;
+    z-index: 3;
+    display: block;
+    height: available;
+
+    line-height: 1.3;
+    color: #87939b;
+    content: "Cliquer dans cette fenêtre pour rechercher un fichier";
+    background-color: transparent;
+    border-left: 0 solid #d2d2d2;
+    border-radius: 0 0 0 0;
+    opacity: 1;
+}
+
+#import_csv > div > label {
+    display: none;
+}
+
+.wrapper-card {
+    display: flex;
+    align-items: center;
+    max-width: 60rem;
+    margin: auto;
+}
+
+.action-createCsv-btn{
+    display: flex;
+    flex-direction: column;
+    max-width: fit-content;
+    margin: auto;
+
+}
+
+.first-theme {
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 60rem;
+}
+
+#here{
+    vertical-align: center !important;
+    color: #00bcd4;
+    font-weight: bold;
+}
+
+.error-center{
+    text-align: center;
+}
+
+#import_csv > span{
+    background-color: white;
+    box-shadow: white 0 0 0 0 ;
+    color: #f44336;
+    padding: .5rem;
+}
+
+#import_csv > span > span {
+    margin: auto;
+    text-align: center;
+}
+
+#import_csv > span > span > span.form-error-icon.badge.badge-danger.text-uppercase {
+    margin: auto;
+    width: fit-content;
+}
+
+#import_csv > span > span > span.form-error-message{
+    margin: auto;
+}
+
+
+div.card-body > div > form {
+    padding: 1rem;
+}
+
+div.card-body > div > form > label:nth-child(3){
+    margin-top: 1rem;
+}
+
+.wrapper-soon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+.soon{
+    text-align: center;
+    line-height: 3.5rem;
+    color: dimgrey;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.separator{
+    margin-left: 15px;
+    height: 1px;
+    width: calc(100% - 30px);
+    background-color: rgba(180, 180, 180, 0.3);
+}
+
+body > div.main-panel > nav > div > div.collapse.navbar-collapse.justify-content-end > ul > li > div > a {
+    padding-left: 36px;
 }
 
