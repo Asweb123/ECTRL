@@ -285,7 +285,7 @@ class AuditController extends AbstractController
             if($progression >= 100){
                 $score = $scoreAndProgManager->scoreCalculator($audit->getCertification()->getRequirements(), $audit);
                 $audit->setScore($score);
-                $audit->setStatus(2);
+                $audit = $scoreAndProgManager->validateStater($audit);
                // $user = $result->getAudit()->getUser();
                // $sendNotificationManager->sendNotification($user);
 

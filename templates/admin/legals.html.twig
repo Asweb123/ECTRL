@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ECTRL - administration{% endblock %}
+
+{% block body %}
+<div class="bg-img">
+    <div class="home-bg">
+        <div class="legal-wrapper">
+            <header class="home-header">
+                <h1 class="ectrl legal mb-4">Mentions légales</h1>
+            </header>
+            <section class="home-section section-legal">
+                <div class="legal-detail">
+                    <h3 class="admin  mb-3 text-center">Propriétaire</h3>
+                    <p class="text-center">SARL Agence Digitale EKALIT- 1 rue Victor Hugo 59000 LILLE
+                    <h3 class="admin  mb-3 text-center">Créateur</h3>
+                    <p class="text-center">EKALIT</p>
+                    <h3 class="admin  mb-3 text-center">Responsable publication</h3>
+                    <p class="text-center">EKALIT– ekalitcontact@gmail.com</p>
+                    <h3 class="admin  mb-3 text-center">Webmaster</h3>
+                    <p class="text-center">EKALIT– ekalitcontact@gmail.com</p>
+                    <h3 class="admin  mb-3 text-center">Hébergeur</h3>
+                    <p class="text-center">O2switch</p>
+                </div>
+            </section>
+            <div class="pagination">
+                <a href="{{ path('home') }}" class="back-btn-text"><button class="btn btn-outline-secondary">Retour</button></a>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

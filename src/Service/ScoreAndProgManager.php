@@ -46,6 +46,15 @@ class ScoreAndProgManager
         return $perCentScore;
     }
 
+    public function validateStater($audit){
+        if($audit->getScore() >= 70){
+            $audit->setState(3);
+        } else {
+            $audit->setState(2);
+        }
+        return $audit;
+    }
+
     public function averageLastAuditsScore($lastAudits)
     {
         $totalScore = 0;

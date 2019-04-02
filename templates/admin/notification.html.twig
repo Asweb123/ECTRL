@@ -5,10 +5,12 @@
 
 {% block sideNavNotifications %}active{% endblock %}
 
+{% block headTitle %}Notifications{% endblock %}
+
 {% block content %}
 
 <div class="wrapper-soon">
-    <p class="soon">Coming soon...</p>
+    <p class="soon">En développement...</p>
     <div class="pagination">
         <a href="{{ app.request.headers.get('referer') }}" class="back-btn-text"><button class="btn btn-outline-secondary">Retour</button></a>
     </div>

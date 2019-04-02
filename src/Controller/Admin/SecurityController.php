@@ -21,4 +21,12 @@ class SecurityController extends AbstractController
 
         return $this->render('admin/home.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
+
+    /**
+     * @Route("/mentions-legales", name="legals")
+     */
+    public function legal(): Response
+    {
+        return $this->render('admin/legals.html.twig');
+    }
 }

@@ -3,8 +3,9 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block sideNavDashboard %}active{% endblock %}
-
+{% block headTitle %}Dashboard{% endblock %}
 {% block content %}
+
 
 <div class="wrapper-charts">
     <div class="wrapper-chart1">
@@ -29,7 +30,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <h4 class="card-title">Taux d'audits par score réalisé</h4>
+                <h4 class="card-title">Répartition des audits par score</h4>
                 <p class="card-category">Du {{ "-12 months"|date("d/m/Y") }} au {{ "now"|date("d/m/Y") }}</p>
             </div>
         </div>

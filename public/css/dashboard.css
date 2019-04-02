@@ -543,3 +543,11 @@ body > div.main-panel > nav > div > div.collapse.navbar-collapse.justify-content
     padding-left: 36px;
 }
 
+.ectrl {
+    color: #4B8E8F;
+}
+
+#navbarDropdownProfile{
+    cursor: pointer;
+}
+

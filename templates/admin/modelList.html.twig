@@ -4,6 +4,8 @@
 
 {% block sideNavModels %}active{% endblock %}
 
+{% block headTitle %}Liste des modèles d'audits{% endblock %}
+
 {% block content %}
     <div class="btn-newModel-wrapper mb-4">
         <button onclick="location.href='{{ path('admin-importCsv') }}'" class="btn btn-info btn-newModel btn-sm createModelbtns">Importer un nouveau modèle</button>

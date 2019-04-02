@@ -1,25 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ECTRL{% endblock %}
+{% block title %}ECTRL - administration{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+<div class="bg-img">
+    <div class="home-bg">
+        <div class="home-wrapper">
+            <header class="home-header">
+                <h1 class="ectrl">ECTRL</h1>
+                <p class="by">par</p>
+                <h2 class="ekalit-ghost">EKALIT</h2>
+                <div class="ekalit-wrapper">
+                    <img class="ekalit-img" src="{{ asset('img/ekalit.png') }}" alt="logo de Ekalit">
+                </div>
+            </header>
+            <section class="home-section">
+                <div class="chart-wrapper">
+                    <img class="home-chart" src="{{ asset('img/charts.png') }}" alt="Illustration de graphiques">
+                </div>
+                <div class="home-connection">
+                    <h3 class="admin  mb-4 text-center">Accédez à l'espace d'administration de l'application</h3>
+                    <form method="post">
+                        {#  <h1 class="h4 mb-4 font-weight-normal text-center">Se connecter</h1> #}
+                        {% if error %}
+                            <div class="home-error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+                        <label for="inputEmail" class="sr-only home-input">Adresse mail</label>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control home-input" placeholder="Adresse mail" required autofocus>
+                        <label for="inputPassword" class="sr-only home-input">Mot de passe</label>
+                        <input type="password" name="password" id="inputPassword" class="form-control home-input" placeholder="Mot de passe" required>
 
-    <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
-    <label for="inputEmail" class="sr-only">Adresse mail</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
-    <label for="inputPassword" class="sr-only">Mot de passe</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                        <input type="hidden" name="_csrf_token"value="{{ csrf_token('authenticate') }}">
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+                        <button class="btn btn-lg btn-ekalit" type="submit">
+                            Connexion
+                        </button>
+                        <p class="text-center pmdp">En cas de mot de passe oublié, rendez-vous sur l'application ECTRL pour le réinitialiser.</p>
+                    </form>
+                </div>
+            </section>
+        </div>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+            <footer class="footer-section">
+                    <p class="footer-p">
+                        <a href="{{ path('legals') }}" class="home-legal">Mentions légales</a>
+                        <span> - </span>
+                        <a href="http://ekalitp5.marineaubaret.fr/" class="home-contact">EKALIT</a>
+                    </p>
+            </footer>
+
+    </div>
+</div>
 {% endblock %}
