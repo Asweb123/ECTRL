@@ -26,6 +26,7 @@ class AppFixtures extends Fixture
         $theme1->setTitle("Responsabilité de la direction");
         $theme1->setDescription("Politique, principes généraux et organisation de la société");
         $theme1->setRankCertification(1);
+        $theme1->setColor('#247474');
         $theme1->setCertification($certificationIFS);
 
         $requirement1T1 = new Requirement();
@@ -61,6 +62,7 @@ class AppFixtures extends Fixture
         $theme2->setTitle("Système de management de la qualité et de la sécurité des aliments");
         $theme2->setDescription("Exigences sur la documentation et conservation des enregistrements");
         $theme2->setRankCertification(2);
+        $theme2->setColor('#7786FB');
         $theme2->setCertification($certificationIFS);
 
         $requirement5T2 = new Requirement();
@@ -96,6 +98,7 @@ class AppFixtures extends Fixture
         $theme3->setTitle("Gestion des ressources");
         $theme3->setDescription("Hygiène, formation et instruction du personnel");
         $theme3->setRankCertification(3);
+        $theme3->setColor('#99F0B8');
         $theme3->setCertification($certificationIFS);
 
         $requirement9T3 = new Requirement();
@@ -131,6 +134,7 @@ class AppFixtures extends Fixture
         $theme4->setTitle("Planification et procédé de fabrication");
         $theme4->setDescription("Emballage du produit, réception et stockage");
         $theme4->setRankCertification(4);
+        $theme4->setColor('#B87AFF');
         $theme4->setCertification($certificationIFS);
 
         $requirement13T4 = new Requirement();
@@ -166,6 +170,7 @@ class AppFixtures extends Fixture
         $theme5->setTitle("Mesures, Analyses et améliorations");
         $theme5->setDescription("Inspections d’usine et contrôles quantitatifs (poids, volume…)");
         $theme5->setRankCertification(5);
+        $theme5->setColor('#5BC1C2');
         $theme5->setCertification($certificationIFS);
 
         $requirement17T5 = new Requirement();
@@ -201,6 +206,7 @@ class AppFixtures extends Fixture
         $theme6->setTitle("Food Defense");
         $theme6->setDescription("Sécurité du site et du personnel");
         $theme6->setRankCertification(6);
+        $theme6->setColor('#FAC392');
         $theme6->setCertification($certificationIFS);
 
         $requirement21T6 = new Requirement();
@@ -236,10 +242,10 @@ class AppFixtures extends Fixture
 
 
         // Roles
-    //    $roleD = new Role();
-    //    $roleD->setTitle("Directeur");
-    //    $roleD->setDescription("Suivi des résultats et validation des grilles vérifiées par le responsable qualité");
-    //    $roleD->setRank(1);
+        $roleD = new Role();
+        $roleD->setTitle("Administrateur");
+        $roleD->setDescription("Accès au backOffice côté Agence de l'application ECTRL");
+        $roleD->setRank(1);
 
         $roleR = new Role();
         $roleR->setTitle("Responsable qualité");
@@ -256,9 +262,9 @@ class AppFixtures extends Fixture
         $company->setName("Fleury Michon");
 
 
-    //    $registerCodeD = new RegisterCode();
-    //    $registerCodeD->setCodeContent("X29JTZ22");
-    //    $registerCodeD->setMaxNbOfUsers(2);
+    //   $registerCodeD = new RegisterCode();
+    //   $registerCodeD->setCodeContent("X29JTZ22");
+    //   $registerCodeD->setMaxNbOfUsers(2);
 
         $registerCodeR = new RegisterCode();
         $registerCodeR->setCodeContent("UT28SK78");
@@ -271,19 +277,19 @@ class AppFixtures extends Fixture
 
         //Code for EKALIT
         $companyE = new Company();
-        $companyE->setName("EkalitTestSociété");
+        $companyE->setName("Société test Ekalit");
 
         $registerCodeDE = new RegisterCode();
         $registerCodeDE->setCodeContent("E29JTZ22");
-        $registerCodeDE->setMaxNbOfUsers(3);
+        $registerCodeDE->setMaxNbOfUsers(5);
 
         $registerCodeRE = new RegisterCode();
         $registerCodeRE->setCodeContent("ET28SK78");
-        $registerCodeRE->setMaxNbOfUsers(3);
+        $registerCodeRE->setMaxNbOfUsers(5);
 
         $registerCodeAE = new RegisterCode();
         $registerCodeAE->setCodeContent("ES59ET47");
-        $registerCodeAE->setMaxNbOfUsers(3);
+        $registerCodeAE->setMaxNbOfUsers(5);
 
 
 
@@ -295,7 +301,7 @@ class AppFixtures extends Fixture
         $registerCodeR->setRole($roleR);
         $registerCodeA->setRole($roleA);
 
-    //    $registerCodeDE->setRole($roleD);
+        $registerCodeDE->setRole($roleD);
         $registerCodeRE->setRole($roleR);
         $registerCodeAE->setRole($roleA);
 
@@ -308,7 +314,7 @@ class AppFixtures extends Fixture
         $registerCodeAE->setCompany($companyE);
 
 
-     //   $company->addRegisterCode($registerCodeD);
+    //    $company->addRegisterCode($registerCodeD);
         $company->addRegisterCode($registerCodeR);
         $company->addRegisterCode($registerCodeA);
 
@@ -355,7 +361,7 @@ class AppFixtures extends Fixture
         $manager->persist($company);
         $manager->persist($companyE);
 
-    //    $manager->persist($roleD);
+        $manager->persist($roleD);
         $manager->persist($roleR);
         $manager->persist($roleA);
 

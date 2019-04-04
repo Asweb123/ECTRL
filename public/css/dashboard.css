@@ -551,3 +551,17 @@ body > div.main-panel > nav > div > div.collapse.navbar-collapse.justify-content
     cursor: pointer;
 }
 
+
+@media screen and (max-width: 576px){
+    .container-fluid{
+        padding: 0;
+    }
+
+    .custom-file{
+        height: 6rem;
+    }
+
+    .navbar-brand{
+        margin-top: 15px;
+    }
+}

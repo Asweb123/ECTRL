@@ -17,36 +17,19 @@ class ModelManager
         $this->em = $em;
         $this->certificationRepository = $certificationRepository;
     }
-/*
-    public function modelReorder($themeToDelete)
-    {
-        $themeRank = $themeToDelete->getRankCertification;
-        $requirementsTheme = $themeToDelete->getRequirements();
-        $requirementsNb = count($requirementsTheme);
-/*
-        $model = $this->certificationRepository->findBy([
-            "certification" => $themeToDelete->getCertification(),
-            "orderBy" => ["rankCertification", "ASC"]
-        ]);
 
-        foreach($model as $theme){
-            if($theme->getRankCertification() > $themeRank){
-                $theme->setRankCertification($theme->getRankcertification() - 1);
-                if(count($theme->getRequirements()) !== 0){
-                    foreach($theme->getRequirements() as $requirement){
-                        $requirement->setRankCertification($requirement->getRankCertification() - $requirementsNb);
-                        $this->em->persist($requirement);
-                    }
-                }
-                $this->em->persist($theme);
-            }
+    public function modelCreationLeft($company){
+        $currentModelList = count($company->getCertifications());
+        $maxCertificationsNb = $company->getMaxCertificationsNb();
+
+        if($maxCertificationsNb === null){
+            $modelCreationLeft = null;
+        } elseif ($currentModelList > $maxCertificationsNb) {
+            $modelCreationLeft = 0;
+        } else {
+            $modelCreationLeft = $maxCertificationsNb - $currentModelList;
         }
 
-        $this->em->remove($themeToDelete);
-      //  $this->em->flush();
-
-        return $model;
-
+        return $modelCreationLeft;
     }
-*/
 }

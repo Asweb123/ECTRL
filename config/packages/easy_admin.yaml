@@ -19,6 +19,8 @@ easy_admin:
            - { entity: Certification, icon: list-alt }
            - { entity: Theme, icon: list-ol }
            - { entity: Requirement, icon: check-square }
+    list:
+        actions: ['show']
 
 
 
@@ -26,6 +28,7 @@ easy_admin:
     entities:
         Company:
             class: App\Entity\Company
+
             label: Sociétés
             icon: tasks
             list:
@@ -38,6 +41,7 @@ easy_admin:
                     - { property: certifications, label: Modèle d'audit }
                     - { property: registerCodes, label: Code d'enregistrement}
                     - { property: users, label: Utilisateurs }
+                    - { property: maxCertificationsNb, label: Limite de modèles }
                     - { property: creationDate, label: Date de création}
             show:
                 title: Sociétés
@@ -47,17 +51,20 @@ easy_admin:
                     - { property: certifications, label: Modèle d'audit }
                     - { property: registerCodes, label: Code d'enregistrement}
                     - { property: users, label: Utilisateurs }
+                    - { property: maxCertificationsNb, label: Limite de modèles }
                     - { property: creationDate, label: Date de création}
             new:
                 title: Créer une société
                 fields:
                     - { property: name, label: Nom }
+                    - { property: maxCertificationsNb, label: Limite de modèles, help: Laisser vide pour rendre ilimiter le nombre de modèle disponible  }
 # easyadmin bug who don't save one tot many relation  - { property: certifications, label: Modèle d'audit }
             edit:
                 title: Modifier cette société
                 fields:
                     - { property: name, label: Nom }
-# easyadmin bug who don't save one tot many relation   - { property: certifications, label: Modèle d'audit }
+                    - { property: maxCertificationsNb, label: Limite de modèles, help: Laisser vide pour rendre ilimiter le nombre de modèle disponible }
+# easyadmin bug who don't save one tot many relation   - { property: certifications }
                     - { property: registerCodes, label: Code d'enregistrement}
 
         RegisterCode:

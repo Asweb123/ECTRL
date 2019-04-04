@@ -12,6 +12,7 @@ use App\Repository\CertificationRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\ThemeRepository;
 use App\Service\CsvManager;
+use App\Service\ModelManager;
 use App\Service\ThemeManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -30,7 +31,7 @@ class ModelsController extends AbstractController
     /**
      * @Route("/admin/modeles", name="admin-modelList")
      */
-    public function modelList(Request $request, CompanyRepository $companyRepository)
+    public function modelList(Request $request, CompanyRepository $companyRepository, ModelManager $modelManager)
     {
         $user = $this->getUser();
         $company = $companyRepository->find($user->getCompany()->getId());
@@ -52,9 +53,12 @@ class ModelsController extends AbstractController
             return $this->redirectToRoute('admin-editModel', ["modelId" => $certification->getId()]);
         }
 
+        $modelCreationLeft = $modelManager->modelCreationLeft($company);
+
         return $this->render('admin/modelList.html.twig', [
             "company" => $company,
             "models" => $models,
+            "modelCreationLeft" => $modelCreationLeft,
             "form" => $form->createView()
         ]);
     }
@@ -63,7 +67,7 @@ class ModelsController extends AbstractController
     /**
      * @Route("/admin/modele/{modelId}", name="admin-modelDetail")
      */
-    public function modelDetail($modelId, CertificationRepository $certificationRepository)
+    public function modelDetail($modelId, CertificationRepository $certificationRepository, ThemeRepository $themeRepository)
     {
         $user = $this->getUser();
         $company = $user->getCompany();
@@ -73,8 +77,11 @@ class ModelsController extends AbstractController
             throw $this->createNotFoundException();
         }
 
+        $themes = $themeRepository->findBy(['certification' => $model], ['rankCertification' => 'ASC']);
+
         return $this->render('admin/model.html.twig', [
             "model" => $model,
+            "themes" => $themes,
             "company" => $company
         ]);
     }
@@ -88,6 +95,10 @@ class ModelsController extends AbstractController
         $user = $this->getUser();
         $company = $user->getCompany();
         $model = $certificationRepository->find($modelId);
+
+        if($model === null) {
+            throw $this->createNotFoundException();
+        }
 
         $newTheme = new Theme();
 
@@ -183,6 +194,10 @@ class ModelsController extends AbstractController
 
         $model = $certificationRepository->find($modelId);
 
+        if($model === null) {
+            throw $this->createNotFoundException();
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         if($model->getIsChild() === true){
@@ -199,10 +214,16 @@ class ModelsController extends AbstractController
     /**
      * @Route("/admin/importation-csv", name="admin-importCsv")
      */
-    public function importModel(Request $request, CsvManager $csvManager)
+    public function importModel(Request $request, CsvManager $csvManager, ModelManager $modelManager)
     {
         $user = $this->getUser();
         $company = $user->getCompany();
+
+        $modelCreationLeft = $modelManager->modelCreationLeft($company);
+
+        if($modelCreationLeft <= 0){
+            $this->redirectToRoute('admin-modelList');
+        }
 
         $form = $this->createForm(ImportCsvType::class);
 
@@ -239,6 +260,7 @@ class ModelsController extends AbstractController
         $root = $this->getParameter('kernel.project_dir');
         $response = new BinaryFileResponse($root.'/public/csv/exempleaudit.csv');
         $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT,'exempleaudit.csv');
+
         return $response;
     }
 

@@ -93,7 +93,7 @@ class AuditController extends AbstractController
             $audit->setCompany($user->getCompany());
             $this->em->persist($audit);
 
-            $requirementList = $this->requirementRepository->findBy(['certification' => $certification], ['rankCertification' => 'ASC']);
+            $requirementList = $this->requirementRepository->findBy(['certification' => $certification]);
             foreach($requirementList as $requirement){
                 $result = new Result();
                 $result->setAudit($audit);
@@ -140,6 +140,7 @@ class AuditController extends AbstractController
         }
 
         catch(\Exception $ex){
+            dump($ex);
             return $this->responseManager->response500();
         }
 
@@ -279,7 +280,10 @@ class AuditController extends AbstractController
                 }
             }
 
-            $progression = $scoreAndProgManager->perCentCalculator($progressionRaw, count($audit->getResults()));
+            $certification = $audit->getCertification();
+            $totalRequirements = $certification->getRequirements();
+
+            $progression = $scoreAndProgManager->perCentCalculator($progressionRaw, count($totalRequirements));
             $audit->setProgression($progression);
 
             if($progression >= 100){

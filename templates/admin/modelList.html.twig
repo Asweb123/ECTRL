@@ -7,9 +7,16 @@
 {% block headTitle %}Liste des modèles d'audits{% endblock %}
 
 {% block content %}
+
+
     <div class="btn-newModel-wrapper mb-4">
+    {% if modelCreationLeft >= 0 %}
+        <h5 class="modelCreationLeftNb">Vous pouvez encore créer {{ modelCreationLeft }} modèles.</h5>
+    {% endif %}
+    {% if (modelCreationLeft > 0) or (modelCreationLeft == null) %}
         <button onclick="location.href='{{ path('admin-importCsv') }}'" class="btn btn-info btn-newModel btn-sm createModelbtns">Importer un nouveau modèle</button>
         <button id="newModelBtn" class="btn btn-info btn-newModel btn-sm createModelbtns">Créer un nouveau modèle</button>
+    {% endif %}
     </div>
 
     <div id="modelModal" class="card modalDash deleteModal">
@@ -37,15 +44,12 @@
     </div>
 
     <div class="model-wrapper">
-        {% for key, model in models %}
+        {% for key, model in models|reverse %}
             <div id="modelDeleter{{ key }}" class="card model-card">
                 <div class="card-header card-header-text card-header-success ekalitRelative">
                     <div class="card-text">
                         <h4 class="card-title">{{ model.title }}</h4>
                     </div>
-                    {% if model.isChild == false%}
-                        <img src="{{ asset('img/ekalitMini.png') }}" class="ekalitLabel">
-                    {% endif %}
                 </div>
                 <div class="card-body">
                     <p class="model-description">{{ model.description }}</p>

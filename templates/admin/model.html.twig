@@ -56,7 +56,7 @@
     {% endfor %}
 
     <div class="pagination">
-        <a href="{{ app.request.headers.get('referer') }}" class="back-btn-text"><button class="btn btn-outline-secondary">Retour à liste de modèles d'audits</button></a>
+        <a href="{{ path('admin-modelList') }}" class="back-btn-text"><button class="btn btn-outline-secondary">Retour à liste de modèles d'audits</button></a>
     </div>
 </div>
 

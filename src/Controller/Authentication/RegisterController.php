@@ -95,8 +95,12 @@ class RegisterController extends AbstractController
             $user->setRole($registerCode->getRole());
             $user->setRegisterCode($registerCode);
 
-            if($registerCode->getRole()->getRank() === 2 || $registerCode->getRole()->getRank() === 1){
+            if($registerCode->getRole()->getRank() === 2){
                 $user->setRoles(['ROLE_ADMIN']);
+            }
+
+            if($registerCode->getRole()->getRank() === 1){
+                $user->setroles(['ROLE_SUPER_ADMIN']);
             }
 
             $this->em->persist($user);

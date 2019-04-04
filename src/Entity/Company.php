@@ -60,6 +60,12 @@ class Company
      */
     private $audits;
 
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     * @Assert\Type("integer")
+     */
+    private $maxCertificationsNb;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime("now");
@@ -221,5 +227,17 @@ class Company
 
     public function __toString(){
         return $this->name;
+    }
+
+    public function getMaxCertificationsNb(): ?int
+    {
+        return $this->maxCertificationsNb;
+    }
+
+    public function setMaxCertificationsNb(?int $maxCertificationsNb): self
+    {
+        $this->maxCertificationsNb = $maxCertificationsNb;
+
+        return $this;
     }
 }

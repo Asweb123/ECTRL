@@ -48,21 +48,25 @@ class ScoreAndProgManager
 
     public function validateStater($audit){
         if($audit->getScore() >= 70){
-            $audit->setState(3);
+            $audit->setStatus(2);
         } else {
-            $audit->setState(2);
+            $audit->setStatus(3);
         }
         return $audit;
     }
 
     public function averageLastAuditsScore($lastAudits)
     {
+        $lastAuditsNb = count($lastAudits);
+
         $totalScore = 0;
         foreach ($lastAudits as $audit){
             $totalScore = $totalScore + $audit->getScore();
         }
-
-        $averageLastAuditsScore = $totalScore/count($lastAudits);
+        if($lastAuditsNb === 0){
+            $lastAuditsNb = 1;
+        }
+        $averageLastAuditsScore = $totalScore/$lastAuditsNb;
 
         return $averageLastAuditsScore;
     }

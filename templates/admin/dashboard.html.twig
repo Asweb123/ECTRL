@@ -168,7 +168,9 @@
                 formatter: undefined,
             },
             y: {
-                formatter: undefined,
+                formatter: function(y) {
+                    return y + "%";
+                },
                 title: {
                     formatter: (seriesName) => seriesName,
                 },
