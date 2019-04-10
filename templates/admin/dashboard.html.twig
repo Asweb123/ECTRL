@@ -18,7 +18,7 @@
             <div class="card-body">
                 <h4 class="card-title">Historique des audits de la société</h4>
                 <p class="card-category">
-                    Depuis le {{ company.creationDate|date("d/m/Y") }}</p>
+                    Score total moyen: {{ averageAllAuditScore|number_format(2, '.') }}%</p>
             </div>
         </div>
     </div>
@@ -112,7 +112,6 @@
                 }
             },
         },
-
         theme: {
             palette: 'palette2'
         },
@@ -156,9 +155,7 @@
                 }
             }
         },
-        yaxis: {
 
-        },
         tooltip: {
             enabled: true,
             theme: 'dark',

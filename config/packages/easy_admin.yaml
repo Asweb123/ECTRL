@@ -57,13 +57,13 @@ easy_admin:
                 title: Créer une société
                 fields:
                     - { property: name, label: Nom }
-                    - { property: maxCertificationsNb, label: Limite de modèles, help: Laisser vide pour rendre ilimiter le nombre de modèle disponible  }
+                    - { property: maxCertificationsNb, label: Limite de modèles, help: Laisser vide pour rendre illimiter le nombre de modèle disponible  }
 # easyadmin bug who don't save one tot many relation  - { property: certifications, label: Modèle d'audit }
             edit:
                 title: Modifier cette société
                 fields:
                     - { property: name, label: Nom }
-                    - { property: maxCertificationsNb, label: Limite de modèles, help: Laisser vide pour rendre ilimiter le nombre de modèle disponible }
+                    - { property: maxCertificationsNb, label: Limite de modèles, help: Laisser vide pour rendre illimiter le nombre de modèle disponible }
 # easyadmin bug who don't save one tot many relation   - { property: certifications }
                     - { property: registerCodes, label: Code d'enregistrement}
 

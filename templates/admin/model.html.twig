@@ -8,73 +8,73 @@
 
 {% block content %}
 <div class="wrapper-audit">
-    {% if model.isChild == true%}
+  {#  {% if model.isChild == true%}#}
     <div class="model-actions-wrapper model-detail-action">
         <button onclick="location.href='{{ path('admin-editModel', {'modelId' : model.id}) }}'" type="button" class="btn btn-warning btn-edit btn-sm">Modifier modèle</button>
         <button class="btn btn-danger btn-edit btn-sm" id="deleteBtn">Supprimer modèle</button>
     </div>
-    {% endif %}
-    <div class="card model-card-header">
-        <div class="card-header card-header-success header-flex">
-            <div class="header-center">
-                <h4 class="card-title">{{ model.title }}</h4>
-                <p class="card-category">Créé le {{ model.CreationDate|date("d/m/Y") }}</p>
-            </div>
-        </div>
-        <div class="card-body header-center">
-            <span>{{ model.description }}</span>
-        </div>
-    </div>
+{#  {% endif %}#}
+  <div class="card model-card-header">
+      <div class="card-header card-header-success header-flex">
+          <div class="header-center">
+              <h4 class="card-title">{{ model.title }}</h4>
+              <p class="card-category">Créé le {{ model.CreationDate|date("d/m/Y") }}</p>
+          </div>
+      </div>
+      <div class="card-body header-center">
+          <span>{{ model.description }}</span>
+      </div>
+  </div>
 
 
-    {% for theme in model.themes %}
-    <div class="card card-nav-tabs theme-card">
-        <div class="card-header card-header-success" style="background: linear-gradient(60deg, {{ theme.color }}, {{ theme.color }} 33%);">
-            Thème {{ theme.rankCertification }}
-        </div>
-        <div class="card-body">
-            <h4 class="card-title">{{ theme.title }}</h4>
-            <p class="card-text">{{ theme.description }}</p>
-            <div class="card-body table-responsive">
-                <table class="table table-hover">
-                    <thead class="text-success">
-                    <th>ID</th>
-                    <th>Exigence</th>
-                    </thead>
-                    <tbody>
-                    {% for requirement in theme.requirements %}
-                        <tr>
-                            <td class="text-center">{{ theme.rankCertification }}.{{ requirement.rankTheme }}</td>
-                            <td class="requirementModel">{{ requirement.description }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
+  {% for theme in model.themes %}
+  <div class="card card-nav-tabs theme-card">
+      <div class="card-header card-header-success" style="background: linear-gradient(60deg, {{ theme.color }}, {{ theme.color }} 33%);">
+          Thème {{ theme.rankCertification }}
+      </div>
+      <div class="card-body">
+          <h4 class="card-title">{{ theme.title }}</h4>
+          <p class="card-text">{{ theme.description }}</p>
+          <div class="card-body table-responsive">
+              <table class="table table-hover">
+                  <thead class="text-success">
+                  <th>ID</th>
+                  <th>Exigence</th>
+                  </thead>
+                  <tbody>
+                  {% for requirement in theme.requirements %}
+                      <tr>
+                          <td class="text-center">{{ theme.rankCertification }}.{{ requirement.rankTheme }}</td>
+                          <td class="requirementModel">{{ requirement.description }}</td>
+                      </tr>
+                  {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+  {% endfor %}
 
-    <div class="pagination">
-        <a href="{{ path('admin-modelList') }}" class="back-btn-text"><button class="btn btn-outline-secondary">Retour à liste de modèles d'audits</button></a>
-    </div>
+  <div class="pagination">
+      <a href="{{ path('admin-modelList') }}" class="back-btn-text"><button class="btn btn-outline-secondary">Retour à liste de modèles d'audits</button></a>
+  </div>
 </div>
 
 
 <div id="deleteModal" class="card modalDash deleteModal">
-    <div id="modal-content-model" class="modal-content">
-        <div class="card-header card-header-danger mb-3">
-            <h4 class="card-title text-center">Suppression d'un modèle</h4>
-        </div>
-        <div class="card-body">
-            <h5 class="text-center">Souhaitez-vous vraiment supprimer ce modèle d'audit?</h5>
-            <p class="text-center">{{ model.title }}</p>
-            <div class="actions-modal">
-                <button id="deleteCancel" class="btn btn-outline-secondary btn-modal">Annuler</button>
-                <a id="deleteAction" href="{{ path('admin-deleteModel', {'modelId' : model.id}) }}" class="btn btn-danger btn-modal">Supprimer</a>
-            </div>
-        </div>
-    </div>
+  <div id="modal-content-model" class="modal-content">
+      <div class="card-header card-header-danger mb-3">
+          <h4 class="card-title text-center">Suppression d'un modèle</h4>
+      </div>
+      <div class="card-body">
+          <h5 class="text-center">Souhaitez-vous vraiment supprimer ce modèle d'audit?</h5>
+          <p class="text-center">{{ model.title }}</p>
+          <div class="actions-modal">
+              <button id="deleteCancel" class="btn btn-outline-secondary btn-modal">Annuler</button>
+              <a id="deleteAction" href="{{ path('admin-deleteModel', {'modelId' : model.id}) }}" class="btn btn-danger btn-modal">Supprimer</a>
+          </div>
+      </div>
+  </div>
 </div>
 {% endblock %}
 
@@ -82,20 +82,20 @@
 {{ parent() }}
 
 <script>
-    var btnModalUp = document.getElementById("deleteBtn");
-    var modal = document.getElementById('deleteModal');
-    var modalContent = document.getElementById("modal-content");
-    var btnDelete = document.getElementById("deleteCancel");
+  var btnModalUp = document.getElementById("deleteBtn");
+  var modal = document.getElementById('deleteModal');
+  var modalContent = document.getElementById("modal-content");
+  var btnDelete = document.getElementById("deleteCancel");
 
 
-    btnModalUp.onclick = function() {
-        modal.style.display = "flex";
-    };
+  btnModalUp.onclick = function() {
+      modal.style.display = "flex";
+  };
 
-    btnDelete.onclick = function() {
-        //    modal.style.animation = "fadeOut 0.3s";
-        //   modalContent.style.animation = "zoomOut 0.3s";
-        modal.style.display = "none";
-    };
+  btnDelete.onclick = function() {
+      //    modal.style.animation = "fadeOut 0.3s";
+      //   modalContent.style.animation = "zoomOut 0.3s";
+      modal.style.display = "none";
+  };
 </script>
 {% endblock %}

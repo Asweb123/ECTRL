@@ -158,14 +158,9 @@ class ScoreAndProgManager
             }
 
         }
-/*
-        foreach($auditsScorePerType as $key => $certification){
-            if(empty($certification["data"])){
-                unset($auditsScorePerType[$key]);
-            }
-        }
-*/
+
         return $auditsScorePerType;
     }
+
 
 }

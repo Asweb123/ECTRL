@@ -14,11 +14,11 @@
 
 {% block content %}
 <div class="wrapper-audit">
-    {% if model.isChild == true%}
+
         <div class="model-actions-wrapper model-detail-action">
             <button class="btn btn-danger btn-edit btn-sm" id="deleteBtn">Supprimer modèle</button>
         </div>
-    {% endif %}
+
 
     <div class="card model-card-header">
         <div class="card-header card-header-success header-flex">
@@ -89,7 +89,7 @@
                             {{ form_start(formEditTheme[key], {'action': path('admin-editModel', {modelId : model.id}), 'method': 'PUT', 'attr': {'id': key }}  ) }}
                             {{ form_errors(formEditTheme[key]) }}
                             {{ form_row(formEditTheme[key].title, {'attr': {'value': theme.title }}) }}
-                            {{ form_row(formEditTheme[key].description, {'attr': {'value': theme.description }}) }}
+                            {{ form_row(formEditTheme[key].description, {'value': theme.description }) }}
                             {{ form_row(formEditTheme[key].id, {'attr': {'value': theme.id }}) }}
                             <div class="actions-modal">
                                 <button type=button id="editThemeCancel{{ key }}" class="btn btn-outline-secondary btn-modal">Annuler</button>

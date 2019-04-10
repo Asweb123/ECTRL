@@ -560,8 +560,22 @@ body > div.main-panel > nav > div > div.collapse.navbar-collapse.justify-content
     .custom-file{
         height: 6rem;
     }
+}
+
+@media screen and (max-width: 991px){
 
     .navbar-brand{
         margin-top: 15px;
+    }
+}
+
+.logout{
+    display:none;
+}
+
+@media screen and (max-width: 991px){
+
+    .logout{
+        display: block;
     }
 }

@@ -18,6 +18,8 @@ class DashboardController extends AbstractController
 
         $company = $user->getCompany();
         $lastAudits = $auditRepository->findLastAudits($company);
+        $allAudits = $auditRepository->findAllAudits($company, "ASC");
+        $averageAllAuditScore = $scoreAndProgManager->averageLastAuditsScore($allAudits);
         $averageLastAuditsScore = $scoreAndProgManager->averageLastAuditsScore($lastAudits);
         $recurrentRequirementList = $scoreAndProgManager->recurrentRequirementsFailed($company);
         $auditsPerScore = $scoreAndProgManager->auditsPerScore($company);
@@ -29,7 +31,8 @@ class DashboardController extends AbstractController
              "averageLastAuditsScore" => $averageLastAuditsScore,
              "recurrentRequirementList" => $recurrentRequirementList,
              "auditsPerScore" => $auditsPerScore,
-             "auditsScorePerType" => $auditsScorePerType
+             "auditsScorePerType" => $auditsScorePerType,
+             "averageAllAuditScore" => $averageAllAuditScore
         ]);
     }
 }

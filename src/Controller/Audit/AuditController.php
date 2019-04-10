@@ -108,7 +108,6 @@ class AuditController extends AbstractController
                     "themeColor" => $requirement->getTheme()->getColor(),
                     "requirementDescription" => $requirement->getDescription(),
                     "requirementRankTheme" => $requirement->getRankTheme(),
-               //     "requirementRankCertification" => $requirement->getRankCertification(),
                     "uuidResult" => $result->getId(),
                     "state" => $result->getState()
                 ];
@@ -186,7 +185,6 @@ class AuditController extends AbstractController
                         "themeColor" => $requirement->getTheme()->getColor(),
                         "requirementDescription" => $requirement->getDescription(),
                         "requirementRankTheme" => $requirement->getRankTheme(),
-                    //    "requirementRankCertification" => $requirement->getRankCertification(),
                         "uuidResult" => $result->getId(),
                         "state" => $result->getState(),
                         ];
@@ -232,7 +230,7 @@ class AuditController extends AbstractController
 
 
     /**
-     * @Route("/audit", name="editAudit", methods={"PATCH"})
+     * @Route("/audit", name="editAudit", methods={"PUT"})
      */
     public function EditAudit(Request $request, ResultRepository $resultRepository, ScoreAndProgManager $scoreAndProgManager, SendNotificationManager $sendNotificationManager)
     {

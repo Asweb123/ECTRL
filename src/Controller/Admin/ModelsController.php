@@ -236,9 +236,13 @@ class ModelsController extends AbstractController
 
             $return = $csvManager->csvToDbManager($fileContent, $company);
 
-            if (is_string($return)) {
-                $form->addError(new FormError($return));
+            if($form->getErrors()->count() === 0){
+                if (is_string($return)) {
+                    $form->addError(new FormError($return));
+                }
             }
+
+
         }
         if ($form->isSubmitted() && $form->isValid()){
             return $this->redirectToRoute('admin-modelDetail', ["modelId" => $return->getId()]);

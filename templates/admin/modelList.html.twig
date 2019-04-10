@@ -56,7 +56,7 @@
                 </div>
                 <div class="model-actions-wrapper">
                     <button onclick="location.href='{{ path('admin-modelDetail', {'modelId' : model.id}) }}'" type="button" class="btn btn-info btn-link">Voir</button>
-                    {% if model.isChild == true%}
+
                     <button onclick="location.href='{{ path('admin-editModel', {'modelId' : model.id}) }}'" type="button" class="btn btn-warning btn-link">Modifier</button>
                     <button id="deleteBtn{{ key }}" class="btn btn-danger btn-link">Supprimer</button>
 
@@ -75,7 +75,7 @@
                             </div>
                         </div>
                     </div>
-                    {% endif %}
+
                 </div>
             </div>
 
@@ -117,7 +117,7 @@
         });
 
         {% for key, model in models %}
-            {% if model.isChild == true%}
+
             var btnModalUp{{ key }} = document.getElementById("deleteBtn{{ key }}");
             var modal{{ key }} = document.getElementById('deleteModal{{ key }}');
             var modalContent{{ key }} = document.getElementById("modal-content{{ key }}");
@@ -147,7 +147,7 @@
                 modal{{ key }}.style.display = "none";
 
             });
-        {% endif %}
+
         {% endfor %}
 
 
