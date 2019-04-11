@@ -29,4 +29,12 @@ class SecurityController extends AbstractController
     {
         return $this->render('admin/legals.html.twig');
     }
+
+    /**
+     * @Route("/app", name="app")
+     */
+    public function appAccess()
+    {
+        return $this->redirect('https://exp-shell-app-assets.s3.us-west-1.amazonaws.com/android/%40citrov/ectrl-6ec01bf929a642678ee8d93a48cec343-signed.apk');
+    }
 }
